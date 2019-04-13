@@ -15,6 +15,6 @@ public class Start {
 
 		Test.findAndPrintSolution(sudoku);
 
-		Test.findAndPrintAllSolutions(sudoku);
+		Test.generateAndPrintNewSudokuWithSolutions();
 	}
 }

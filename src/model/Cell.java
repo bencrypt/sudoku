@@ -33,6 +33,10 @@ public class Cell {
 	
 	/* --> Methods <-- */
 
+    public Cell copy() {
+        return new Cell(gridX, gridY, value, editable);
+    }
+
     /* --> Getters and Setters <-- */
 
     public int getGridX() {
@@ -53,6 +57,10 @@ public class Cell {
 
     public boolean isEditable() {
         return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public boolean isValid() {

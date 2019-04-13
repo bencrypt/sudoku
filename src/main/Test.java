@@ -1,5 +1,6 @@
 package main;
 
+import computing.SudokuGenerator;
 import computing.SudokuSolver;
 import console.SudokuPrinter;
 import model.Cell;
@@ -17,25 +18,25 @@ public class Test {
         // create example
         byte[][] values =
                 {
-                        {8, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 3, 6, 0, 0, 0, 0, 0},
-                        {0, 7, 0, 0, 9, 0, 2, 0, 0},
+                        {8, 0, 0,   0, 0, 0,   0, 0, 0},
+                        {0, 0, 3,   6, 0, 0,   0, 0, 0},
+                        {0, 7, 0,   0, 9, 0,   2, 0, 0},
 
-                        {0, 5, 0, 0, 0, 7, 0, 0, 0},
-                        {0, 0, 0, 0, 4, 5, 7, 0, 0},
-                        {0, 0, 0, 1, 0, 0, 0, 3, 0},
+                        {0, 5, 0,   0, 0, 7,   0, 0, 0},
+                        {0, 0, 0,   0, 4, 5,   7, 0, 0},
+                        {0, 0, 0,   1, 0, 0,   0, 3, 0},
 
-                        {0, 0, 1, 0, 0, 0, 0, 6, 8},
-                        {0, 0, 8, 5, 0, 0, 0, 1, 0},
-                        {0, 9, 0, 0, 0, 0, 4, 0, 0}
+                        {0, 0, 1,   0, 0, 0,   0, 6, 8},
+                        {0, 0, 8,   5, 0, 0,   0, 1, 0},
+                        {0, 9, 0,   0, 0, 0,   4, 0, 0}
                 };
 
         // create a Sudoku board from the values
         Cell[][] board = new Cell[9][9];
         for (byte row = 0; row < 9; row++) {
             for (byte column = 0; column < 9; column++) {
-                boolean changeable = values[row][column] == 0 ? true : false;
-                board[row][column] = new Cell(row, column, values[row][column], true);
+                boolean editable = values[row][column] == 0 ? true : false;
+                board[row][column] = new Cell(row, column, values[row][column], editable);
             }
         }
 
@@ -81,8 +82,7 @@ public class Test {
         // new Sudoku
         long start = System.currentTimeMillis();
 
-        // TODO: Sudoku-Generator
-        Sudoku newSudoku = null;
+        Sudoku newSudoku = SudokuGenerator.generateSudoku(30);
 
         long end = System.currentTimeMillis();
 
