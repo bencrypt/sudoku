@@ -77,12 +77,12 @@ public class Test {
         }
     }
 
-    public static void generateAndPrintNewSudokuWithSolutions() {
+    public static void generateAndPrintNewSudokuWithSolutions(int countOfPredefinedCells) {
 
         // new Sudoku
         long start = System.currentTimeMillis();
 
-        Sudoku newSudoku = SudokuGenerator.generateSudoku(30);
+        Sudoku newSudoku = SudokuGenerator.generateSudoku(countOfPredefinedCells);
 
         long end = System.currentTimeMillis();
 
