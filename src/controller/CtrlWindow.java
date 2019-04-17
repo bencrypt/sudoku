@@ -21,6 +21,7 @@ public class CtrlWindow {
 
         // initialize the components in the Window and create the event handling for them
         initView();
+        createBoardController(board);
         createEventHandling();
     }
 
@@ -40,6 +41,10 @@ public class CtrlWindow {
 
     private void createEventHandling() {
         // TODO: EventHandling einbauen
+    }
+
+    private void createBoardController(Board board) {
+        new CtrlBoard(board);
     }
 
     public void showWindow() {

@@ -1,6 +1,8 @@
 package model;
 
-public class Cell {
+import java.util.Observable;
+
+public class Cell extends Observable {
 	
 	/* --> Fields <-- */
 
@@ -37,6 +39,13 @@ public class Cell {
         return new Cell(gridX, gridY, value, editable);
     }
 
+    @Override
+    public void notifyObservers() {
+        setChanged();
+        super.notifyObservers();
+        clearChanged();
+    }
+
     /* --> Getters and Setters <-- */
 
     public int getGridX() {
@@ -53,6 +62,7 @@ public class Cell {
 
     public void setValue(int value) {
         this.value = value;
+        notifyObservers();
     }
 
     public boolean isEditable() {
@@ -61,10 +71,16 @@ public class Cell {
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+        notifyObservers();
     }
 
     public boolean isValid() {
         return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+        notifyObservers();
     }
 
     public boolean isAutomaticallySolved() {
