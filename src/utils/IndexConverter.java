@@ -43,7 +43,7 @@ public class IndexConverter {
      * @return
      *      the GUI-Cell which corresponds to the model-Cell at the given coordinates
      */
-    public static JButton determineGuiCellFromModelCell(int modelCellX, int modelCellY, List<HoverButton> guiCells) {
+    public static HoverButton determineGuiCellFromModelCell(int modelCellX, int modelCellY, List<HoverButton> guiCells) {
         int indexGuiCell = (modelCellX*9) + modelCellY;
         return guiCells.get(indexGuiCell);
     }

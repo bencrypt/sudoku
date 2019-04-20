@@ -5,6 +5,7 @@ import utils.IndexConverter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,6 +29,11 @@ public class Board extends JPanel {
     /* --> Methods <-- */
 
     private void init() {
+
+        /**
+         * TODO: einheitliches Layout
+         *  --> nicht editierbare Zellen sind größer, da dort kein Border eingezeichnet wird
+         */
 
         // preferences
         setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -67,13 +73,13 @@ public class Board extends JPanel {
         // create the cell
         HoverButton cell = new HoverButton("0", BoardConstants.BACKGROUND, BoardConstants.BACKGROUND);
 
+        // preferences
         cell.setFocusable(false);
 
         // set the standard size
         cell.setPreferredSize(new Dimension(cellSize, cellSize));
 
         // make the cell non transparent and set the standard colors
-        cell.setOpaque(true);
         cell.setForeground(BoardConstants.FONT_COLOR_NORMAL);
         cell.setBackground(BoardConstants.CELL_COLOR_NORMAL);
 

@@ -4,18 +4,22 @@ import model.BoardConstants;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class HoverButton extends JButton {
 
     /* --> Fields <-- */
 
     private Border previousBorder;
+    private Color highlight;
+    private Color shadow;
 
     /* --> Constructors <-- */
 
@@ -26,6 +30,10 @@ public class HoverButton extends JButton {
 
     public HoverButton(String text, Color highlight, Color shadow) {
         super(text);
+
+        this.highlight = highlight;
+        this.shadow = shadow;
+
         init(highlight, shadow);
     }
 
@@ -45,6 +53,14 @@ public class HoverButton extends JButton {
                 return BoardConstants.FONT_COLOR_NORMAL;
             }
         });
+    }
+
+    public void enableHover() {
+        changeOnHover(highlight, shadow);
+    }
+
+    public void disableHover() {
+        removeMouseListener(getMouseListeners()[0]);
     }
 
     @Override

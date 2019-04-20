@@ -8,8 +8,10 @@ import model.Cell;
 import model.Sudoku;
 import utils.IndexConverter;
 import view.Board;
+import view.HoverButton;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -68,7 +70,7 @@ public class CtrlBoard implements Observer {
 
         // determine the updated model-Cell and the corresponding GUI-Cell
         Cell updated = (Cell) o;
-        JButton toUpdate = IndexConverter.determineGuiCellFromModelCell(updated.getGridX(), updated.getGridY(), gui.getCells());
+        HoverButton toUpdate = IndexConverter.determineGuiCellFromModelCell(updated.getGridX(), updated.getGridY(), gui.getCells());
 
         // put the new value into the GUI
         if (updated.getValue() != 0) {
@@ -86,7 +88,8 @@ public class CtrlBoard implements Observer {
             toUpdate.setBorderPainted(true);
         } else {
             toUpdate.setFont(BoardConstants.FONT_UNEDITABLE);
-            toUpdate.setBorderPainted(false);
+            //toUpdate.setBorderPainted(false);
+            toUpdate.disableHover();
         }
 
         if (updated.isValid()) {
