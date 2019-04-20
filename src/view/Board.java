@@ -1,6 +1,7 @@
 package view;
 
 import model.BoardConstants;
+import utils.IndexConverter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +15,7 @@ public class Board extends JPanel {
 
     private int cellSize = BoardConstants.CELL_SIZE;
 
-    private ArrayList<JButton> cells;
+    private ArrayList<HoverButton> cells;
 
     private ArrayList<JPanel> boxes;
 
@@ -39,7 +40,7 @@ public class Board extends JPanel {
         add(contentPane);
 
         // initialize the 81 cells
-        cells = new ArrayList<JButton>(81);
+        cells = new ArrayList<HoverButton>(81);
         for (int i = 0; i < 81; i++) {
             cells.add(initCell());
         }
@@ -61,10 +62,10 @@ public class Board extends JPanel {
 
     }
 
-    private JButton initCell() {
+    private HoverButton initCell() {
 
         // create the cell
-        JButton cell = new JButton("0");
+        HoverButton cell = new HoverButton("0", BoardConstants.BACKGROUND, BoardConstants.BACKGROUND);
 
         cell.setFocusable(false);
 
@@ -106,29 +107,15 @@ public class Board extends JPanel {
 
         // add each cell to the corresponding box
         for (int i = 0; i < cells.size(); i++) {
-            int box = determineBoxForCell(i);
+            int box = IndexConverter.determineGuiBoxForGuiCell(i);
             boxes.get(box).add(cells.get(i));
         }
 
     }
 
-    private int determineBoxForCell(int cellIndex) {
-
-        // calculate the position of the cell given by its index
-        int cellRow = cellIndex / 9;
-        int cellCol = cellIndex % 9;
-
-        // calculate the position of the box with help of the cell position
-        int boxRow = cellRow / 3;
-        int boxCol = cellCol / 3;
-
-        // calculate the box index and return it
-        return (boxRow*3) + boxCol;
-    }
-
     /* --> Getters And Setters <-- */
 
-    public ArrayList<JButton> getCells() {
+    public ArrayList<HoverButton> getCells() {
         return cells;
     }
 }
