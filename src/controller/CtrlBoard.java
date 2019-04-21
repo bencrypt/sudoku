@@ -49,6 +49,11 @@ public class CtrlBoard implements Observer {
         initObserver();
     }
 
+    public void restartSudoku() {
+        model.restart();
+        initObserver();
+    }
+
     /*
      * Update GUI when model changed
      */
@@ -85,10 +90,8 @@ public class CtrlBoard implements Observer {
 
         if (updated.isEditable()) {
             toUpdate.setFont(BoardConstants.FONT_EDITABLE);
-            toUpdate.setBorderPainted(true);
         } else {
             toUpdate.setFont(BoardConstants.FONT_UNEDITABLE);
-            //toUpdate.setBorderPainted(false);
             toUpdate.disableHover();
         }
 

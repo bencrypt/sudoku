@@ -91,6 +91,13 @@ public class ValueSelector extends JPanel {
 
     public void hidePopup() {
         if (popup != null) {
+
+            // reset the value buttons so that the border is shown correctly next time the popup opens
+            valueButtons.forEach(btn -> {
+                btn.reset();
+            });
+
+            // hide the popup
             popup.hide();
         }
     }

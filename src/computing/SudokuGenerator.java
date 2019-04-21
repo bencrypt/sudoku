@@ -8,6 +8,8 @@ import java.util.Random;
 
 public class SudokuGenerator {
 
+    // TODO: schnelleres Erstellen von Sudokus
+
     public static Sudoku generateEmptyAndNonEditableSudoku() {
         Cell[][] board = new Cell[9][9];
 

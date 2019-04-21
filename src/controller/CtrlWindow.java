@@ -1,15 +1,17 @@
 package controller;
 
+import eventHandling.MenuHandler;
 import view.Board;
 import view.Window;
 import view.menu.MenuBar;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class CtrlWindow {
 
     /* --> Fields <-- */
+
+    private CtrlBoard ctrlBoard;
 
     private Window window;
     private MenuBar menuBar;
@@ -22,7 +24,7 @@ public class CtrlWindow {
         // initialize the components in the Window and create the event handling for them
         initView();
         createBoardController(board);
-        createEventHandling();
+        addMenuHandlers();
     }
 
     /* --> Methods <-- */
@@ -39,12 +41,12 @@ public class CtrlWindow {
         window.addToBorderLayout(board, BorderLayout.CENTER);
     }
 
-    private void createEventHandling() {
-        // TODO: EventHandling einbauen
+    private void createBoardController(Board board) {
+        ctrlBoard = new CtrlBoard(board);
     }
 
-    private void createBoardController(Board board) {
-        new CtrlBoard(board);
+    private void addMenuHandlers() {
+        new MenuHandler(ctrlBoard, menuBar);
     }
 
     public void showWindow() {

@@ -10,7 +10,7 @@ public class MenuBar extends JMenuBar {
 
     /* --> Fields <-- */
 
-    private JMenu mnuFile;
+    private MnuFile mnuFile;
 
     /* --> Constructor <-- */
 
@@ -34,7 +34,7 @@ public class MenuBar extends JMenuBar {
 
     /* --> Getters and Setters <-- */
 
-    public JMenu getMnuFile() {
+    public MnuFile getMnuFile() {
         return mnuFile;
     }
 }

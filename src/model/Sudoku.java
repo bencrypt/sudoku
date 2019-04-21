@@ -17,6 +17,20 @@ public class Sudoku {
 
 	/* --> Methods <-- */
 
+	public void restart() {
+
+		Cell currentCell;
+
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+				currentCell = board[row][col];
+				if (currentCell.isEditable()) {
+					currentCell.setValue(0);
+				}
+			}
+		}
+	}
+
 	public Sudoku copy() {
 
 		// copy the board
@@ -154,5 +168,4 @@ public class Sudoku {
 	public Cell[][] getBoard() {
 		return board;
 	}
-
 }

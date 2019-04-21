@@ -30,11 +30,6 @@ public class Board extends JPanel {
 
     private void init() {
 
-        /**
-         * TODO: einheitliches Layout
-         *  --> nicht editierbare Zellen sind größer, da dort kein Border eingezeichnet wird
-         */
-
         // preferences
         setBorder(new EmptyBorder(30, 30, 30, 30));
         setBackground(BoardConstants.BACKGROUND);
