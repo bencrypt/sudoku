@@ -121,9 +121,15 @@ public class CtrlBoard implements Observer {
      */
 
     public void updateFromValueInput(int indexClickedCell, int newValue) {
-
         Cell toUpdate = IndexConverter.determineModelCellFromIndexOfGuiCell(model, indexClickedCell);
         toUpdate.setValue(newValue);
+
+        if (toUpdate.isAutomaticallySolved()) {
+            toUpdate.setAutomaticallySolved(false);
+        }
+
+
+        model.checkAndMarkDuplicates();
     }
 
     /* --> Getters and Setters <-- */
