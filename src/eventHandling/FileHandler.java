@@ -15,33 +15,23 @@ import java.io.File;
 
 public class FileHandler {
 
-    public static void exportSudokuIntoXml(Sudoku toExport) {
+    /* --> Fields <-- */
 
-        /* --> choose the file in which the Sudoku should be exported <-- */
+    private static File currentFile;
 
-        // create a file chooser for ".suk"-files
-        JFileChooser fc = new JFileChooser(new File("."));
-        fc.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                return f.getName().endsWith(".suk") || f.isDirectory();
-            }
+    /* --> Methods <-- */
 
-            @Override
-            public String getDescription() {
-                return "Sudoku-Dateien";
-            }
-        });
+    /*
+     * Save and Save As
+     */
 
-        // show the file chooser
-        // --> if cancelled, the method returns
-        int option = fc.showDialog(null, "Exportieren");
-        File destination = null;
+    public static void exportSudokuIntoXml(Sudoku toExport, boolean saveIntoCurrentFile) {
 
-        if (option == JFileChooser.APPROVE_OPTION) {
-            destination = fc.getSelectedFile();
-        } else {
-            return;
+        // choose the file in which the Sudoku should be exported
+        // --> may be the current file if wished so and valid
+        File destination = currentFile;
+        if (!saveIntoCurrentFile || currentFile != null) {
+            destination = chooseFile("Exportieren");
         }
 
         // add the ending ".suk" if needed
@@ -49,12 +39,10 @@ public class FileHandler {
             destination = new File(destination + ".suk");
         }
 
-        /* --> convert the internal Sudoku to a XmlSudoku <-- */
-
+        // convert the internal Sudoku to a XmlSudoku
         XmlSudoku xmlSudoku = new XmlSudoku(toExport);
 
-        /* --> export into the choosen file <-- */
-
+        // export into the choosen file
         try {
             // helping classes
             JAXBContext jc = JAXBContext.newInstance(XmlSudoku.class, XmlCell.class);
@@ -64,6 +52,9 @@ public class FileHandler {
             // write in XML
             m.marshal(xmlSudoku, destination);
 
+            // set the destination file as current file
+            currentFile = destination;
+
         } catch (JAXBException e) {
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht exportiert werden.",
                                             "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -71,37 +62,16 @@ public class FileHandler {
         }
     }
 
+    /*
+     * Load
+     */
+
     public static Sudoku importSudokuFromXml() {
 
-        /* --> choose the file from which the Sudoku should be imported <-- */
+        // choose the file from which the Sudoku should be imported
+        File source = chooseFile("Importieren");
 
-        // create a file chooser for ".suk"-files
-        JFileChooser fc = new JFileChooser(new File("."));
-        fc.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                return f.getName().endsWith(".suk") || f.isDirectory();
-            }
-
-            @Override
-            public String getDescription() {
-                return "Sudoku-Dateien";
-            }
-        });
-
-        // show the file chooser
-        // --> if cancelled, the method returns
-        int option = fc.showDialog(null, "Importieren");
-        File source = null;
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            source = fc.getSelectedFile();
-        } else {
-            return null;
-        }
-
-        /* --> import from the choosen file <-- */
-
+        // import from the choosen file
         XmlSudoku xmlSudoku = null;
         try {
             // helping classes
@@ -111,14 +81,16 @@ public class FileHandler {
             // read XML
             xmlSudoku = (XmlSudoku) um.unmarshal(source);
 
+            // set the destination file as current file
+            currentFile = source;
+
         } catch (JAXBException e) {
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht importiert werden.",
                                             "Fehler", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
 
-        /* --> convert the imported XmlSudoku to an internal Sudoku <-- */
-
+        // convert the imported XmlSudoku to an internal Sudoku
         Cell[][] internalBoard = new Cell[9][9];
         xmlSudoku.getBoard().forEach(xmlCell -> {
             internalBoard[xmlCell.getGridX()][xmlCell.getGridY()] =
@@ -130,5 +102,38 @@ public class FileHandler {
 
         // return the converted Sudoku
         return sudoku;
+    }
+
+    /*
+     * Helping method for file choosing
+     */
+
+    private static File chooseFile(String approveButtonText) {
+
+        // create a file chooser for ".suk"-files
+        JFileChooser fc = new JFileChooser(new File("."));
+        fc.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.getName().endsWith(".suk") || f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Sudoku-Dateien";
+            }
+        });
+
+        // show the file chooser
+        // --> if cancelled, the method returns
+        int option = fc.showDialog(null, approveButtonText);
+        File source = null;
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            source = fc.getSelectedFile();
+        }
+
+        // return the choosed file, may be null
+        return source;
     }
 }
