@@ -68,19 +68,22 @@ public class MenuHandler {
 
     private void addMenuHandlerLoad() {
         gui.getMnuFile().getMniLoad().addActionListener(e -> {
-            // TODO: Sudoku laden
+            Sudoku loaded = FileHandler.importSudokuFromXml();
+            if (loaded != null) {
+                ctrlBoard.changeModel(loaded);
+            }
         });
     }
 
     private void addMenuHandlerSave() {
         gui.getMnuFile().getMniSave().addActionListener(e -> {
-            // TODO: Sudoku speichern
+            FileHandler.exportSudokuIntoXml(ctrlBoard.getModel(), true);
         });
     }
 
     private void addMenuHandlerSaveAs() {
         gui.getMnuFile().getMniSaveAs().addActionListener(e -> {
-            // TODO: Sudoku speichern unter
+            FileHandler.exportSudokuIntoXml(ctrlBoard.getModel(), false);
         });
     }
 
