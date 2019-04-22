@@ -30,7 +30,7 @@ public class FileHandler {
         // choose the file in which the Sudoku should be exported
         // --> may be the current file if wished so and valid
         File destination = currentFile;
-        if (!saveIntoCurrentFile || currentFile != null) {
+        if (!saveIntoCurrentFile || currentFile == null) {
             destination = chooseFile("Exportieren");
         }
 
