@@ -15,6 +15,7 @@ public class WaitingDialog extends JDialog {
         // preferences
         setLayout(new BorderLayout());
         setModal(true);
+        setResizable(false);
 
         // add label with waiting message
         JLabel lblWaiting = new JLabel("Bitte warten ...");

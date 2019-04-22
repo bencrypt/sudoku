@@ -95,4 +95,9 @@ public class Cell extends Observable {
     public boolean isAutomaticallySolved() {
         return automaticallySolved;
     }
+
+    public void setAutomaticallySolved(boolean automaticallySolved) {
+        this.automaticallySolved = automaticallySolved;
+        notifyObservers();
+    }
 }
