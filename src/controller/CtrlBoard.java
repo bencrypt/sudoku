@@ -3,6 +3,7 @@ package controller;
 import computing.SudokuGenerator;
 import console.SudokuPrinter;
 import eventHandling.BoardHandler;
+import eventHandling.FileHandler;
 import model.BoardConstants;
 import model.Cell;
 import model.Sudoku;
