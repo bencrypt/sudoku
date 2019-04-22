@@ -1,20 +1,22 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import console.SudokuPrinter;
-import computing.SudokuSolver;
+import controller.CtrlWindow;
 import model.Sudoku;
+
+import java.awt.*;
 
 public class Start {
 	
 	public static void main(String[] args) {
 
-		Sudoku sudoku = Test.createExampleSudoku();
+//		Sudoku sudoku = Test.createExampleSudoku();
+//		Test.findAndPrintSolution(sudoku);
+//		Test.generateAndPrintNewSudokuWithSolutions(30);
 
-		Test.findAndPrintSolution(sudoku);
+		EventQueue.invokeLater(() -> {
+			CtrlWindow ctrlWindow = new CtrlWindow();
+			ctrlWindow.showWindow();
+		});
 
-		Test.generateAndPrintNewSudokuWithSolutions(30);
 	}
 }
