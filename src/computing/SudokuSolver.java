@@ -16,7 +16,12 @@ public class SudokuSolver {
 		Sudoku solution = toSolve.copy();
 
 		// solve the Sudoku and give the solution back
-        solveViaBacktracking(solution);
+        boolean solved = solveViaBacktracking(solution);
+
+        // if the Sudoku cannot be solved, return null, else the solution
+        if (!solved) {
+            solution = null;
+        }
 		return solution;
 	}
 
@@ -183,18 +188,16 @@ public class SudokuSolver {
 
     /* --> determine the next solution step via human strategy <-- */
 
-    public static Sudoku determineNextStep(Sudoku sudoku)
+    public static Cell determineNextStep(Sudoku sudoku)
     {
-        // copy the given Sudoku
-        Sudoku nextStep = sudoku.copy();
-
         // determine the value for the next Cell to be solved
-        Cell changed = onlyOnePossibleValue(nextStep);
+        // --> a copy of the changed Cell will be returned
+        Cell nextStep = onlyOnePossibleValue(sudoku);
 
         // Kontrollausgabe
 //        System.out.println("Nächster Schritt: " + changed);
 
-        // return the copy of the given Sudoku in which the next step is done
+        // return the copy of the changed Cell
         return nextStep;
     }
 
@@ -217,9 +220,15 @@ public class SudokuSolver {
 
                 // if there is exactly one possible value, set it into the Cell
                 if (possibleValues.size() == 1) {
-                    changed = cell;
+                    changed = cell.copy();
                     changed.setValue(possibleValues.get(0));
+                    break;
                 }
+            }
+
+            // break if there was still a changed cell
+            if (changed != null) {
+                break;
             }
         }
 

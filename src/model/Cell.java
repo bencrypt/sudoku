@@ -1,6 +1,8 @@
 package model;
 
-public class Cell {
+import java.util.Observable;
+
+public class Cell extends Observable {
 	
 	/* --> Fields <-- */
 
@@ -16,7 +18,7 @@ public class Cell {
 	private boolean valid;
 	private boolean automaticallySolved;
 	
-	/* --> Constructor <-- */
+	/* --> Constructors <-- */
 	
 	public Cell(int gridX, int gridY, int value, boolean editable) {
 
@@ -30,11 +32,27 @@ public class Cell {
 		this.valid = true;
 		this.automaticallySolved = false;
 	}
-	
-	/* --> Methods <-- */
+
+    public Cell(int gridX, int gridY, int value, boolean editable, boolean valid, boolean automaticallySolved) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.value = value;
+        this.editable = editable;
+        this.valid = valid;
+        this.automaticallySolved = automaticallySolved;
+    }
+
+    /* --> Methods <-- */
 
     public Cell copy() {
         return new Cell(gridX, gridY, value, editable);
+    }
+
+    @Override
+    public void notifyObservers() {
+        setChanged();
+        super.notifyObservers();
+        clearChanged();
     }
 
     /* --> Getters and Setters <-- */
@@ -53,6 +71,7 @@ public class Cell {
 
     public void setValue(int value) {
         this.value = value;
+        notifyObservers();
     }
 
     public boolean isEditable() {
@@ -61,13 +80,24 @@ public class Cell {
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+        notifyObservers();
     }
 
     public boolean isValid() {
         return valid;
     }
 
+    public void setValid(boolean valid) {
+        this.valid = valid;
+        notifyObservers();
+    }
+
     public boolean isAutomaticallySolved() {
         return automaticallySolved;
+    }
+
+    public void setAutomaticallySolved(boolean automaticallySolved) {
+        this.automaticallySolved = automaticallySolved;
+        notifyObservers();
     }
 }
