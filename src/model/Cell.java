@@ -18,7 +18,7 @@ public class Cell extends Observable {
 	private boolean valid;
 	private boolean automaticallySolved;
 	
-	/* --> Constructor <-- */
+	/* --> Constructors <-- */
 	
 	public Cell(int gridX, int gridY, int value, boolean editable) {
 
@@ -32,8 +32,17 @@ public class Cell extends Observable {
 		this.valid = true;
 		this.automaticallySolved = false;
 	}
-	
-	/* --> Methods <-- */
+
+    public Cell(int gridX, int gridY, int value, boolean editable, boolean valid, boolean automaticallySolved) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.value = value;
+        this.editable = editable;
+        this.valid = valid;
+        this.automaticallySolved = automaticallySolved;
+    }
+
+    /* --> Methods <-- */
 
     public Cell copy() {
         return new Cell(gridX, gridY, value, editable);
