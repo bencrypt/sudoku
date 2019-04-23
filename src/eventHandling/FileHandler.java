@@ -104,6 +104,44 @@ public class FileHandler {
         return sudoku;
     }
 
+    public static Sudoku importSudokuFromXml(String sourcePath) {
+
+        // get source file
+        File source = new File(sourcePath);
+
+        // import from the choosen file
+        XmlSudoku xmlSudoku = null;
+        try {
+            // helping classes
+            JAXBContext jc = JAXBContext.newInstance(XmlSudoku.class, XmlCell.class);
+            Unmarshaller um = jc.createUnmarshaller();
+
+            // read XML
+            xmlSudoku = (XmlSudoku) um.unmarshal(source);
+
+            // set the destination file as current file
+            currentFile = source;
+
+        } catch (JAXBException e) {
+            JOptionPane.showMessageDialog(null, "Die Datei konnte nicht importiert werden.",
+                    "Fehler", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+        // convert the imported XmlSudoku to an internal Sudoku
+        Cell[][] internalBoard = new Cell[9][9];
+        xmlSudoku.getBoard().forEach(xmlCell -> {
+            internalBoard[xmlCell.getGridX()][xmlCell.getGridY()] =
+                    new Cell(xmlCell.getGridX(), xmlCell.getGridY(), xmlCell.getValue(), xmlCell.isEditable(),
+                            xmlCell.isValid(), xmlCell.isAutomaticallySolved());
+        });
+
+        Sudoku sudoku = new Sudoku(internalBoard);
+
+        // return the converted Sudoku
+        return sudoku;
+    }
+
     /*
      * Helping method for file choosing
      */
