@@ -65,11 +65,16 @@ public class ControlPanelHandler {
             // determine the next Cell (copy) to be changed
             Cell nextStep = SudokuSolver.determineNextStep(ctrlBoard.getModel());
 
+            // if no further step is possible, show a info message
+            if (nextStep == null) {
+                JOptionPane.showMessageDialog(null, "Es konnte kein weiterer Schritt berechnet werden.");
+            }
+
             // work with the determined Cell if existing
             if (nextStep != null) {
 
                 // get the corresponding (unmodified) Cell from the model
-                Cell toChange = ctrlBoard.getModel().getBoard()[nextStep.getGridX()][nextStep.getGridY()];
+                Cell toChange = ctrlBoard.getModel().getBoard()[nextStep.getRow()][nextStep.getColumn()];
 
                 // change the value and status of the model Cell
                 toChange.setValue(nextStep.getValue());

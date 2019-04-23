@@ -7,8 +7,8 @@ public class Cell extends Observable {
 	/* --> Fields <-- */
 
     // position of the cell in a Sudoku board
-	private int gridX;
-	private int gridY;
+	private int row;
+	private int column;
 
 	// value of the cell (1 to 9, 0 if empty)
 	private int value;
@@ -20,11 +20,11 @@ public class Cell extends Observable {
 	
 	/* --> Constructors <-- */
 	
-	public Cell(int gridX, int gridY, int value, boolean editable) {
+	public Cell(int row, int column, int value, boolean editable) {
 
 	    // set fields with given values
-		this.gridX = gridX;
-		this.gridY = gridY;
+		this.row = row;
+		this.column = column;
 		this.value = value;
 		this.editable = editable;
 
@@ -33,9 +33,9 @@ public class Cell extends Observable {
 		this.automaticallySolved = false;
 	}
 
-    public Cell(int gridX, int gridY, int value, boolean editable, boolean valid, boolean automaticallySolved) {
-        this.gridX = gridX;
-        this.gridY = gridY;
+    public Cell(int row, int column, int value, boolean editable, boolean valid, boolean automaticallySolved) {
+        this.row = row;
+        this.column = column;
         this.value = value;
         this.editable = editable;
         this.valid = valid;
@@ -45,7 +45,7 @@ public class Cell extends Observable {
     /* --> Methods <-- */
 
     public Cell copy() {
-        return new Cell(gridX, gridY, value, editable);
+        return new Cell(row, column, value, editable, valid, automaticallySolved);
     }
 
     @Override
@@ -55,14 +55,20 @@ public class Cell extends Observable {
         clearChanged();
     }
 
-    /* --> Getters and Setters <-- */
-
-    public int getGridX() {
-        return gridX;
+    @Override
+    public String toString() {
+        return "Cell[row: " + row + ", column: " + column + ", value: " + value + ", editable: " + editable
+                + ", valid: " + valid + ", automaticallySolved: " + automaticallySolved + "]";
     }
 
-    public int getGridY() {
-        return gridY;
+    /* --> Getters and Setters <-- */
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
     }
 
     public int getValue() {

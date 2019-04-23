@@ -2,7 +2,10 @@ package model;
 
 import utils.DuplicatesChecker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Sudoku {
 
@@ -21,7 +24,6 @@ public class Sudoku {
 	public void restart() {
 
 		Cell currentCell;
-
 		for (int row = 0; row < 9; row++) {
 			for (int col = 0; col < 9; col++) {
 				currentCell = board[row][col];
@@ -30,6 +32,8 @@ public class Sudoku {
 				}
 			}
 		}
+
+		checkAndMarkDuplicates();
 	}
 
 	/*
@@ -57,17 +61,17 @@ public class Sudoku {
 
 				// check if the value of the cell is already existing in a related unit (row, column, box)
 				// --> if so, mark the Cell as invalid
-				checkAndMarkDuplicatesInRow(row);
-				checkAndMarkDuplicatesInColumn(col);
-				checkAndMarkDuplicatesInBox(row, col);
+				checkAndMarkDuplicatesInRow(currentCell);
+				checkAndMarkDuplicatesInColumn(currentCell);
+				checkAndMarkDuplicatesInBox(currentCell);
 			}
 		}
 	}
 
-	private void checkAndMarkDuplicatesInRow(int row)
+	private void checkAndMarkDuplicatesInRow(Cell cellInRow)
 	{
 		// determine all affected Cells and Values
-		List<Cell> cells = getAllCellsInRow(row);
+		List<Cell> cells = getAllCellsInRow(cellInRow);
 		List<Integer> values = new ArrayList<>(9);
 
 		cells.forEach(cell -> {
@@ -88,10 +92,10 @@ public class Sudoku {
 		});
 	}
 
-	private void checkAndMarkDuplicatesInColumn(int col)
+	private void checkAndMarkDuplicatesInColumn(Cell cellInCol)
 	{
 		// determine all affected Cells and Values
-		List<Cell> cells = getAllCellsInColumn(col);
+		List<Cell> cells = getAllCellsInColumn(cellInCol);
 		List<Integer> values = new ArrayList<>(9);
 
 		cells.forEach(cell -> {
@@ -112,10 +116,10 @@ public class Sudoku {
 		});
 	}
 
-	private void checkAndMarkDuplicatesInBox(int row, int col)
+	private void checkAndMarkDuplicatesInBox(Cell cellInBox)
 	{
 		// determine all affected Cells and Values
-		List<Cell> cells = getAllCellsInBox(row, col);
+		List<Cell> cells = getAllCellsInBox(cellInBox);
 		List<Integer> values = new ArrayList<>(9);
 
 		cells.forEach(cell -> {
@@ -207,14 +211,15 @@ public class Sudoku {
 
 		// list with all existing values in the related units (row, column, box)
 		Set<Integer> existingValues = new TreeSet<>();
-		existingValues.addAll(determineAllValuesInRow(cell.getGridX()));
-		existingValues.addAll(determineAllValuesInColumn(cell.getGridY()));
-		existingValues.addAll(determineAllValuesInBox(cell.getGridX(), cell.getGridY()));
+		existingValues.addAll(determineAllValuesInRow(cell));
+		existingValues.addAll(determineAllValuesInColumn(cell));
+		existingValues.addAll(determineAllValuesInBox(cell));
 
 		// delete every existing value from the list of possible values
 		possibleValues.removeAll(existingValues);
 
 		// control output
+//		System.out.println("\ndeterminePossibleValues: " + cell.getRow() + "|" + cell.getColumn());
 //		System.out.println("Schon vorhandene Zahlen: " + existingValues);
 //		System.out.println("Mögliche Zahlen: " + possibleValues);
 
@@ -227,10 +232,11 @@ public class Sudoku {
 	 * --> determine existing values in a unit
 	 */
 
-	public List<Integer> determineAllValuesInRow(int row) {
+	public List<Integer> determineAllValuesInRow(Cell cell) {
 
-		// create the set
+		// needed variables
 		List<Integer> allValues = new ArrayList<>();
+		int row = cell.getRow();
 
 		// helper variables, defined before the following loop to save memory
 		Cell currentCell = null;
@@ -253,10 +259,11 @@ public class Sudoku {
 		return allValues;
 	}
 
-	public List<Integer> determineAllValuesInColumn(int col) {
+	public List<Integer> determineAllValuesInColumn(Cell cell) {
 
-		// create the set
+		// needed variables
 		List<Integer> allValues = new ArrayList<>();
+		int col = cell.getColumn();
 
 		// helper variables, defined before the following loop to save memory
 		Cell currentCell = null;
@@ -279,10 +286,12 @@ public class Sudoku {
 		return allValues;
 	}
 
-	public List<Integer> determineAllValuesInBox(int row, int col) {
+	public List<Integer> determineAllValuesInBox(Cell cell) {
 
-		// create the set
+		// needed variables
 		List<Integer> allValues = new ArrayList<>();
+		int row = cell.getRow();
+		int col = cell.getColumn();
 
 		// get the first coordinate in the affected box
 		int rowInBox = row % 3;
@@ -320,10 +329,25 @@ public class Sudoku {
 		return board;
 	}
 
-	public List<Cell> getAllCellsInRow(int row) {
+	public List<Cell> getAllRelatedCells(Cell cell) {
 
-		// create the list
+		// create the list to be returned
+		List<Cell> relatedCells = new ArrayList<>();
+
+		// add all Cells in the related units (row, column, box)
+		relatedCells.addAll(getAllCellsInRow(cell));
+		relatedCells.addAll(getAllCellsInColumn(cell));
+		relatedCells.addAll(getAllCellsInBox(cell));
+
+		// return the filled list
+		return relatedCells;
+	}
+
+	public List<Cell> getAllCellsInRow(Cell cell) {
+
+		// needed variables
 		List<Cell> allCells = new ArrayList<>(9);
+		int row = cell.getRow();
 
 		// get all Cells in the given row
 		for (int col = 0; col < 9; col++) {
@@ -334,10 +358,11 @@ public class Sudoku {
 		return allCells;
 	}
 
-	public List<Cell> getAllCellsInColumn(int col) {
+	public List<Cell> getAllCellsInColumn(Cell cell) {
 
-		// create the list
+		// needed variables
 		List<Cell> allCells = new ArrayList<>(9);
+		int col = cell.getColumn();
 
 		// get all Cells in the given column
 		for (int row = 0; row < 9; row++) {
@@ -348,10 +373,12 @@ public class Sudoku {
 		return allCells;
 	}
 
-	public List<Cell> getAllCellsInBox(int row, int col) {
+	public List<Cell> getAllCellsInBox(Cell cell) {
 
-		// create the list
+		// needed variables
 		List<Cell> allCells = new ArrayList<>(9);
+		int row = cell.getRow();
+		int col = cell.getColumn();
 
 		// get the first coordinate in the affected box
 		int rowInBox = row % 3;

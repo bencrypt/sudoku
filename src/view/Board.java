@@ -5,7 +5,6 @@ import utils.IndexConverter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,6 +26,10 @@ public class Board extends JPanel {
     }
 
     /* --> Methods <-- */
+
+    /*
+     * methods for initializing the GUI
+     */
 
     private void init() {
 
@@ -111,7 +114,6 @@ public class Board extends JPanel {
             int box = IndexConverter.determineGuiBoxForGuiCell(i);
             boxes.get(box).add(cells.get(i));
         }
-
     }
 
     /* --> Getters And Setters <-- */

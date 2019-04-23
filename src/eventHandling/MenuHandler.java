@@ -1,15 +1,13 @@
 package eventHandling;
 
 import computing.GeneratorThread;
-import computing.SudokuGenerator;
 import controller.CtrlBoard;
+import eventHandling.printing.PrintHandler;
 import model.Sudoku;
 import view.WaitingDialog;
 import view.menu.MenuBar;
-import view.menu.MnuFile;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -32,6 +30,7 @@ public class MenuHandler {
         addMenuHandlerLoad();
         addMenuHandlerSave();
         addMenuHandlerSaveAs();
+        addMenuHandlerPrint();
         addMenuHandlerExit();
     }
 
@@ -84,6 +83,12 @@ public class MenuHandler {
     private void addMenuHandlerSaveAs() {
         gui.getMnuFile().getMniSaveAs().addActionListener(e -> {
             FileHandler.exportSudokuIntoXml(ctrlBoard.getModel(), false);
+        });
+    }
+
+    private void addMenuHandlerPrint() {
+        gui.getMnuFile().getMniPrint().addActionListener(e -> {
+            PrintHandler.printBoard(ctrlBoard.getGui());
         });
     }
 

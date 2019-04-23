@@ -5,6 +5,9 @@ import model.Sudoku;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class SudokuSolver {
 
@@ -190,12 +193,19 @@ public class SudokuSolver {
 
     public static Cell determineNextStep(Sudoku sudoku)
     {
+        // TODO: weitere Berechnungen
+
         // determine the value for the next Cell to be solved
         // --> a copy of the changed Cell will be returned
         Cell nextStep = onlyOnePossibleValue(sudoku);
 
+        if (nextStep == null) {
+            nextStep = onlyOnePossibleCellInRelatingUnits(sudoku);
+            System.out.println("zweiter Test: " + nextStep);
+        }
+
         // Kontrollausgabe
-//        System.out.println("Nächster Schritt: " + changed);
+//        System.out.println("Nächster Schritt: " + nextStep);
 
         // return the copy of the changed Cell
         return nextStep;
@@ -226,7 +236,7 @@ public class SudokuSolver {
                 }
             }
 
-            // break if there was still a changed cell
+            // break if there is already a changed cell
             if (changed != null) {
                 break;
             }
@@ -234,5 +244,94 @@ public class SudokuSolver {
 
         // return the changed Cell (maybe null)
         return changed;
+    }
+
+    private static Cell onlyOnePossibleCellInRelatingUnits(Sudoku sudoku) {
+
+        // help variable
+        Cell changed = null;
+
+        // go through each Cell until one Cell with only one possible value is found
+        for (Cell[] row : sudoku.getBoard()) {
+            for (Cell cell : row) {
+
+                // if the current Cell cannot be edited or is already filled, continue with the next Cell
+                if (!cell.isEditable() || cell.getValue() != 0) {
+                    continue;
+                }
+
+                // determine the possible values of the cell
+                List<Integer> possibleValuesInCell = sudoku.determinePossibleValues(cell);
+
+                // determine all empty Cells and their possible values in the related row
+                List<Cell> otherCellsInRow = sudoku.getAllCellsInRow(cell)
+                                                .stream().filter(c -> c.getValue() == 0).collect(Collectors.toList());
+                otherCellsInRow.remove(cell);
+
+                Set<Integer> possibleValuesInRow = new TreeSet<>();
+                otherCellsInRow.forEach(related -> {
+                    possibleValuesInRow.addAll(sudoku.determinePossibleValues(related));
+                });
+
+                // determine all empty Cells and their possible values in the related column
+                List<Cell> otherCellsInColumn = sudoku.getAllCellsInColumn(cell)
+                                                    .stream().filter(c -> c.getValue() == 0).collect(Collectors.toList());
+                otherCellsInColumn.remove(cell);
+
+                Set<Integer> possibleValuesInColumn = new TreeSet<>();
+                otherCellsInColumn.forEach(related -> {
+                    possibleValuesInColumn.addAll(sudoku.determinePossibleValues(related));
+                });
+
+                // determine all empty Cells and their possible values in the related box
+                List<Cell> otherCellsInBox = sudoku.getAllCellsInBox(cell)
+                                                .stream().filter(c -> c.getValue() == 0).collect(Collectors.toList());
+                otherCellsInBox.remove(cell);
+
+                Set<Integer> possibleValuesInBox = new TreeSet<>();
+                otherCellsInBox.forEach(related -> {
+                    possibleValuesInBox.addAll(sudoku.determinePossibleValues(related));
+                });
+
+                // control output
+//                System.out.println("\nonlyOnePossibleCellInRelatingUnits: " + cell.getRow() + "|" + cell.getColumn());
+//                System.out.println("Möglich in Feld: " + possibleValuesInCell);
+//                System.out.println("Möglich in anderen Feldern der Reihe:  " + possibleValuesInRow);
+//                System.out.println("Möglich in anderen Feldern der Spalte: " + possibleValuesInColumn);
+//                System.out.println("Möglich in anderen Feldern der Box:    " + possibleValuesInBox);
+
+                // if there is exactly one possible value left for the cell, set it into the Cell
+                for (Integer value : possibleValuesInCell) {
+
+                    // if the value is possible in another Cell of an unit (row, column, box), try the next value
+                    if (possibleValuesInRow.contains(value)
+                            && possibleValuesInColumn.contains(value)
+                            && possibleValuesInBox.contains(value))
+                    {
+                        continue;
+                    }
+
+                    // here the current value is only possible in the current Cell for one unit (row, column, box)
+                    // --> set it into a copy of the Cell and stop the loop
+                    changed = cell.copy();
+                    changed.setValue(value);
+                    break;
+                }
+
+                // break if there is already a changed cell
+                if (changed != null) {
+                    break;
+                }
+            }
+
+            // break if there is already a changed cell
+            if (changed != null) {
+                break;
+            }
+        }
+
+        // return the changed Cell (maybe null)
+        return changed;
+
     }
 }

@@ -1,7 +1,5 @@
 package view.menu;
 
-import model.BoardConstants;
-
 import javax.swing.*;
 
 public class MnuFile extends JMenu {
@@ -13,6 +11,7 @@ public class MnuFile extends JMenu {
     private JMenuItem mniLoad;
     private JMenuItem mniSave;
     private JMenuItem mniSaveAs;
+    private JMenuItem mniPrint;
     private JMenuItem mniExit;
 
     /* --> Constructor <-- */
@@ -34,6 +33,7 @@ public class MnuFile extends JMenu {
         mniLoad = new JMenuItem("Sudoku laden");
         mniSave = new JMenuItem("Sudoku speichern");
         mniSaveAs = new JMenuItem("Sudoku speichern unter ...");
+        mniPrint = new JMenuItem("Sudoku ausdrucken");
         mniExit = new JMenuItem("Programm beenden");
 
         // add the menu-items to the menu
@@ -43,6 +43,8 @@ public class MnuFile extends JMenu {
         add(mniLoad);
         add(mniSave);
         add(mniSaveAs);
+        addSeparator();
+        add(mniPrint);
         addSeparator();
         add(mniExit);
     }
@@ -67,6 +69,10 @@ public class MnuFile extends JMenu {
 
     public JMenuItem getMniSaveAs() {
         return mniSaveAs;
+    }
+
+    public JMenuItem getMniPrint() {
+        return mniPrint;
     }
 
     public JMenuItem getMniExit() {

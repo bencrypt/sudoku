@@ -1,7 +1,5 @@
 package controller;
 
-import computing.SudokuGenerator;
-import console.SudokuPrinter;
 import eventHandling.BoardHandler;
 import eventHandling.FileHandler;
 import model.BoardConstants;
@@ -11,8 +9,6 @@ import utils.IndexConverter;
 import view.Board;
 import view.HoverButton;
 
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,7 +28,9 @@ public class CtrlBoard implements Observer {
         this.gui = gui;
         this.ctrlValueSelector = new CtrlValueSelector(this);
 
-        Sudoku test = SudokuGenerator.generateSudoku(35);
+        // TODO: Test-Methoden rausnehmen
+       // Sudoku test = SudokuGenerator.generateSudoku(30);
+        Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
         changeModel(test);
 
         createEventHandling();
@@ -76,7 +74,7 @@ public class CtrlBoard implements Observer {
 
         // determine the updated model-Cell and the corresponding GUI-Cell
         Cell updated = (Cell) o;
-        HoverButton toUpdate = IndexConverter.determineGuiCellFromModelCell(updated.getGridX(), updated.getGridY(), gui.getCells());
+        HoverButton toUpdate = IndexConverter.determineGuiCellFromModelCell(updated.getRow(), updated.getColumn(), gui.getCells());
 
         // put the new value into the GUI
         if (updated.getValue() != 0) {

@@ -1,10 +1,8 @@
 package view.menu;
 
 import model.BoardConstants;
-import view.menu.MnuFile;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MenuBar extends JMenuBar {
 
