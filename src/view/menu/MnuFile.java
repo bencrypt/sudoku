@@ -1,7 +1,5 @@
 package view.menu;
 
-import model.BoardConstants;
-
 import javax.swing.*;
 
 public class MnuFile extends JMenu {

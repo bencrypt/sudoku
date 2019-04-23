@@ -5,12 +5,8 @@ import utils.IndexConverter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.util.ArrayList;
 
 public class Board extends JPanel {

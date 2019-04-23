@@ -1,19 +1,11 @@
 package eventHandling.printing;
 
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
-import model.Sudoku;
 import view.Board;
-import view.Window;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PageRanges;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.print.*;
+import java.awt.print.PrinterAbortException;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 public class PrintHandler {
 

@@ -1,7 +1,5 @@
 package view;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import javax.swing.*;
 import java.awt.*;
 

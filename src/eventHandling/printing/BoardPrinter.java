@@ -1,21 +1,10 @@
 package eventHandling.printing;
 
-import javafx.geometry.Dimension2D;
-import javafx.print.Paper;
-import model.BoardConstants;
 import view.Board;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.File;
-import java.io.IOException;
 
 public class BoardPrinter implements Printable {
 

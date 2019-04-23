@@ -1,7 +1,6 @@
 package main;
 
 import controller.CtrlWindow;
-import model.Sudoku;
 
 import java.awt.*;
 

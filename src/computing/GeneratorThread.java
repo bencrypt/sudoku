@@ -3,7 +3,6 @@ package computing;
 import model.Sudoku;
 
 import javax.swing.*;
-import java.util.List;
 
 public class GeneratorThread extends SwingWorker<Void, Void> {
 

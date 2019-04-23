@@ -4,7 +4,6 @@ import model.Cell;
 import model.Sudoku;
 import view.HoverButton;
 
-import javax.swing.*;
 import java.util.List;
 
 public class IndexConverter {

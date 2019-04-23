@@ -1,16 +1,13 @@
 package eventHandling;
 
 import computing.GeneratorThread;
-import computing.SudokuGenerator;
 import controller.CtrlBoard;
 import eventHandling.printing.PrintHandler;
 import model.Sudoku;
 import view.WaitingDialog;
 import view.menu.MenuBar;
-import view.menu.MnuFile;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
