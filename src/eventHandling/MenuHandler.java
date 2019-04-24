@@ -142,6 +142,8 @@ public class MenuHandler {
         WaitingDialog waitingDialog = new WaitingDialog();
         final GeneratorThread generatorThread = new GeneratorThread(countOfPredefinedCells, waitingDialog);
 
+        // TODO: Stoppe den Thread beim Abbrechen --> funktioniert bisher nicht
+
         // when the waiting dialog is closed, stop generating a new Sudoku
         waitingDialog.addComponentListener(new ComponentAdapter() {
             @Override

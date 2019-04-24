@@ -329,6 +329,34 @@ public class Sudoku {
 		return board;
 	}
 
+	public int getCountOfFilledCells() {
+		int filled = 0;
+
+		for (Cell[] row : board) {
+			for (Cell cell : row) {
+				if (cell.getValue() != 0) {
+					filled++;
+				}
+			}
+		}
+
+		return filled;
+	}
+
+	public int getCountOfEmptyCells() {
+		int empty = 0;
+
+		for (Cell[] row : board) {
+			for (Cell cell : row) {
+				if (cell.getValue() == 0) {
+					empty++;
+				}
+			}
+		}
+
+		return empty;
+	}
+
 	public List<Cell> getAllRelatedCells(Cell cell) {
 
 		// create the list to be returned

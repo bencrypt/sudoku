@@ -1,5 +1,6 @@
 package computing;
 
+import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
 
@@ -11,7 +12,9 @@ import java.util.stream.Collectors;
 
 public class SudokuSolver {
 
-	/* --> find the first solution via backtracking <-- */
+    /*
+     * find first solutions via backtracking
+     */
 
 	public static Sudoku findFirstSolution(Sudoku toSolve) {
 
@@ -73,7 +76,9 @@ public class SudokuSolver {
 		return false;
 	}
 
-	/* --> find all solutions via backtracking <-- */
+	/*
+	 * all solutions via backtracking
+	 */
 		
 	public static List<Sudoku> findAllSolutions(Sudoku toSolve) {
 		
@@ -127,7 +132,9 @@ public class SudokuSolver {
 		}
 	}
 
-	/* --> determine if there is exactly one solution <-- */
+	/*
+	 * unique and count of solutions
+	 */
 
     public static boolean HasExactlyOneSolution(Sudoku toSolve)
     {
@@ -189,7 +196,29 @@ public class SudokuSolver {
         }
     }
 
-    /* --> determine the next solution step via human strategy <-- */
+    /*
+     * solution via human strategy
+     */
+
+    public static boolean isSolveableByHumanStrategy(Sudoku toSolve) {
+
+        Sudoku copy = toSolve.copy();
+
+        Cell nextStep;
+        do {
+            nextStep = determineNextStep(copy);
+            if (nextStep != null) {
+                copy.getBoard()[nextStep.getRow()][nextStep.getColumn()].setValue(nextStep.getValue());
+            }
+
+        } while (nextStep != null);
+
+        if (copy.determineNextFreeCell() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static Cell determineNextStep(Sudoku sudoku)
     {
@@ -201,7 +230,7 @@ public class SudokuSolver {
 
         if (nextStep == null) {
             nextStep = onlyOnePossibleCellInRelatingUnits(sudoku);
-            System.out.println("zweiter Test: " + nextStep);
+//            System.out.println("zweiter Test: " + nextStep);
         }
 
         // Kontrollausgabe
