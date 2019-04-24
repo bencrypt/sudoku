@@ -44,7 +44,7 @@ public class Board extends JPanel {
         add(contentPane);
 
         // initialize the 81 cells
-        cells = new ArrayList<HoverButton>(81);
+        cells = new ArrayList<>(81);
         for (int i = 0; i < 81; i++) {
             cells.add(initCell());
         }

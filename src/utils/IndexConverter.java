@@ -8,26 +8,26 @@ import java.util.List;
 
 public class IndexConverter {
 
-    /**
-     * Converts the given one-dimensional index of a GUI-Cell in the GUI-list to the two-dimensional index for
-     * the model-Cells and returns the Cell at this position.
-     *
-     * @param sudoku
-     *      the Sudoku with the Cell
-     * @param guiCell
-     *      the index of the GUI-Cell (with one-dimensional index)
-     * @return
-     *      the model-Cell which corresponds to the GUI-Cell at the given position
-     */
-    public static Cell determineModelCellFromIndexOfGuiCell(Sudoku sudoku, int guiCell) {
 
-        // calculate the position of the Cell given by its index
-        int cellRow = guiCell / 9;
-        int cellCol = guiCell % 9;
+    public static Pair<Integer, Integer> determineIndex2DFromIndex1D(int index1D) {
 
-        // calculate the box index and return it
-        return sudoku.getBoard()[cellRow][cellCol];
+        // calculate the 2D-index of the Cell given by the 1D-index
+        int cellRow = index1D / 9;
+        int cellCol = index1D % 9;
+
+        // return the 2D-Index
+        return new Pair<>(cellRow, cellCol);
     }
+
+    public static int determineIndex1DFromIndex2D(Pair<Integer, Integer> index2D) {
+
+        // calculate the 1D-index of the Cell given by the 2D-index
+        int index1D = (index2D.getFirst()*9) + index2D.getSecond();
+
+        // return the 1D-Index
+        return index1D;
+    }
+
 
     /**
      * Converts the given two-dimensional index of a model-Cell to the one-dimensional index in the GUI-list

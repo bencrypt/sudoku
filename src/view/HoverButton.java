@@ -31,7 +31,7 @@ public class HoverButton extends JButton {
      */
     public HoverButton(String text) {
         super(text);
-        init(Color.BLACK, BoardConstants.BORDER_COLOR);
+        init(BoardConstants.BORDER_COLOR, BoardConstants.BORDER_COLOR);
     }
 
     /**
@@ -104,6 +104,9 @@ public class HoverButton extends JButton {
                 setBorder(previousBorder);
             }
         };
+
+        // add the MouseAdapter
+        addMouseListener(mouseAdapter);
     }
 
     /**

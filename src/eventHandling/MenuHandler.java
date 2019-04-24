@@ -110,23 +110,29 @@ public class MenuHandler {
                 "Wie viele Sudoku-Zellen sollen vorbelegt werden?", 30);
         int countOfPredefinedCells = -1;
 
-        // check if the input is valid
-        try {
-            countOfPredefinedCells = Integer.valueOf(input);
+        // define the border values for input
+        int MIN = 20;
+        int MAX = 50;
 
-            if (countOfPredefinedCells < 20 || countOfPredefinedCells > 40) {
-                throw new NumberFormatException();
+        // if there is a input, check if it is valid
+        if (input != null) {
+            try {
+                countOfPredefinedCells = Integer.valueOf(input);
+
+                if (countOfPredefinedCells < MIN || countOfPredefinedCells > MAX) {
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException ex) {
+                showErrorDialog(input, MIN, MAX);
             }
-        } catch (NumberFormatException ex) {
-            showErrorDialog(input);
         }
 
         // return the input, maybe -1
         return countOfPredefinedCells;
     }
 
-    private void showErrorDialog(String input) {
-        String errorMessage = "'" + input + "' ist kein gültiger Wert.\nGültige Werte: 20 bis 40";
+    private void showErrorDialog(String input, int min, int max) {
+        String errorMessage = "'" + input + "' ist kein gültiger Wert.\nGültige Werte: " + min + " bis " + max;
         JOptionPane.showMessageDialog(null, errorMessage, "Fehler", JOptionPane.ERROR_MESSAGE);
     }
 

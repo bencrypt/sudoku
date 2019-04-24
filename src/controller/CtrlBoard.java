@@ -6,6 +6,7 @@ import model.BoardConstants;
 import model.Cell;
 import model.Sudoku;
 import utils.IndexConverter;
+import utils.Pair;
 import view.Board;
 import view.HoverButton;
 
@@ -119,7 +120,8 @@ public class CtrlBoard implements Observer {
      */
 
     public void updateFromValueInput(int indexClickedCell, int newValue) {
-        Cell toUpdate = IndexConverter.determineModelCellFromIndexOfGuiCell(model, indexClickedCell);
+        Pair<Integer, Integer> index2D = IndexConverter.determineIndex2DFromIndex1D(indexClickedCell);
+        Cell toUpdate = model.getBoard()[index2D.getFirst()][index2D.getSecond()];
         toUpdate.setValue(newValue);
 
         if (toUpdate.isAutomaticallySolved()) {
