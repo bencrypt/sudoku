@@ -2,6 +2,7 @@ package main;
 
 import controller.CtrlWindow;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Start {
@@ -12,7 +13,7 @@ public class Start {
 //		Test.findAndPrintSolution(sudoku);
 //		Test.generateAndPrintNewSudokuWithSolutions(30);
 
-		EventQueue.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> {
 			CtrlWindow ctrlWindow = new CtrlWindow();
 			ctrlWindow.showWindow();
 		});

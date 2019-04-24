@@ -40,6 +40,32 @@ public class SudokuGenerator {
         return new Sudoku(board);
     }
 
+    public static Sudoku tryToGenerateSudoku(int countOfPredefinedCells) {
+
+        // define a new Sudoku
+        Sudoku newSudoku = null;
+
+        // generate a new Sudoku until there is created one with exactly one solution
+        newSudoku = createSudokuViaHumanStrategy(countOfPredefinedCells);
+
+        if (newSudoku != null) {
+
+            // make the predefined Cells non editable
+            for (Cell[] row : newSudoku.getBoard()) {
+                for (Cell cell : row) {
+
+                    // if the current Cell is empty (value 0) it can be edited
+                    if (cell.getValue() != 0) {
+                        cell.setEditable(false);
+                    }
+                }
+            }
+        }
+
+        // return the created Sudoku
+        return newSudoku;
+    }
+
     public static Sudoku generateSudoku(int countOfPredefinedCells) {
 
         // define a new Sudoku

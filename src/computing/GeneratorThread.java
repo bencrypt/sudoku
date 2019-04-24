@@ -23,8 +23,26 @@ public class GeneratorThread extends SwingWorker<Void, Void> {
     /* --> Methods <-- */
 
     @Override
-    protected Void doInBackground() throws Exception {
-        newSudoku = SudokuGenerator.generateSudoku(countOfPredefinedCells);
+    protected Void doInBackground() {
+
+        // save the start time
+        long start = System.currentTimeMillis();
+
+        while (newSudoku == null && !isCancelled()) {
+            newSudoku = SudokuGenerator.tryToGenerateSudoku(countOfPredefinedCells);
+        }
+
+        // save the end time
+        long end = System.currentTimeMillis();
+
+        // control output with needed time
+        if (isCancelled()) {
+            System.out.println("Generator-Thread unterbrochen nach " + (end - start) + " ms.");
+        } else {
+            System.out.println("Neues Sudoku generiert in " + (end - start) + " ms.");
+        }
+
+        // return null (not needed)
         return null;
     }
 
