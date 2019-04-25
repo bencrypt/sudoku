@@ -97,7 +97,6 @@ public class MenuHandler {
 
     private void addMenuHandlerExit() {
         gui.getMnuFile().getMniExit().addActionListener(e -> {
-            // TODO: Beenden bestätigen lassen, sofern ungespeichertes Sudoku
             ctrlWindow.closeWindow();
         });
     }

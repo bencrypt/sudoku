@@ -121,4 +121,8 @@ public class Board extends JPanel {
     public ArrayList<HoverButton> getCells() {
         return cells;
     }
+
+    public ArrayList<JPanel> getBoxes() {
+        return boxes;
+    }
 }

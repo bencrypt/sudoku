@@ -1,5 +1,6 @@
 package controller;
 
+import computing.SudokuGenerator;
 import eventHandling.BoardHandler;
 import eventHandling.FileHandler;
 import model.BoardConstants;
@@ -30,8 +31,8 @@ public class CtrlBoard implements Observer {
         this.ctrlValueSelector = new CtrlValueSelector(this);
 
         // TODO: Test-Methoden rausnehmen
-       // Sudoku test = SudokuGenerator.generateSudoku(30);
-        Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
+        Sudoku test = SudokuGenerator.generateSudoku(30);
+       // Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
         changeModel(test);
 
         createEventHandling();
@@ -90,6 +91,7 @@ public class CtrlBoard implements Observer {
 
         if (updated.isEditable()) {
             toUpdate.setFont(BoardConstants.FONT_EDITABLE);
+            toUpdate.enableHover();
         } else {
             toUpdate.setFont(BoardConstants.FONT_UNEDITABLE);
             toUpdate.disableHover();

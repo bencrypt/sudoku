@@ -14,7 +14,9 @@ public class HoverButton extends JButton {
 
     /* --> Fields <-- */
 
-    private Border previousBorder;
+    private Border originalBorder;
+    private Border hoverBorder;
+
     private Color highlight;
     private Color shadow;
 
@@ -30,7 +32,11 @@ public class HoverButton extends JButton {
      *      the text of the Button
      */
     public HoverButton(String text) {
+
+        // create normal JButton with the given text
         super(text);
+
+        // initialize the hover effect
         init(BoardConstants.BORDER_COLOR, BoardConstants.BORDER_COLOR);
     }
 
@@ -42,11 +48,11 @@ public class HoverButton extends JButton {
      *      the text of the Button
      */
     public HoverButton(String text, Color highlight, Color shadow) {
+
+        // create normal JButton with the given text
         super(text);
 
-        this.highlight = highlight;
-        this.shadow = shadow;
-
+        // initialize the hover effect
         init(highlight, shadow);
     }
 
@@ -64,6 +70,13 @@ public class HoverButton extends JButton {
 
         // preferences
         setBackground(BoardConstants.BACKGROUND);
+
+        // save the given colors
+        this.highlight = highlight;
+        this.shadow = shadow;
+
+        // create the hover border
+        hoverBorder = new EtchedBorder(highlight, shadow);
 
         // add the hover-effect with the given colors
         initMouseAdapter(highlight, shadow);
@@ -86,22 +99,19 @@ public class HoverButton extends JButton {
      */
     private void initMouseAdapter(Color highlight, Color shadow) {
 
-        // create hover border
-        EtchedBorder border = new EtchedBorder(highlight, shadow);
-
         // create hover effect
         // --> if the hover is over, return to the previous border
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                setBorder(border);
+                setBorder(hoverBorder);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                setBorder(previousBorder);
+                setBorder(originalBorder);
             }
         };
 
@@ -142,6 +152,7 @@ public class HoverButton extends JButton {
      */
     public void disableHover() {
         removeMouseListener(mouseAdapter);
+        setBorder(originalBorder);
     }
 
     /**
@@ -153,8 +164,10 @@ public class HoverButton extends JButton {
     @Override
     public void setBorder(Border border) {
 
-        // save previous border
-        previousBorder = getBorder();
+        // save previous border if not the hover border
+        if (border != hoverBorder) {
+            originalBorder = border;
+        }
 
         // set new border
         super.setBorder(border);

@@ -3,6 +3,7 @@ package eventHandling;
 import controller.CtrlBoard;
 import controller.CtrlValueSelector;
 import view.Board;
+import view.HoverButton;
 import view.ValueSelector;
 
 import javax.swing.*;
@@ -37,6 +38,15 @@ public class BoardHandler {
     private void addBoardClickHandler() {
         gui.getCells().forEach(cell -> {
             addCellClickHandler(cell);
+        });
+
+        // hide ValueSelector when clicked on Board or when exited Board
+        gui.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                ctrlValueSelector.getGui().hidePopup();
+            }
         });
     }
 
