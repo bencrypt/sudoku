@@ -1,5 +1,6 @@
 package eventHandling;
 
+import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
 import model.xml.XmlCell;
@@ -18,6 +19,7 @@ public class FileHandler {
     /* --> Fields <-- */
 
     private static File currentFile;
+    private static Sudoku lastSavedSudoku;
 
     /* --> Methods <-- */
 
@@ -54,6 +56,11 @@ public class FileHandler {
 
             // set the destination file as current file
             currentFile = destination;
+
+            // set a copy of the saved Sudoku as the last saved Sudoku
+            // --> can be compared with later states for checking if the current state is saved or not when closing
+            lastSavedSudoku = toExport.copy();
+            SudokuPrinter.showOnConsole(lastSavedSudoku, "lastSavedSudoku");
 
         } catch (JAXBException e) {
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht exportiert werden.",
@@ -100,6 +107,11 @@ public class FileHandler {
 
         Sudoku sudoku = new Sudoku(internalBoard);
 
+        // set a copy of the imported Sudoku as the last saved Sudoku
+        // --> can be compared with later states for checking if the current state is saved or not when closing
+        lastSavedSudoku = sudoku.copy();
+        SudokuPrinter.showOnConsole(lastSavedSudoku, "lastSavedSudoku");
+
         // return the converted Sudoku
         return sudoku;
     }
@@ -138,6 +150,11 @@ public class FileHandler {
 
         Sudoku sudoku = new Sudoku(internalBoard);
 
+        // set a copy of the imported Sudoku as the last saved Sudoku
+        // --> can be compared with later states for checking if the current state is saved or not when closing
+        lastSavedSudoku = sudoku.copy();
+        SudokuPrinter.showOnConsole(lastSavedSudoku, "lastSavedSudoku");
+
         // return the converted Sudoku
         return sudoku;
     }
@@ -173,5 +190,14 @@ public class FileHandler {
 
         // return the choosed file, may be null
         return source;
+    }
+
+    /*
+     * Compare a given Sudoku with the last saved Sudoku
+     * --> e.g. used when closing the Window
+     */
+
+    public static boolean equalsLastSavedSudoku(Sudoku toCompare) {
+        return toCompare.equals(lastSavedSudoku);
     }
 }

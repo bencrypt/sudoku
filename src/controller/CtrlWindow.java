@@ -1,13 +1,17 @@
 package controller;
 
 import eventHandling.ControlPanelHandler;
+import eventHandling.FileHandler;
 import eventHandling.MenuHandler;
 import view.Board;
 import view.ControlPanel;
 import view.Window;
 import view.menu.MenuBar;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CtrlWindow {
 
@@ -51,11 +55,34 @@ public class CtrlWindow {
     }
 
     private void addEventHandlers() {
-        new MenuHandler(ctrlBoard, menuBar);
+        new MenuHandler(this, ctrlBoard, menuBar);
         new ControlPanelHandler(ctrlBoard, controlPanel);
+
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeWindow();
+            }
+        });
     }
 
     public void showWindow() {
         window.makeVisible();
+    }
+
+    public void closeWindow() {
+        boolean equalsLastSavedSudoku = FileHandler.equalsLastSavedSudoku(ctrlBoard.getModel());
+        int option = JOptionPane.YES_OPTION;
+
+        if (!equalsLastSavedSudoku) {
+            option = JOptionPane.showConfirmDialog(null,
+                    "Der aktuelle Stand des Sudokus wurde nicht gespeichert. " +
+                            "Soll das Programm wirklich beendet werden??",
+                    "Schließen", JOptionPane.YES_NO_OPTION);
+        }
+
+        if (option == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 }

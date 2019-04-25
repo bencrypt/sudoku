@@ -2,6 +2,7 @@ package eventHandling;
 
 import computing.GeneratorThread;
 import controller.CtrlBoard;
+import controller.CtrlWindow;
 import eventHandling.printing.PrintHandler;
 import model.Sudoku;
 import view.WaitingDialog;
@@ -15,13 +16,15 @@ public class MenuHandler {
 
     /* --> Fields <-- */
 
+    private CtrlWindow ctrlWindow;
     private CtrlBoard ctrlBoard;
     private MenuBar gui;
 
     /* --> Constructor <-- */
 
-    public MenuHandler(CtrlBoard ctrlBoard, MenuBar gui) {
+    public MenuHandler(CtrlWindow ctrlWindow, CtrlBoard ctrlBoard, MenuBar gui) {
 
+        this.ctrlWindow = ctrlWindow;
         this.ctrlBoard = ctrlBoard;
         this.gui = gui;
 
@@ -95,7 +98,7 @@ public class MenuHandler {
     private void addMenuHandlerExit() {
         gui.getMnuFile().getMniExit().addActionListener(e -> {
             // TODO: Beenden bestätigen lassen, sofern ungespeichertes Sudoku
-            System.exit(0);
+            ctrlWindow.closeWindow();
         });
     }
 

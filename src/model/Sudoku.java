@@ -36,6 +36,47 @@ public class Sudoku {
 		checkAndMarkDuplicates();
 	}
 
+	public Sudoku copy() {
+
+		// copy the board
+		Cell[][] boardCopy = new Cell[9][9];
+
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+				boardCopy[row][col] = board[row][col].copy();
+			}
+		}
+
+		// create and return a new Sudoku with the copied board
+		return new Sudoku(boardCopy);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		// if the given Object is not a Sudoku, return false
+		if (!(obj instanceof Sudoku)) {
+			return false;
+		}
+
+		// get the Sudoku which is to be compared
+		Sudoku toCompare = (Sudoku) obj;
+
+		// check equality of each Cell
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+
+				// if one Cell is not equal, return false
+				if (!board[row][col].equals(toCompare.getBoard()[row][col])) {
+					return false;
+				}
+			}
+		}
+
+		// if arrived here, the Sudokus are equal
+		return true;
+	}
+
 	/*
 	 * methods for marking duplicate Cells as invalid
 	 */
@@ -142,23 +183,8 @@ public class Sudoku {
 
 	/*
 	 * methods for solving
-	 * --> copy Sudoku, next free Cell and possible Values
+	 * --> next free Cell, possible Values, all values in a unit
 	 */
-
-	public Sudoku copy() {
-
-		// copy the board
-		Cell[][] boardCopy = new Cell[9][9];
-
-		for (int row = 0; row < 9; row++) {
-			for (int col = 0; col < 9; col++) {
-				boardCopy[row][col] = board[row][col].copy();
-			}
-		}
-
-		// create and return a new Sudoku with the copied board
-		return new Sudoku(boardCopy);
-	}
 
 	public Cell determineNextFreeCell() {
 

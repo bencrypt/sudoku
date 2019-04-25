@@ -56,6 +56,32 @@ public class Cell extends Observable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+
+        // if the given Object is not a Cell, return false
+        if (!(obj instanceof Cell)) {
+            return false;
+        }
+
+        // get the Cell which is to be compared
+        Cell toCompare = (Cell) obj;
+
+        // helping variables
+        boolean sameRow = row == toCompare.getRow();
+        boolean sameCol = column == toCompare.getColumn();
+        boolean sameValue = value == toCompare.getValue();
+        boolean sameEditable = editable == toCompare.isEditable();
+        boolean sameValid = valid == toCompare.isValid();
+        boolean sameAutomaticallySolved = automaticallySolved == toCompare.isAutomaticallySolved();
+
+        // check if the Cells are equal
+        boolean equal = sameRow && sameCol && sameValue && sameEditable && sameValid && sameAutomaticallySolved;
+
+        // return the result
+        return equal;
+    }
+
+    @Override
     public String toString() {
         return "Cell[row: " + row + ", column: " + column + ", value: " + value + ", editable: " + editable
                 + ", valid: " + valid + ", automaticallySolved: " + automaticallySolved + "]";

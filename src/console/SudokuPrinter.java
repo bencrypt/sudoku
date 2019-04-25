@@ -3,6 +3,19 @@ package console;
 import model.Sudoku;
 
 public class SudokuPrinter {
+
+	public static void showOnConsole(Sudoku sudoku, String title) {
+
+		// header with title
+		System.out.println("-------------");
+		System.out.println(title + ":");
+
+		// Sudoku
+		showOnConsole(sudoku);
+
+		// footer
+		System.out.println("-------------");
+	}
 	
 	public static void showOnConsole(Sudoku sudoku) {
 		

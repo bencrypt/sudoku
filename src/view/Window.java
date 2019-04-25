@@ -20,7 +20,7 @@ public class Window extends JFrame {
         // preferences
         setTitle("Sudoku");
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setResizable(false);
     }
 
