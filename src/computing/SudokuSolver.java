@@ -16,6 +16,14 @@ public class SudokuSolver {
      * find first solutions via backtracking
      */
 
+    /**
+     * Returns the first solution of the given Sudoku that is found via backtracking.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      the solved Sudoku
+     */
 	public static Sudoku findFirstSolution(Sudoku toSolve) {
 
 		// copy the Sudoku to be solved so that the solution has another reference
@@ -31,6 +39,16 @@ public class SudokuSolver {
 		return solution;
 	}
 
+    /**
+     * Solves the given Sudoku via backtracking so that the first solution is finally saved in the given instance.
+     * Therefore a copy should be given to this method.
+     * Returns true when a solution is found, else false.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      true when a solution is found, else false
+     */
 	private static boolean solveViaBacktracking(Sudoku toSolve) {
 
 		// determine the next free Cell on the Sudoku board
@@ -79,17 +97,35 @@ public class SudokuSolver {
 	/*
 	 * all solutions via backtracking
 	 */
-		
+
+    /**
+     * Returns a list with all solutions the given Sudoku has.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      a list with all solutions for the given Sudoku, may be empty
+     */
 	public static List<Sudoku> findAllSolutions(Sudoku toSolve) {
-		
+
+	    // create and fill the result list
 		List<Sudoku> solutions = new ArrayList<>();
-		
 		findAllSolutionsViaBacktracking(toSolve, solutions);
-		
+
+		// return the list
 		return solutions;
 		
 	}
-	
+
+    /**
+     * Fills the given list with all solutions the given Sudoku has. Those solutions are made in copies of the original
+     * Sudoku so that the original Sudoku stays untouched from outside view (internally it is changed but resetted).
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @param solutions
+     *      all (yet found) solutions of the given Sudoku
+     */
 	private static void findAllSolutionsViaBacktracking(Sudoku toSolve, List<Sudoku> solutions) {
 		
 		// determine the next free Cell in the Sudoku
@@ -136,6 +172,14 @@ public class SudokuSolver {
 	 * unique and count of solutions
 	 */
 
+    /**
+     * Returns true when the given Sudoku has exactly one solution, else false.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      true when the Sudoku has exactly one solution, else false
+     */
     public static boolean hasExactlyOneSolution(Sudoku toSolve)
     {
         // help list
@@ -152,6 +196,20 @@ public class SudokuSolver {
             return false;
     }
 
+    /**
+     * Searches for <code>maxCount</code> solutions of the given Sudoku. If the given limit is exceeded for exactly
+     * one count, the method will stop. All solutions found until then are saved in the given list.
+     * <p>
+     * Example: when the limit is 1, the method stops when 2 solutions are found. Both solutions are added to the
+     * given list.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @param solutions
+     *      the found solutions
+     * @param maxCount
+     *      the limit for searching solutions
+     */
     private static void determineMaxCountOfSolutions(Sudoku toSolve, List<Sudoku> solutions, int maxCount)
     {
         // as soon there is one more solution as searched stop the method
@@ -200,19 +258,31 @@ public class SudokuSolver {
      * solution via human strategy
      */
 
+    /**
+     * Returns true when the given Sudoku is solveable via human strategies used in the method
+     * {@link #determineNextStep(Sudoku)}. If the Sudoku is not solveable in this way, false will be returned.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      true when solveable by human strategy, else false
+     */
     public static boolean isSolveableByHumanStrategy(Sudoku toSolve) {
 
+        // copy the given Sudoku
         Sudoku copy = toSolve.copy();
 
+        // search for the next (human strategy) step as long as possible
         Cell nextStep;
         do {
             nextStep = determineNextStep(copy);
             if (nextStep != null) {
                 copy.getBoard()[nextStep.getRow()][nextStep.getColumn()].setValue(nextStep.getValue());
             }
-
         } while (nextStep != null);
 
+        // if now there is no empty Cell, the Sudoku is solved
+        // --> return true or false for each case
         if (copy.determineNextFreeCell() == null) {
             return true;
         } else {
@@ -220,9 +290,19 @@ public class SudokuSolver {
         }
     }
 
+    /**
+     * Determines the next Step for solving the given Sudoku. This step is calculated by human strategies, e.g. by
+     * searching a Cell which has only one possible value left.
+     * Returns a copy of the Cell to fill next, where this copy has the value to set for this step.
+     *
+     * @param sudoku
+     *      the Sudoku which should be solved
+     * @return
+     *      a copy of the Cell to fill for the next step (has the value to set for solving)
+     */
     public static Cell determineNextStep(Sudoku sudoku)
     {
-        // TODO: weitere Berechnungen
+        // TODO: weitere Berechnungen?
 
         // determine the value for the next Cell to be solved
         // --> a copy of the changed Cell will be returned
@@ -233,13 +313,23 @@ public class SudokuSolver {
 //            System.out.println("zweiter Test: " + nextStep);
         }
 
-        // Kontrollausgabe
+        // control output
 //        System.out.println("Nächster Schritt: " + nextStep);
 
         // return the copy of the changed Cell
         return nextStep;
     }
 
+    /**
+     * Goes through the given Sudoku to find a Cell where only one possible value is left. If such a Cell is found,
+     * the left value is setted in a copy of this Cell. Afterwards this Cell is returned.
+     * If no Cell has only one possible value, null is returned.
+     *
+     * @param sudoku
+     *      the Sudoku which should be solved
+     * @return
+     *      a copy of the Cell found with the only possible value setted
+     */
     private static Cell onlyOnePossibleValue(Sudoku sudoku)
     {
         // help variable
@@ -275,6 +365,20 @@ public class SudokuSolver {
         return changed;
     }
 
+    /**
+     * Goes through the given Sudoku to find a Cell which is the only Cell in a unit (row, column, box) to have a
+     * certain value. If such a Cell is found, the value is setted in a copy of this Cell. Afterwards this Cell is
+     * returned.
+     * If no Cell has a definitively value, null is returned.
+     * <p>
+     * Example: In the first row the Cell (0|5) is the only Cell which can have the value 8. So 8 has to be setted
+     * into this Cell.
+     *
+     * @param sudoku
+     *      the Sudoku which should be solved
+     * @return
+     *      a copy of the Cell found with the only possible value setted
+     */
     private static Cell onlyOnePossibleCellInRelatingUnits(Sudoku sudoku) {
 
         // help variable
@@ -361,6 +465,5 @@ public class SudokuSolver {
 
         // return the changed Cell (maybe null)
         return changed;
-
     }
 }

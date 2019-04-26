@@ -32,7 +32,7 @@ public class CtrlBoard implements Observer {
 
         // TODO: Test-Methoden rausnehmen
         Sudoku test = SudokuGenerator.generateSudoku(30);
-       // Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
+//        Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
         changeModel(test);
 
         createEventHandling();
