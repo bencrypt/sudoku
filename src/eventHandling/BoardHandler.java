@@ -7,6 +7,7 @@ import view.HoverButton;
 import view.ValueSelector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -44,8 +45,22 @@ public class BoardHandler {
         gui.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
                 ctrlValueSelector.getGui().hidePopup();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+                // get the absolute coordinates of the Board and the mouse cursor
+                Point boardStart = gui.getLocationOnScreen();
+                Point cursor = e.getLocationOnScreen();
+
+                // if the mouse is NOT on the board, hide the ValueSelector
+                if (cursor.x < boardStart.x || cursor.x > (boardStart.x + gui.getWidth())
+                        || cursor.y < boardStart.y || cursor.y > (boardStart.y + gui.getHeight()))
+                {
+                    ctrlValueSelector.getGui().hidePopup();
+                }
             }
         });
     }
