@@ -136,7 +136,7 @@ public class SudokuSolver {
 	 * unique and count of solutions
 	 */
 
-    public static boolean HasExactlyOneSolution(Sudoku toSolve)
+    public static boolean hasExactlyOneSolution(Sudoku toSolve)
     {
         // help list
         List<Sudoku> solutions = new ArrayList<>();
