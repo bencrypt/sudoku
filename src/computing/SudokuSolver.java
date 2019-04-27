@@ -1,6 +1,5 @@
 package computing;
 
-import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
 
@@ -53,14 +52,14 @@ public class SudokuSolver {
 
 		// determine the next free Cell on the Sudoku board
 		// --> if the board is already filled, return true
-		Cell freeCell = toSolve.determineNextFreeCell();
+		Cell freeCell = toSolve.getNextFreeCell();
 		if (freeCell == null) {
 			return true;
 		}
 
 		// determine all possible values for the free Cell
 		// --> if no value is possible, return false
-		List<Integer> possibleValues = toSolve.determinePossibleValues(freeCell);
+		List<Integer> possibleValues = toSolve.getPossibleValues(freeCell);
 		if (possibleValues.isEmpty()) {
 			return false;
 		}
@@ -131,7 +130,7 @@ public class SudokuSolver {
 		// determine the next free Cell in the Sudoku
 		// --> if the Sudoku is completely filled, a copy of the given Sudoku is added to the solution list and
         //     go back to the last backtracking level
-		Cell freeCell = toSolve.determineNextFreeCell();
+		Cell freeCell = toSolve.getNextFreeCell();
 		if (freeCell == null) {
 		    Sudoku solution = toSolve.copy();
 			solutions.add(solution);
@@ -140,7 +139,7 @@ public class SudokuSolver {
 
 		// determine all possible values for the free Cell
 		// --> if no value is possible, return null
-		List<Integer> possibleValues = toSolve.determinePossibleValues(freeCell);
+		List<Integer> possibleValues = toSolve.getPossibleValues(freeCell);
 		if (possibleValues.isEmpty()) {
 			return;
 		}
@@ -221,7 +220,7 @@ public class SudokuSolver {
         // determine the next free Cell in the Sudoku
         // --> if the Sudoku is completely filled, a copy of the given Sudoku is added to the solution list and
         //     go back to the last backtracking level
-        Cell freeCell = toSolve.determineNextFreeCell();
+        Cell freeCell = toSolve.getNextFreeCell();
         if (freeCell == null) {
             Sudoku solution = toSolve.copy();
             solutions.add(solution);
@@ -230,7 +229,7 @@ public class SudokuSolver {
 
         // determine all possible values for the free Cell
         // --> if no value is possible, return null
-        List<Integer> possibleValues = toSolve.determinePossibleValues(freeCell);
+        List<Integer> possibleValues = toSolve.getPossibleValues(freeCell);
         if (possibleValues.isEmpty()) {
             return;
         }
@@ -283,7 +282,7 @@ public class SudokuSolver {
 
         // if now there is no empty Cell, the Sudoku is solved
         // --> return true or false for each case
-        if (copy.determineNextFreeCell() == null) {
+        if (copy.getNextFreeCell() == null) {
             return true;
         } else {
             return false;
@@ -345,7 +344,7 @@ public class SudokuSolver {
                 }
 
                 // determine all possible values for the Cell
-                List<Integer> possibleValues = sudoku.determinePossibleValues(cell);
+                List<Integer> possibleValues = sudoku.getPossibleValues(cell);
 
                 // if there is exactly one possible value, set it into the Cell
                 if (possibleValues.size() == 1) {
@@ -394,7 +393,7 @@ public class SudokuSolver {
                 }
 
                 // determine the possible values of the cell
-                List<Integer> possibleValuesInCell = sudoku.determinePossibleValues(cell);
+                List<Integer> possibleValuesInCell = sudoku.getPossibleValues(cell);
 
                 // determine all empty Cells and their possible values in the related row
                 List<Cell> otherCellsInRow = sudoku.getAllCellsInRow(cell)
@@ -403,7 +402,7 @@ public class SudokuSolver {
 
                 Set<Integer> possibleValuesInRow = new TreeSet<>();
                 otherCellsInRow.forEach(related -> {
-                    possibleValuesInRow.addAll(sudoku.determinePossibleValues(related));
+                    possibleValuesInRow.addAll(sudoku.getPossibleValues(related));
                 });
 
                 // determine all empty Cells and their possible values in the related column
@@ -413,7 +412,7 @@ public class SudokuSolver {
 
                 Set<Integer> possibleValuesInColumn = new TreeSet<>();
                 otherCellsInColumn.forEach(related -> {
-                    possibleValuesInColumn.addAll(sudoku.determinePossibleValues(related));
+                    possibleValuesInColumn.addAll(sudoku.getPossibleValues(related));
                 });
 
                 // determine all empty Cells and their possible values in the related box
@@ -423,7 +422,7 @@ public class SudokuSolver {
 
                 Set<Integer> possibleValuesInBox = new TreeSet<>();
                 otherCellsInBox.forEach(related -> {
-                    possibleValuesInBox.addAll(sudoku.determinePossibleValues(related));
+                    possibleValuesInBox.addAll(sudoku.getPossibleValues(related));
                 });
 
                 // control output

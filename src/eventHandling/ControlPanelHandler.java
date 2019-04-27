@@ -12,22 +12,42 @@ public class ControlPanelHandler {
 
     /* --> Fields <-- */
 
-    private CtrlBoard ctrlBoard;
+    // related View
     private ControlPanel gui;
+
+    // needed for event handling
+    private CtrlBoard ctrlBoard;
 
     /* --> Constructor <-- */
 
+    /**
+     * Creates the event handling for the given ControlPanel-GUI. Therefore uses the given Board-Controller e.g. to make
+     * solving the showed Sudoku possible.
+     *
+     * @param ctrlBoard
+     *      the Board-Controller needed for the event handling
+     * @param gui
+     *      the GUI to be supplemented by the event handling
+     */
     public ControlPanelHandler(CtrlBoard ctrlBoard, ControlPanel gui) {
 
+        // set the fields
         this.ctrlBoard = ctrlBoard;
         this.gui = gui;
 
+        // add the event handlers for the single elements on the GUI
         addSolveCompletelyHandler();
         addSolveNextStepHandler();
     }
 
     /* --> Methods <-- */
 
+    /**
+     * Creates the event handling for the button "Solve completely". Therefore the current shown Sudoku is completely
+     * solved and the solution made to the new Model of the Board-Controller given in the constructor.
+     *
+     * @see SudokuSolver
+     */
     private void addSolveCompletelyHandler() {
         gui.getBtnSolveCompletely().addActionListener(e -> {
 
@@ -37,7 +57,8 @@ public class ControlPanelHandler {
 
             // if there is no solution, show a info message
             if (solution == null) {
-                JOptionPane.showMessageDialog(null, "Es gibt keine Lösung für den aktuellen Stand des Sudokus.");
+                JOptionPane.showMessageDialog(null,
+                                              "Es gibt keine Lösung für den aktuellen Stand des Sudokus.");
             }
 
             // work with the solution if existing
@@ -59,6 +80,12 @@ public class ControlPanelHandler {
         });
     }
 
+    /**
+     * Creates the event handling for the button "Solve next step". Therefore the current shown Sudoku is supplemented
+     * for the next to solve Cell and the solution made to the new Model of the Board-Controller given in the constructor.
+     *
+     * @see SudokuSolver
+     */
     private void addSolveNextStepHandler() {
         gui.getBtnSolveNextStep().addActionListener(e -> {
 
@@ -67,7 +94,8 @@ public class ControlPanelHandler {
 
             // if no further step is possible, show a info message
             if (nextStep == null) {
-                JOptionPane.showMessageDialog(null, "Es konnte kein weiterer Schritt berechnet werden.");
+                JOptionPane.showMessageDialog(null,
+                                              "Es konnte kein weiterer Schritt berechnet werden.");
             }
 
             // work with the determined Cell if existing

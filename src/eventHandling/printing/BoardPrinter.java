@@ -8,12 +8,37 @@ import java.awt.print.Printable;
 
 public class BoardPrinter implements Printable {
 
+    /* --> Fields <-- */
+
+    // the Board to be printed
     private Board toPrint;
 
+    /* --> Constructor <-- */
+
+    /**
+     * Creates a printable instance for the given Board.
+     * When calling the method {@link #print(Graphics, PageFormat, int)}, the board can be printed.
+     *
+     * @param toPrint
+     *      the Board to be printed
+     */
     public BoardPrinter(Board toPrint) {
         this.toPrint = toPrint;
     }
 
+    /**
+     * Prints the Board given in the constructor.
+     * Therefore maybe scales it down and puts it on the center of the page on which it should be printed.
+     *
+     * @param g
+     *      the Graphics object to be printed at
+     * @param pf
+     *      the PageFormat for printing
+     * @param pageIndex
+     *      the page index of the printed site, here only 1 page available
+     * @return
+     *      for the first and only Page {@link Printable#PAGE_EXISTS}, else {@link Printable#NO_SUCH_PAGE}
+     */
     @Override
     public int print(Graphics g, PageFormat pf, int pageIndex) {
 

@@ -219,7 +219,7 @@ public class SudokuGenerator {
 
         // select a random value and set it into the Cell
         // --> if no value is possible, return null
-        List<Integer> possibleValues = sudoku.determinePossibleValues(toBeFilled);
+        List<Integer> possibleValues = sudoku.getPossibleValues(toBeFilled);
         if (possibleValues.size() > 0) {
             int randValue = possibleValues.get(rand.nextInt(possibleValues.size()));
             toBeFilled.setValue(randValue);

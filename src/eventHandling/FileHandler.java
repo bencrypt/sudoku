@@ -137,8 +137,8 @@ public class FileHandler {
         // convert the imported XmlSudoku to an internal Sudoku
         Cell[][] internalBoard = new Cell[9][9];
         xmlSudoku.getBoard().forEach(xmlCell -> {
-            internalBoard[xmlCell.getGridX()][xmlCell.getGridY()] =
-                    new Cell(xmlCell.getGridX(), xmlCell.getGridY(), xmlCell.getValue(), xmlCell.isEditable(),
+            internalBoard[xmlCell.getRow()][xmlCell.getColumn()] =
+                    new Cell(xmlCell.getRow(), xmlCell.getColumn(), xmlCell.getValue(), xmlCell.isEditable(),
                             xmlCell.isValid(), xmlCell.isAutomaticallySolved());
         });
 

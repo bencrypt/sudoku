@@ -13,6 +13,12 @@ public class Test {
 
     /* --> Methods <-- */
 
+    /**
+     * Creates an example Sudoku and returns it.
+     *
+     * @return
+     *      an example Sudoku
+     */
     public static Sudoku createExampleSudoku() {
 
         // create example
@@ -44,6 +50,12 @@ public class Test {
         return new Sudoku(board);
     }
 
+    /**
+     * Solves the given Sudoku and prints the solution with the needed time to solve on console.
+     *
+     * @param toSolve
+     *      the Sudoku to solve
+     */
     public static void findAndPrintSolution(Sudoku toSolve) {
 
         // solve the Sudoku and determine the computing time
@@ -54,10 +66,15 @@ public class Test {
         long ende = System.currentTimeMillis();
 
         // print the solution and the time needed to solve
-        System.out.println("\n-------\nErgebnis (" + (ende - start) + "ms):\n-------");
-        SudokuPrinter.showOnConsole(solvedSudoku);
+        SudokuPrinter.showOnConsole(solvedSudoku, "Ergebnis (" + (ende-start) + " ms)");
     }
 
+    /**
+     * Searches for all solutions of the given Sudoku and prints them with the needed time to solve on console.
+     *
+     * @param toSolve
+     *      the Sudoku to solve
+     */
     public static void findAndPrintAllSolutions(Sudoku toSolve) {
 
         // get all solutions in a list and determine the computing time
@@ -72,11 +89,17 @@ public class Test {
         // print the solutions and the time needed for the whole computing
         System.out.println("\n-------\n"+solutions.size()+" Lösung(en) ("+(ende -start)+"ms):\n-------");
         for (int i = 0; i < solutions.size(); i++) {
-            System.out.println("\nLösung " + (i + 1) + ":");
-            SudokuPrinter.showOnConsole(solutions.get(i));
+            SudokuPrinter.showOnConsole(solutions.get(i), "Lösung " + (i+1));
         }
     }
 
+    /**
+     * Generates a new Sudoku, prints it on the console, searches for all solutions and also prints them on the
+     * console.
+     *
+     * @param countOfPredefinedCells
+     *      the count of predefined Cells in the Sudoku to be created
+     */
     public static void generateAndPrintNewSudokuWithSolutions(int countOfPredefinedCells) {
 
         // new Sudoku
@@ -86,9 +109,7 @@ public class Test {
 
         long end = System.currentTimeMillis();
 
-        System.out.println("\n-------\nNeues Sudoku (" + (end - start) + "ms):\n-------");
-        SudokuPrinter.showOnConsole(newSudoku);
-
+        SudokuPrinter.showOnConsole(newSudoku, "Neues Sudoku (" + (end - start) + " ms)");
 
         // solve the new Sudoku
         List<Sudoku> solutions = new ArrayList<>();
@@ -102,8 +123,7 @@ public class Test {
         System.out.println("\n-------\n" + solutions.size() + " Lösung(en) (" + (end - start) + "ms):\n-------");
 
         for (int i = 0; i < solutions.size(); i++) {
-            System.out.println("\nLösung " + (i+1) + ":");
-            SudokuPrinter.showOnConsole(solutions.get(i));
+            SudokuPrinter.showOnConsole(solutions.get(i), "Lösung " + (i+1));
         }
     }
 }

@@ -26,8 +26,11 @@ public class XmlSudoku {
     public XmlSudoku() { }
 
     /**
-     * Constructor to create a XmlSudoku from an internal Sudoku.
+     * Constructor to create a XmlSudoku from an internal Sudoku. Needed to import and export a Sudoku
+     * from a XML-file.
+     *
      * @param sudoku
+     *      the internal Sudoku to convert
      */
     public XmlSudoku(Sudoku sudoku) {
 
@@ -44,12 +47,18 @@ public class XmlSudoku {
 
     /* --> Getters and Setters <-- */
 
+    /**
+     * @return the board of the Sudoku
+     */
     @XmlElementWrapper(name = "board", required = true)
     @XmlElement(name="cell")
     public List<XmlCell> getBoard() {
         return board;
     }
 
+    /**
+     * @param board the board of the Sudoku
+     */
     public void setBoard(List<XmlCell> board) {
         this.board = board;
     }

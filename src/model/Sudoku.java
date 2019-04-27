@@ -15,14 +15,24 @@ public class Sudoku {
 
 	/* --> Constructors <-- */
 
+	/**
+	 * Creates a Sudoku with the given board.
+	 *
+	 * @param board
+	 * 		the Sudoku board in form of a two-dimensional array of Cells
+	 */
 	public Sudoku(Cell[][] board) {
 		this.board = board;
 	}
 
 	/* --> Methods <-- */
 
+	/**
+	 * Restarts the Sudoku which means the value of every editable Cell is resetted to 0.
+	 */
 	public void restart() {
 
+		// reset all editable Cells
 		Cell currentCell;
 		for (int row = 0; row < 9; row++) {
 			for (int col = 0; col < 9; col++) {
@@ -33,9 +43,18 @@ public class Sudoku {
 			}
 		}
 
+		// check for duplicates
+		// --> only duplicates if user manipulated Sudoku
 		checkAndMarkDuplicates();
 	}
 
+	/**
+	 * Returns a copy of the calling Sudoku. Therefore each Cell is copied into a new board array so that there is no
+	 * dependency between the original and the copied Sudoku.
+	 *
+	 * @return
+	 * 		a copy of the calling Sudoku
+	 */
 	public Sudoku copy() {
 
 		// copy the board
@@ -51,6 +70,17 @@ public class Sudoku {
 		return new Sudoku(boardCopy);
 	}
 
+	/**
+	 * Returns true when the calling Sudoku is equal to the given Object. Therefore the given Object is checked for
+	 * being a Sudoku itself and afterwards each Cell of the calling Sudoku is compared to the corresponding Cell in the
+	 * given Sudoku.
+	 * When each Cell is equal, true is returned. If at least one Cell is not equal, return false.
+	 *
+	 * @param obj
+	 *      the Object to be compared to the calling Cell
+	 * @return
+	 *      true when the Cell is equal to the given Object (too a Cell), else false
+	 */
 	@Override
 	public boolean equals(Object obj) {
 
@@ -81,8 +111,17 @@ public class Sudoku {
 	 * methods for marking duplicate Cells as invalid
 	 */
 
+	/**
+	 * Checks for each Cell if it has a value that is already contained in the related units (row, column, box).
+	 * Every affected Cell (duplicate) is marked as invalid.
+	 *
+	 * @see #checkAndMarkDuplicatesInRow(Cell)
+	 * @see #checkAndMarkDuplicatesInColumn(Cell)
+	 * @see #checkAndMarkDuplicatesInBox(Cell)
+	 */
 	public void checkAndMarkDuplicates() {
 
+		// check each Cell
 		Cell currentCell = null;
 
 		for (int row = 0; row < 9; row++) {
@@ -109,6 +148,12 @@ public class Sudoku {
 		}
 	}
 
+	/**
+	 * Checks the row which contains the given Cell for Cells with duplicate values and marks them as invalid.
+	 *
+	 * @param cellInRow
+	 * 		a Cell in the row to be checked
+	 */
 	private void checkAndMarkDuplicatesInRow(Cell cellInRow)
 	{
 		// determine all affected Cells and Values
@@ -133,6 +178,12 @@ public class Sudoku {
 		});
 	}
 
+	/**
+	 * Checks the column which contains the given Cell for Cells with duplicate values and marks them as invalid.
+	 *
+	 * @param cellInCol
+	 * 		a Cell in the column to be checked
+	 */
 	private void checkAndMarkDuplicatesInColumn(Cell cellInCol)
 	{
 		// determine all affected Cells and Values
@@ -157,6 +208,12 @@ public class Sudoku {
 		});
 	}
 
+	/**
+	 * Checks the box which contains the given Cell for Cells with duplicate values and marks them as invalid.
+	 *
+	 * @param cellInBox
+	 * 		a Cell in the box to be checked
+	 */
 	private void checkAndMarkDuplicatesInBox(Cell cellInBox)
 	{
 		// determine all affected Cells and Values
@@ -181,84 +238,189 @@ public class Sudoku {
 		});
 	}
 
+	/* --> Getters and Setters <-- */
+
 	/*
-	 * methods for solving
-	 * --> next free Cell, possible Values, all values in a unit
+	 * Getters and Setters for fields
 	 */
 
-	public Cell determineNextFreeCell() {
-
-		/* --> determine the next free Cell's coordinate on board <-- */
-
-		// the coordinates for the free Cell
-		int cellRow = -1;
-		int cellColumn = -1;
-
-		// go through each Cell until a free one is found
-		for (int row = 0; row < 9; row++) {
-			for (int col = 0; col < 9; col++) {
-
-				// a Cell is free when its value is 0
-				if (board[row][col].getValue() == 0) {
-					cellRow = row;
-					cellColumn = col;
-					break;
-				}
-			}
-
-			// if there is already a cell found, stop the loop
-			if (cellRow != -1 && cellColumn != -1) {
-				break;
-			}
-		}
-
-		/* --> get and return the free cell (maybe null) <-- */
-
-		Cell freeCell = null;
-
-		if (cellRow != -1 || cellColumn != -1) {
-			freeCell = board[cellRow][cellColumn];
-		}
-
-		return freeCell;
-	}
-
-	public List<Integer> determinePossibleValues(Cell cell) {
-
-		// list for all possible values, to be returned
-		List<Integer> possibleValues = new ArrayList<>();
-
-		// initialize the help list with all values from 1 to 9
-		for (int i = 1; i <= 9; i++) {
-			possibleValues.add(i);
-		}
-
-		/* --> determine all values which can't occur and delete them from the list to be returned <-- */
-
-		// list with all existing values in the related units (row, column, box)
-		Set<Integer> existingValues = new TreeSet<>();
-		existingValues.addAll(determineAllValuesInRow(cell));
-		existingValues.addAll(determineAllValuesInColumn(cell));
-		existingValues.addAll(determineAllValuesInBox(cell));
-
-		// delete every existing value from the list of possible values
-		possibleValues.removeAll(existingValues);
-
-		// control output
-//		System.out.println("\ndeterminePossibleValues: " + cell.getRow() + "|" + cell.getColumn());
-//		System.out.println("Schon vorhandene Zahlen: " + existingValues);
-//		System.out.println("Mögliche Zahlen: " + possibleValues);
-
-		/* --> return the list of possible values <-- */
-		return possibleValues;
+	/**
+	 * @return the board of the Sudoku as two-dimensional array of Cells
+	 */
+	public Cell[][] getBoard() {
+		return board;
 	}
 
 	/*
-	 * helping methods for solving
+	 * Getters and Setters for implicite values
+	 */
+
+	/**
+	 * @return the count of Cells with a value != 0
+	 */
+	public int getCountOfFilledCells() {
+		int filled = 0;
+
+		for (Cell[] row : board) {
+			for (Cell cell : row) {
+				if (cell.getValue() != 0) {
+					filled++;
+				}
+			}
+		}
+
+		return filled;
+	}
+
+	/**
+	 * @return the count of Cells with a value == 0
+	 */
+	public int getCountOfEmptyCells() {
+		int empty = 0;
+
+		for (Cell[] row : board) {
+			for (Cell cell : row) {
+				if (cell.getValue() == 0) {
+					empty++;
+				}
+			}
+		}
+
+		return empty;
+	}
+
+	/*
+	 * Getters for related Cells (in one ore multiple units)
+	 */
+
+	/**
+	 * Returns a list which contains every Cell that is related to the given Cell. That means that the list contains
+	 * each Cell in the realted row, column and box of the given Cell.
+	 * <p>
+	 * IMPORTANT: The given Cell itself is NOT included in the result list.
+	 *
+	 * @param cell
+	 * 		the Cell for which all related Cells should be returned
+	 * @return
+	 * 		a list with all Cells related to the given Cell
+	 *
+	 * @see #getAllCellsInRow(Cell)
+	 * @see #getAllCellsInColumn(Cell)
+	 * @see #getAllCellsInBox(Cell)
+	 */
+	public List<Cell> getAllRelatedCells(Cell cell) {
+
+		// create the list to be returned
+		List<Cell> relatedCells = new ArrayList<>();
+
+		// add all Cells in the related units (row, column, box)
+		relatedCells.addAll(getAllCellsInRow(cell));
+		relatedCells.addAll(getAllCellsInColumn(cell));
+		relatedCells.addAll(getAllCellsInBox(cell));
+
+		// remove all occurrences of the given Cell from the result list
+		while (relatedCells.contains(cell)) {
+			relatedCells.remove(cell);
+		}
+
+		// return the filled list
+		return relatedCells;
+	}
+
+	/**
+	 * Returns all Cells in the row where the given Cell is placed in. This also includes the given Cell itself.
+	 *
+	 * @param cell
+	 * 		a Cell in the row to be gone through
+	 * @return
+	 * 		a list of all Cells in the affected row
+	 */
+	public List<Cell> getAllCellsInRow(Cell cell) {
+
+		// needed variables
+		List<Cell> allCells = new ArrayList<>(9);
+		int row = cell.getRow();
+
+		// get all Cells in the given row
+		for (int col = 0; col < 9; col++) {
+			allCells.add(board[row][col]);
+		}
+
+		// return the list
+		return allCells;
+	}
+
+	/**
+	 * Returns all Cells in the column where the given Cell is placed in. This also includes the given Cell itself.
+	 *
+	 * @param cell
+	 * 		a Cell in the column to be gone through
+	 * @return
+	 * 		a list of all Cells in the affected column
+	 */
+	public List<Cell> getAllCellsInColumn(Cell cell) {
+
+		// needed variables
+		List<Cell> allCells = new ArrayList<>(9);
+		int col = cell.getColumn();
+
+		// get all Cells in the given column
+		for (int row = 0; row < 9; row++) {
+			allCells.add(board[row][col]);
+		}
+
+		// return the list
+		return allCells;
+	}
+
+	/**
+	 * Returns all Cells in the box where the given Cell is placed in. This also includes the given Cell itself.
+	 *
+	 * @param cell
+	 * 		a Cell in the box to be gone through
+	 * @return
+	 * 		a list of all Cells in the affected box
+	 */
+	public List<Cell> getAllCellsInBox(Cell cell) {
+
+		// needed variables
+		List<Cell> allCells = new ArrayList<>(9);
+		int row = cell.getRow();
+		int col = cell.getColumn();
+
+		// get the first coordinate in the affected box
+		int rowInBox = row % 3;
+		int columnInBox = col % 3;
+
+		int firstRowInBox = row - rowInBox;
+		int firstColumnInBox = col - columnInBox;
+
+		// get all Cells in the given box
+		for (int r = firstRowInBox; r < firstRowInBox + 3; r++) {
+			for (int c = firstColumnInBox; c < firstColumnInBox + 3; c++) {
+				allCells.add(board[r][c]);
+			}
+		}
+
+		// return the list
+		return allCells;
+	}
+
+	/*
+	 * Getters for values in related Cells (in one or multiple units)
 	 * --> determine existing values in a unit
 	 */
 
-	public List<Integer> determineAllValuesInRow(Cell cell) {
+	/**
+	 * Returns all values contained in the row in which the given Cell is placed. This also includes the value of the
+	 * given Cell.
+	 *
+	 * @param cell
+	 * 		a Cell in the row to be gone through
+	 * @return
+	 * 		a list of all values in the affected row
+	 */
+	public List<Integer> getAllValuesInRow(Cell cell) {
 
 		// needed variables
 		List<Integer> allValues = new ArrayList<>();
@@ -285,6 +447,15 @@ public class Sudoku {
 		return allValues;
 	}
 
+	/**
+	 * Returns all values contained in the column in which the given Cell is placed. This also includes the value of the
+	 * given Cell.
+	 *
+	 * @param cell
+	 * 		a Cell in the column to be gone through
+	 * @return
+	 * 		a list of all values in the affected column
+	 */
 	public List<Integer> determineAllValuesInColumn(Cell cell) {
 
 		// needed variables
@@ -312,6 +483,15 @@ public class Sudoku {
 		return allValues;
 	}
 
+	/**
+	 * Returns all values contained in the box in which the given Cell is placed. This also includes the value of the
+	 * given Cell.
+	 *
+	 * @param cell
+	 * 		a Cell in the box to be gone through
+	 * @return
+	 * 		a list of all values in the affected box
+	 */
 	public List<Integer> determineAllValuesInBox(Cell cell) {
 
 		// needed variables
@@ -349,106 +529,90 @@ public class Sudoku {
 		return allValues;
 	}
 
-	/* --> Getters and Setters <-- */
+	/*
+	 * Getters for solving and generating
+	 * --> next free Cell, possible Values
+	 */
 
-	public Cell[][] getBoard() {
-		return board;
-	}
+	/**
+	 * Returns the next free Cell the Sudoku contains. If no empty Cell is contained, null will be returned.
+	 * "Free" or "empty" means here that the value of the Cell is 0.
+	 *
+	 * @return
+	 * 		the next free Cell or null
+	 */
+	public Cell getNextFreeCell() {
 
-	public int getCountOfFilledCells() {
-		int filled = 0;
+		/* --> determine the next free Cell's coordinate on board <-- */
 
-		for (Cell[] row : board) {
-			for (Cell cell : row) {
-				if (cell.getValue() != 0) {
-					filled++;
-				}
-			}
-		}
+		// the coordinates for the free Cell
+		int cellRow = -1;
+		int cellColumn = -1;
 
-		return filled;
-	}
-
-	public int getCountOfEmptyCells() {
-		int empty = 0;
-
-		for (Cell[] row : board) {
-			for (Cell cell : row) {
-				if (cell.getValue() == 0) {
-					empty++;
-				}
-			}
-		}
-
-		return empty;
-	}
-
-	public List<Cell> getAllRelatedCells(Cell cell) {
-
-		// create the list to be returned
-		List<Cell> relatedCells = new ArrayList<>();
-
-		// add all Cells in the related units (row, column, box)
-		relatedCells.addAll(getAllCellsInRow(cell));
-		relatedCells.addAll(getAllCellsInColumn(cell));
-		relatedCells.addAll(getAllCellsInBox(cell));
-
-		// return the filled list
-		return relatedCells;
-	}
-
-	public List<Cell> getAllCellsInRow(Cell cell) {
-
-		// needed variables
-		List<Cell> allCells = new ArrayList<>(9);
-		int row = cell.getRow();
-
-		// get all Cells in the given row
-		for (int col = 0; col < 9; col++) {
-			allCells.add(board[row][col]);
-		}
-
-		// return the list
-		return allCells;
-	}
-
-	public List<Cell> getAllCellsInColumn(Cell cell) {
-
-		// needed variables
-		List<Cell> allCells = new ArrayList<>(9);
-		int col = cell.getColumn();
-
-		// get all Cells in the given column
+		// go through each Cell until a free one is found
 		for (int row = 0; row < 9; row++) {
-			allCells.add(board[row][col]);
-		}
+			for (int col = 0; col < 9; col++) {
 
-		// return the list
-		return allCells;
-	}
+				// a Cell is free when its value is 0
+				if (board[row][col].getValue() == 0) {
+					cellRow = row;
+					cellColumn = col;
+					break;
+				}
+			}
 
-	public List<Cell> getAllCellsInBox(Cell cell) {
-
-		// needed variables
-		List<Cell> allCells = new ArrayList<>(9);
-		int row = cell.getRow();
-		int col = cell.getColumn();
-
-		// get the first coordinate in the affected box
-		int rowInBox = row % 3;
-		int columnInBox = col % 3;
-
-		int firstRowInBox = row - rowInBox;
-		int firstColumnInBox = col - columnInBox;
-
-		// get all Cells in the given box
-		for (int r = firstRowInBox; r < firstRowInBox + 3; r++) {
-			for (int c = firstColumnInBox; c < firstColumnInBox + 3; c++) {
-				allCells.add(board[r][c]);
+			// if there is already a cell found, stop the loop
+			if (cellRow != -1 && cellColumn != -1) {
+				break;
 			}
 		}
 
-		// return the list
-		return allCells;
+		/* --> get and return the free cell (maybe null) <-- */
+
+		Cell freeCell = null;
+
+		if (cellRow != -1 || cellColumn != -1) {
+			freeCell = board[cellRow][cellColumn];
+		}
+
+		return freeCell;
+	}
+
+	/**
+	 * Returns all possible values for the given Cell in form of a list.
+	 *
+	 * @param cell
+	 * 		the Cell for which the possible values should be returned
+	 * @return
+	 * 		the possible values for the given Cell
+	 */
+	public List<Integer> getPossibleValues(Cell cell) {
+
+		// list for all possible values, to be returned
+		List<Integer> possibleValues = new ArrayList<>();
+
+		// initialize the help list with all values from 1 to 9
+		for (int i = 1; i <= 9; i++) {
+			possibleValues.add(i);
+		}
+
+		/* --> determine all values which can't occur and delete them from the list to be returned <-- */
+
+		// list with all existing values in the related units (row, column, box)
+		Set<Integer> existingValues = new TreeSet<>();
+		existingValues.addAll(getAllValuesInRow(cell));
+		existingValues.addAll(determineAllValuesInColumn(cell));
+		existingValues.addAll(determineAllValuesInBox(cell));
+
+		// delete every existing value from the list of possible values
+		possibleValues.removeAll(existingValues);
+
+		// control output
+//		System.out.println("\ndeterminePossibleValues: " + cell.getRow() + "|" + cell.getColumn());
+//		System.out.println("Schon vorhandene Zahlen: " + existingValues);
+//		System.out.println("Mögliche Zahlen: " + possibleValues);
+
+		/* --> return the list of possible values <-- */
+		return possibleValues;
 	}
 }

@@ -1,47 +1,70 @@
 package eventHandling;
 
 import controller.CtrlBoard;
-import controller.CtrlValueSelector;
+import view.HoverButton;
 import view.ValueSelector;
-
-import javax.swing.*;
 
 public class ValueSelectorHandler {
 
     /* --> Fields <-- */
 
-    private CtrlBoard ctrlBoard;
-    private CtrlValueSelector ctrlValueSelector;
-
+    // related view
     private ValueSelector gui;
+
+    // needed for event handling
+    private CtrlBoard ctrlBoard;
+
 
     /* --> Constructor <-- */
 
-    public ValueSelectorHandler(CtrlBoard ctrlBoard, CtrlValueSelector ctrlValueSelector) {
+    /**
+     * Creates the event handling for the given ValueSelector-GUI. Therefore uses the given Board-Controller to use
+     * the selected value as input.
+     *
+     * @param ctrlBoard
+     *      the Board-Controller needed for event handling
+     * @param gui
+     *      the GUI to be supplemented by the event handling
+     *
+     * @see #addValueButtonHandler(HoverButton)
+     * @see #addDeleteButtonHandler()
+     */
+    public ValueSelectorHandler(CtrlBoard ctrlBoard, ValueSelector gui) {
 
+        // set the fields
         this.ctrlBoard = ctrlBoard;
-        this.ctrlValueSelector = ctrlValueSelector;
-        this.gui = ctrlValueSelector.getGui();
+        this.gui = gui;
 
+        // create a ValueButtonHandler for each value button
         gui.getValueButtons().forEach(btn -> {
             addValueButtonHandler(btn);
         });
 
+        // create the event handling for the delete button
         addDeleteButtonHandler();
     }
 
     /* --> Methods <-- */
 
-    private void addValueButtonHandler(JButton btn) {
+    /**
+     * Creates the event handling for the given value button to select a value for the clicked Cell.
+     *
+     * @param btn
+     *      the button to be supplemented by the event handling
+     */
+    private void addValueButtonHandler(HoverButton btn) {
         btn.addActionListener(e -> {
-            ctrlBoard.updateFromValueInput(ctrlValueSelector.getIndexClickedCell(), Integer.valueOf(btn.getText()));
+            ctrlBoard.updateFromValueInput(ctrlBoard.getIndexClickedCell(), Integer.valueOf(btn.getText()));
             gui.hidePopup();
         });
     }
 
+    /**
+     * Creates the event handling for the delete button to clear the clicked Cell.
+     */
     private void addDeleteButtonHandler() {
         gui.getBtnDelete().addActionListener(e -> {
-            ctrlBoard.updateFromValueInput(ctrlValueSelector.getIndexClickedCell(), 0);
+            ctrlBoard.updateFromValueInput(ctrlBoard.getIndexClickedCell(), 0);
             gui.hidePopup();
         });
     }

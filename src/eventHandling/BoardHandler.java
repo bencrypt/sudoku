@@ -6,7 +6,6 @@ import view.Board;
 import view.HoverButton;
 import view.ValueSelector;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,28 +14,54 @@ public class BoardHandler {
 
     /* --> Fields <-- */
 
+    // related Controller and View
     private CtrlBoard ctrlBoard;
     private Board gui;
 
+    // needed for changing a Cell's value through GUI input
     private CtrlValueSelector ctrlValueSelector;
     private ValueSelector valueSelector;
 
     /* --> Constructor <-- */
 
+    /**
+     * Creates the event handling for the Board-GUI given by its related Board-Controller. Therefore also uses the
+     * given ValueSelector-Controller to enable the user to select a certain value for a Board's Cell.
+     *
+     * @param ctrlBoard
+     *      the Board-Controller for the Board to be supplemented by the event handling
+     * @param ctrlValueSelector
+     *      the ValueSelector-Controller needed for GUI input
+     *
+     * @see #addBoardClickHandler()
+     */
     public BoardHandler(CtrlBoard ctrlBoard, CtrlValueSelector ctrlValueSelector) {
 
+        // set the fields
         this.ctrlBoard = ctrlBoard;
         this.gui = ctrlBoard.getGui();
 
         this.ctrlValueSelector = ctrlValueSelector;
         this.valueSelector = ctrlValueSelector.getGui();
 
+        // add event handling for a Click on a Board's Cell
         addBoardClickHandler();
     }
 
     /* --> Methods <-- */
 
+    /**
+     * Creates the event handling for a mouse click on a Board's Cell. When a editable Cell is clicked, the GUI of a
+     * ValueSelector is shown to enable the user to select a value for this Cell.
+     * <p>
+     * If there was already a ValueSelector showing, this one will be closed firstly. A ValueSelector is also closed
+     * when clicking on the border of the Board or leaving the Board with the mouse cursor.
+     *
+     * @see #addCellClickHandler(HoverButton)
+     */
     private void addBoardClickHandler() {
+
+        // add a click handler for each Cell
         gui.getCells().forEach(cell -> {
             addCellClickHandler(cell);
         });
@@ -65,7 +90,16 @@ public class BoardHandler {
         });
     }
 
-    private void addCellClickHandler(JButton cell) {
+    /**
+     * Creates the event handling for a mouse click on a Board's Cell. When a editable Cell is clicked, the GUI of a
+     * ValueSelector is shown to enable the user to select a value for this Cell.
+     * <p>
+     * If there was already a ValueSelector showing, this one will be closed firstly.
+     *
+     * @param cell
+     *      the GUI of the Cell to be supplemented by the event handling
+     */
+    private void addCellClickHandler(HoverButton cell) {
 
         // use MouseListener instead of ActionListener to react to every mouse action and not only to
         // left clicks on the button
@@ -81,7 +115,7 @@ public class BoardHandler {
 
                     // determine the index of the clicked cell
                     int indexClickedCell = gui.getCells().indexOf(cell);
-                    ctrlValueSelector.setIndexClickedCell(indexClickedCell);
+                    ctrlBoard.setIndexClickedCell(indexClickedCell);
 
                     // show a popup for selecting a value on the clicked point
                     if (e.getButton() == MouseEvent.BUTTON1) {
