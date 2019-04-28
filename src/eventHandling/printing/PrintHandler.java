@@ -11,6 +11,13 @@ public class PrintHandler {
 
     /* --> Methods <-- */
 
+    /**
+     * Prints the given Board if the printing procedure is not cancelled. Therefore shows a print dialog and
+     * creates an instance of {@link BoardPrinter}.
+     *
+     * @param toPrint
+     *      the Board to be printed
+     */
     public static void printBoard(Board toPrint) {
 
         // create a printer and a printer job

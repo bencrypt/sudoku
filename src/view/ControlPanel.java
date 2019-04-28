@@ -15,12 +15,19 @@ public class ControlPanel extends JPanel {
 
     /* --> Constructor <-- */
 
+    /**
+     * Creates the ControlPanel for the main window which enables the user to solve the Sudoku completely or step
+     * by step. Does not add the event handling, this has to be done by {@link eventHandling.ControlPanelHandler}.
+     */
     public ControlPanel() {
         init();
     }
 
     /* --> Methods <-- */
 
+    /**
+     * Initializes the ControlPanel with all its elements.
+     */
     private void init() {
 
         // preferences
@@ -45,10 +52,16 @@ public class ControlPanel extends JPanel {
 
     /* --> Getters and Setters <-- */
 
+    /**
+     * @return the button "Solve completely"
+     */
     public HoverButton getBtnSolveCompletely() {
         return btnSolveCompletely;
     }
 
+    /**
+     * @return the button "Solve next step"
+     */
     public HoverButton getBtnSolveNextStep() {
         return btnSolveNextStep;
     }

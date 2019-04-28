@@ -14,10 +14,11 @@ public class HoverButton extends JButton {
 
     /* --> Fields <-- */
 
-    private Border previousBorder;
-    private Color highlight;
-    private Color shadow;
+    // normal and hover border
+    private Border originalBorder;
+    private Border hoverBorder;
 
+    // needed for hover effect
     private MouseAdapter mouseAdapter;
 
     /* --> Constructors <-- */
@@ -30,8 +31,12 @@ public class HoverButton extends JButton {
      *      the text of the Button
      */
     public HoverButton(String text) {
+
+        // create normal JButton with the given text
         super(text);
-        init(Color.BLACK, BoardConstants.BORDER_COLOR);
+
+        // initialize the hover effect
+        init(BoardConstants.BORDER_COLOR, BoardConstants.BORDER_COLOR);
     }
 
     /**
@@ -42,11 +47,11 @@ public class HoverButton extends JButton {
      *      the text of the Button
      */
     public HoverButton(String text, Color highlight, Color shadow) {
+
+        // create normal JButton with the given text
         super(text);
 
-        this.highlight = highlight;
-        this.shadow = shadow;
-
+        // initialize the hover effect
         init(highlight, shadow);
     }
 
@@ -65,8 +70,11 @@ public class HoverButton extends JButton {
         // preferences
         setBackground(BoardConstants.BACKGROUND);
 
+        // create the hover border
+        hoverBorder = new EtchedBorder(highlight, shadow);
+
         // add the hover-effect with the given colors
-        initMouseAdapter(highlight, shadow);
+        initMouseAdapter();
 
         // set the font color as normal when disabled
         setUI(new MetalButtonUI() {
@@ -78,16 +86,8 @@ public class HoverButton extends JButton {
 
     /**
      * Initializes the MouseAdapter which realizes the hover effect.
-     *
-     * @param highlight
-     *      the highlight color for the border when hovered
-     * @param shadow
-     *      the shadow color for the border when hovered
      */
-    private void initMouseAdapter(Color highlight, Color shadow) {
-
-        // create hover border
-        EtchedBorder border = new EtchedBorder(highlight, shadow);
+    private void initMouseAdapter() {
 
         // create hover effect
         // --> if the hover is over, return to the previous border
@@ -95,15 +95,18 @@ public class HoverButton extends JButton {
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                setBorder(border);
+                setBorder(hoverBorder);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                setBorder(previousBorder);
+                setBorder(originalBorder);
             }
         };
+
+        // add the MouseAdapter
+        addMouseListener(mouseAdapter);
     }
 
     /**
@@ -130,7 +133,7 @@ public class HoverButton extends JButton {
 
         // only add the mouse adapter if not done already
         if (!containsMouseAdapter) {
-            initMouseAdapter(highlight, shadow);
+            initMouseAdapter();
         }
     }
 
@@ -139,7 +142,10 @@ public class HoverButton extends JButton {
      */
     public void disableHover() {
         removeMouseListener(mouseAdapter);
+        setBorder(originalBorder);
     }
+
+    /* --> Getters and Setters <-- */
 
     /**
      * Sets the border and saves the previous border to change it later. Needed for the hover effect.
@@ -150,8 +156,10 @@ public class HoverButton extends JButton {
     @Override
     public void setBorder(Border border) {
 
-        // save previous border
-        previousBorder = getBorder();
+        // save previous border if not the hover border
+        if (border != hoverBorder) {
+            originalBorder = border;
+        }
 
         // set new border
         super.setBorder(border);

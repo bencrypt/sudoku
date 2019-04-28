@@ -1,20 +1,30 @@
 package controller;
 
 import eventHandling.ControlPanelHandler;
+import eventHandling.FileHandler;
 import eventHandling.MenuHandler;
+import eventHandling.WindowHandler;
 import view.Board;
 import view.ControlPanel;
 import view.Window;
 import view.menu.MenuBar;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CtrlWindow {
 
     /* --> Fields <-- */
 
+    // separate Board-Controller for better overview
     private CtrlBoard ctrlBoard;
 
+    // event handling for window
+    private WindowHandler windowHandler;
+
+    // the GUI elements nested in the Window
     private Window window;
     private MenuBar menuBar;
     private Board board;
@@ -22,6 +32,15 @@ public class CtrlWindow {
 
     /* --> Constructor <-- */
 
+    /**
+     * Creates a Controller for the main window of the application.
+     * Initializes the GUI and creates the event handling. For better overview the Sudoku-Board has its own Controller
+     * which is also created by the Window-Controller.
+     *
+     * @see #initView()
+     * @see #addEventHandlers()
+     * @see CtrlBoard
+     */
     public CtrlWindow () {
 
         // initialize the components in the Window and create the event handling for them
@@ -32,6 +51,9 @@ public class CtrlWindow {
 
     /* --> Methods <-- */
 
+    /**
+     * Initializes the Window and the GUI elements nested in it.
+     */
     private void initView() {
 
         // create view elements
@@ -46,16 +68,45 @@ public class CtrlWindow {
         window.addToBorderLayout(controlPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Creates the Board-Controller for the given Board-GUI.
+     * @param board
+     *      the related View for the Board-Controller
+     */
     private void createBoardController(Board board) {
         ctrlBoard = new CtrlBoard(board);
     }
 
+    /**
+     * Creates the event handling for the Window and all nested GUI elements but the Board.
+     *
+     * @see MenuHandler
+     * @see ControlPanelHandler
+     * @see eventHandling.WindowHandler
+     */
     private void addEventHandlers() {
-        new MenuHandler(ctrlBoard, menuBar);
+
+        // event handling for Menu and ControlPanel
+        new MenuHandler(this, ctrlBoard, menuBar);
         new ControlPanelHandler(ctrlBoard, controlPanel);
+
+        // event handling for the window itself
+        windowHandler = new WindowHandler(window, ctrlBoard);
     }
 
+    /**
+     * Optimizes the window and makes it visible.
+     *
+     * @see Window#makeVisible()
+     */
     public void showWindow() {
         window.makeVisible();
+    }
+
+    /**
+     * Closes the Window after might asking for confirm when a unsaved Sudoku is opened.
+     */
+    public void closeWindow() {
+        windowHandler.closeWindow();
     }
 }

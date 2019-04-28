@@ -13,14 +13,16 @@ public class Board extends JPanel {
 
     /* --> Fields <-- */
 
-    private int cellSize = BoardConstants.CELL_SIZE;
-
+    // the cells and boxes of the grid, each with an one-dimensional array
     private ArrayList<HoverButton> cells;
-
     private ArrayList<JPanel> boxes;
 
     /* --> Constructor <-- */
 
+    /**
+     * Creates the View for the Sudoku-Board.
+     * Does not create the event handling, this has to be done by {@link eventHandling.BoardHandler}
+     */
     public Board() {
         init();
     }
@@ -31,6 +33,9 @@ public class Board extends JPanel {
      * methods for initializing the GUI
      */
 
+    /**
+     * Initializes the Sudoku-Board by creating the 81 Cells and the 9 Boxes.
+     */
     private void init() {
 
         // preferences
@@ -44,7 +49,7 @@ public class Board extends JPanel {
         add(contentPane);
 
         // initialize the 81 cells
-        cells = new ArrayList<HoverButton>(81);
+        cells = new ArrayList<>(81);
         for (int i = 0; i < 81; i++) {
             cells.add(initCell());
         }
@@ -66,6 +71,12 @@ public class Board extends JPanel {
 
     }
 
+    /**
+     * Initializes and returns a Cell for the Sudoku-Board.
+     *
+     * @return
+     *      a Cell for the Sudoku board
+     */
     private HoverButton initCell() {
 
         // create the cell
@@ -75,7 +86,7 @@ public class Board extends JPanel {
         cell.setFocusable(false);
 
         // set the standard size
-        cell.setPreferredSize(new Dimension(cellSize, cellSize));
+        cell.setPreferredSize(new Dimension(BoardConstants.CELL_SIZE, BoardConstants.CELL_SIZE));
 
         // make the cell non transparent and set the standard colors
         cell.setForeground(BoardConstants.FONT_COLOR_NORMAL);
@@ -89,6 +100,13 @@ public class Board extends JPanel {
         return cell;
     }
 
+    /**
+     * Initializes and returns a box for the Sudoku-Board which contains 3x3 Cells. The Cells are not assigned to the
+     * boxes here, this has to be done by {@link #addCellsToBoxes()}.
+     *
+     * @return
+     *      a box for the Sudoku board
+     */
     private JPanel initBox() {
 
         // create the box
@@ -107,6 +125,9 @@ public class Board extends JPanel {
         return box;
     }
 
+    /**
+     * Assignes all 81 Cells to their corresponding 9 boxes of the Sudoku-Board.
+     */
     private void addCellsToBoxes() {
 
         // add each cell to the corresponding box
@@ -118,6 +139,9 @@ public class Board extends JPanel {
 
     /* --> Getters And Setters <-- */
 
+    /**
+     * @return all 81 GUI-Cells of the Sudoku-Board
+     */
     public ArrayList<HoverButton> getCells() {
         return cells;
     }

@@ -3,10 +3,35 @@ package console;
 import model.Sudoku;
 
 public class SudokuPrinter {
-	
+
+	/**
+	 * Prints the values of the given Sudoku after the given title on the console.
+	 *
+	 * @param sudoku
+	 * 		the Sudoku to be printed on console
+	 * @param title
+	 * 		the title to print before the Sudoku
+	 */
+	public static void showOnConsole(Sudoku sudoku, String title) {
+
+		// header with title
+		System.out.println("-------------");
+		System.out.println(title + ":");
+
+		// Sudoku
+		showOnConsole(sudoku);
+
+		// footer
+		System.out.println("-------------");
+	}
+
+	/**
+	 * Prints the values of the given Sudoku on the console.
+	 *
+	 * @param sudoku
+	 * 		the Sudoku to be printed on console
+	 */
 	public static void showOnConsole(Sudoku sudoku) {
-		
-//		System.out.println("Ausgabe:");
 
 		// go through each row
 		for (byte row = 0; row < 9; row++) {
