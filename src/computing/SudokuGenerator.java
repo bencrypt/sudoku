@@ -70,8 +70,10 @@ public class SudokuGenerator {
         // define a new Sudoku
         Sudoku newSudoku = null;
 
+        // TODO: Test-Methoden rausnehmen
         // generate a new Sudoku until there is created one with exactly one solution
         newSudoku = createSudokuViaHumanStrategy(countOfPredefinedCells);
+//        newSudoku = createSudokuWithClearing(countOfPredefinedCells);
 
         if (newSudoku != null) {
 
@@ -308,6 +310,8 @@ public class SudokuGenerator {
             cleared = clearCells(sudoku, countOfPredefinedCells, rand);
         }
 
+        System.out.println("Cleared all needed Cells: " + cleared);
+
         // return the generated Sudoku
         return sudoku;
     }
@@ -334,40 +338,39 @@ public class SudokuGenerator {
         if (sudoku.getCountOfFilledCells() == countOfPredefinedCells) {
             return true;
         }
-
-        SudokuPrinter.showOnConsole(sudoku, "Clear Cell");
-
+        
         List<Cell> triedCells = new ArrayList<>();
         while (triedCells.size() < sudoku.getCountOfFilledCells()) {
 
+            System.out.println("tried:  " + triedCells.size());
+            System.out.println("filled: " + sudoku.getCountOfFilledCells());
+
             // get an untried Cell
-            Cell toClear;
-            do {
-                toClear = getCellToBeCleared(sudoku, rand);
-            } while (triedCells.contains(toClear));
+            Cell toClear = getCellToBeCleared(sudoku, rand, triedCells);
 
             // save the old value
             int oldValue = toClear.getValue();
-
-            System.out.println(toClear);
 
             // clear
             toClear.setValue(0);
 
             // do backtracking to clear the other Cells
             // --> if all Cells to be cleared are cleared, true is returned
-            if (!SudokuSolver.isSolveableByHumanStrategy(sudoku)) {
-                System.out.println("not cleared");
-                toClear.setValue(oldValue);
-                triedCells.add(toClear);
-            } else {
-                System.out.println("cleared");
+            boolean solveAbleByHuman = SudokuSolver.isSolveableByHumanStrategy(sudoku);
+            if (solveAbleByHuman) {
+//                System.out.println("cleared");
+                clearCells(sudoku, countOfPredefinedCells, rand);
+            }
+
+            // if now all needed Cells are cleared and there is a qualified solution, return true
+            if (solveAbleByHuman && sudoku.getCountOfFilledCells() == countOfPredefinedCells) {
+                return true;
             }
 
             // here the cleared Cell does not give a valid solution, so it is resetted
             // --> another Cell can be tried to clear
-//            toClear.setValue(oldValue);
-//            triedCells.add(toClear);
+            toClear.setValue(oldValue);
+            triedCells.add(toClear);
         }
 
         return false;
@@ -383,7 +386,7 @@ public class SudokuGenerator {
      * @return
      *      the chosen, non-empty Cell
      */
-    private static Cell getCellToBeCleared(Sudoku sudoku, Random rand) {
+    private static Cell getCellToBeCleared(Sudoku sudoku, Random rand, List<Cell> triedCells) {
 
         Cell toBeCleared = null;
         int x = 0;
@@ -396,8 +399,9 @@ public class SudokuGenerator {
             y = rand.nextInt(9);
 
             // if the Cell is empty, select it
-            if (sudoku.getBoard()[x][y].getValue() != 0) {
-                toBeCleared = sudoku.getBoard()[x][y];
+            toBeCleared = sudoku.getBoard()[x][y];
+            if (toBeCleared.getValue() == 0 || triedCells.contains(toBeCleared)) {
+                toBeCleared = null;
             }
         }
 
@@ -419,15 +423,14 @@ public class SudokuGenerator {
 
         // initialize an empty Sudoku and a random generator
         Sudoku sudoku = generateEmptyAndEditableSudoku();
-        Random rand = new Random();
 
         // fill the diagonal and check for solution
         // --> if no solution, repeat until a solution is available
         do {
             // fill diagonal
             fillBoxOfDiagonal(0, sudoku);
-            fillBoxOfDiagonal(0, sudoku);
-            fillBoxOfDiagonal(0, sudoku);
+            fillBoxOfDiagonal(1, sudoku);
+            fillBoxOfDiagonal(2, sudoku);
 
             // control output
             SudokuPrinter.showOnConsole(sudoku, "Diagonale");
@@ -466,27 +469,27 @@ public class SudokuGenerator {
         Collections.shuffle(oneToNine);
 
         // determine the start and ending coordinates of the box to be filled
-        int rowStart = -1;
-        int rowEnd = -1;
+        int indexStart = -1;
+        int indexEnd = -1;
         switch (diagonalBox) {
             case 0:
-                rowStart = 0;
-                rowEnd = 3;
+                indexStart = 0;
+                indexEnd = 3;
                 break;
             case 1:
-                rowStart = 3;
-                rowEnd = 6;
+                indexStart = 3;
+                indexEnd = 6;
                 break;
             case 2:
-                rowStart = 6;
-                rowEnd = 9;
+                indexStart = 6;
+                indexEnd = 9;
                 break;
         }
 
         // to each Cell in the given box add the first value of the shuffled list and remove it
         Cell toFill;
-        for (int row = rowStart; row < 3; row++) {
-            for (int col = rowEnd; col < 3; col++) {
+        for (int row = indexStart; row < indexEnd; row++) {
+            for (int col = indexStart; col < indexEnd; col++) {
                 toFill = sudoku.getBoard()[row][col];
                 toFill.setValue(oneToNine.remove(0));
             }
