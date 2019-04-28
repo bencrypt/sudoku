@@ -42,7 +42,7 @@ public class CtrlValueSelector {
      * @see ValueSelectorHandler
      */
     private void addClickHandler() {
-        new ValueSelectorHandler(ctrlBoard);
+        new ValueSelectorHandler(ctrlBoard, gui);
     }
 
     /* --> Getters and Setters <-- */

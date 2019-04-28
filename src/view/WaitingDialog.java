@@ -6,10 +6,21 @@ import java.awt.*;
 
 public class WaitingDialog extends JDialog {
 
+    /* --> Constructor <-- */
+
+    /**
+     * Creates a modal waiting dialog which has to be showed by {@link #makeVisible()} and hidden by {@link #dispose()}
+     * from extern.
+     */
     public WaitingDialog() {
         init();
     }
 
+    /* --> Methods <-- */
+
+    /**
+     * Initializes the waiting dialog.
+     */
     private void init() {
 
         // preferences
@@ -17,7 +28,7 @@ public class WaitingDialog extends JDialog {
         setModal(true);
         setResizable(false);
 
-        // add label with waiting message
+        // create and add label with waiting message
         JLabel lblWaiting = new JLabel("Bitte warten ...");
         lblWaiting.setHorizontalTextPosition(JLabel.CENTER);
         lblWaiting.setVerticalTextPosition(JLabel.CENTER);
@@ -26,6 +37,10 @@ public class WaitingDialog extends JDialog {
         add(lblWaiting);
     }
 
+    /**
+     * Optimizes the waiting dialog and displays it on the center of the screen. To hide the dialog, the method
+     * {@link #dispose()} has to be called.
+     */
     public void makeVisible() {
         pack();
         setLocationRelativeTo(null);

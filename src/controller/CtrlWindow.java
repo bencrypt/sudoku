@@ -3,6 +3,7 @@ package controller;
 import eventHandling.ControlPanelHandler;
 import eventHandling.FileHandler;
 import eventHandling.MenuHandler;
+import eventHandling.WindowHandler;
 import view.Board;
 import view.ControlPanel;
 import view.Window;
@@ -19,6 +20,9 @@ public class CtrlWindow {
 
     // separate Board-Controller for better overview
     private CtrlBoard ctrlBoard;
+
+    // event handling for window
+    private WindowHandler windowHandler;
 
     // the GUI elements nested in the Window
     private Window window;
@@ -78,7 +82,7 @@ public class CtrlWindow {
      *
      * @see MenuHandler
      * @see ControlPanelHandler
-     * @see #closeWindow()
+     * @see eventHandling.WindowHandler
      */
     private void addEventHandlers() {
 
@@ -87,12 +91,7 @@ public class CtrlWindow {
         new ControlPanelHandler(ctrlBoard, controlPanel);
 
         // event handling for the window itself
-        window.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                closeWindow();
-            }
-        });
+        windowHandler = new WindowHandler(window, ctrlBoard);
     }
 
     /**
@@ -105,29 +104,9 @@ public class CtrlWindow {
     }
 
     /**
-     * Prepares closing the Window and closes it under given circumstandes.
-     * <p>
-     * When the current Sudoku showed on the Board equals the last saved Sudoku of the FileHandler, the Window
-     * is automatically closed. If both Sudokus are not equal, the user has to confirm that the Window should be closed.
-     * Alternatively the user can cancel the closing operation and e.g. save the current Sudoku first.
+     * Closes the Window after might asking for confirm when a unsaved Sudoku is opened.
      */
     public void closeWindow() {
-
-        // needed variables
-        boolean equalsLastSavedSudoku = FileHandler.equalsLastSavedSudoku(ctrlBoard.getModel());
-        int option = JOptionPane.YES_OPTION;
-
-        // confirm dialog when not equal Sudokus
-        if (!equalsLastSavedSudoku) {
-            option = JOptionPane.showConfirmDialog(null,
-                    "Der aktuelle Stand des Sudokus wurde nicht gespeichert. " +
-                            "Soll das Programm wirklich beendet werden??",
-                    "Schließen", JOptionPane.YES_NO_OPTION);
-        }
-
-        // when confirmed (or directly equal Sudokus) close the window
-        if (option == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
+        windowHandler.closeWindow();
     }
 }
