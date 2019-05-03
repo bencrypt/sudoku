@@ -251,6 +251,40 @@ public class Sudoku {
 		return board;
 	}
 
+    /**
+     * @return all filled Cells of the board
+     */
+	public List<Cell> getFilledCells() {
+	    List<Cell> filled = new ArrayList<>();
+
+	    for (Cell[] row : board) {
+	        for (Cell cell : row) {
+	            if (cell.getValue() != 0) {
+	                filled.add(cell);
+                }
+            }
+        }
+
+	    return filled;
+    }
+
+    /**
+     * @return all empty Cells of the board
+     */
+    public List<Cell> getEmptyCells() {
+        List<Cell> filled = new ArrayList<>();
+
+        for (Cell[] row : board) {
+            for (Cell cell : row) {
+                if (cell.getValue() == 0) {
+                    filled.add(cell);
+                }
+            }
+        }
+
+        return filled;
+    }
+
 	/*
 	 * Getters and Setters for implicite values
 	 */
@@ -456,7 +490,7 @@ public class Sudoku {
 	 * @return
 	 * 		a list of all values in the affected column
 	 */
-	public List<Integer> determineAllValuesInColumn(Cell cell) {
+	public List<Integer> getAllValuesInColumn(Cell cell) {
 
 		// needed variables
 		List<Integer> allValues = new ArrayList<>();
@@ -492,7 +526,7 @@ public class Sudoku {
 	 * @return
 	 * 		a list of all values in the affected box
 	 */
-	public List<Integer> determineAllValuesInBox(Cell cell) {
+	public List<Integer> getAllValuesInBox(Cell cell) {
 
 		// needed variables
 		List<Integer> allValues = new ArrayList<>();
@@ -601,8 +635,8 @@ public class Sudoku {
 		// list with all existing values in the related units (row, column, box)
 		Set<Integer> existingValues = new TreeSet<>();
 		existingValues.addAll(getAllValuesInRow(cell));
-		existingValues.addAll(determineAllValuesInColumn(cell));
-		existingValues.addAll(determineAllValuesInBox(cell));
+		existingValues.addAll(getAllValuesInColumn(cell));
+		existingValues.addAll(getAllValuesInBox(cell));
 
 		// delete every existing value from the list of possible values
 		possibleValues.removeAll(existingValues);
