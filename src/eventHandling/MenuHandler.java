@@ -180,6 +180,7 @@ public class MenuHandler {
                 countOfPredefinedCells = Integer.valueOf(input);
 
                 if (countOfPredefinedCells < MIN || countOfPredefinedCells > MAX) {
+                	countOfPredefinedCells = -1;
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {

@@ -196,6 +196,28 @@ public class SudokuSolver {
     }
 
     /**
+     * Returns true when the given Sudoku has at least one solution, else false.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      true when the Sudoku has at least one solution, else false
+     */
+    public static boolean hasAtLeastOneSolution(Sudoku toSolve)
+    {
+        // help list
+        List<Sudoku> solutions = new ArrayList<>();
+
+        // solve via backtracking because it is the fastest way to check for a solution
+        Sudoku copy = toSolve.copy();
+        if (SudokuSolver.solveViaBacktracking(copy)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Searches for <code>maxCount</code> solutions of the given Sudoku. If the given limit is exceeded for exactly
      * one count, the method will stop. All solutions found until then are saved in the given list.
      * <p>
