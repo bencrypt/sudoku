@@ -4,11 +4,13 @@ import computing.GeneratorThread;
 import controller.CtrlBoard;
 import controller.CtrlWindow;
 import eventHandling.printing.PrintHandler;
+import model.BoardConstants;
 import model.Sudoku;
 import view.WaitingDialog;
 import view.menu.MenuBar;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -50,11 +52,14 @@ public class MenuHandler {
         addMenuHandlerSaveAs();
         addMenuHandlerPrint();
         addMenuHandlerExit();
+
+        // create the event handling for choosing a font size
+        addHandlerFontSize();
     }
 
     /* --> Methods <-- */
 
-    /**
+    /*
      * adding event handling to each component in the menu
      */
 
@@ -150,6 +155,22 @@ public class MenuHandler {
     }
 
     /**
+     * Creates the event handling for the combo box dealing choosing the font size.
+     */
+    private void addHandlerFontSize() {
+        gui.getCbxFontSize().addActionListener(e -> {
+
+            // update constants
+            BoardConstants.FONT_SIZE = (int) gui.getCbxFontSize().getSelectedItem();
+            BoardConstants.FONT_EDITABLE = new Font(BoardConstants.FONT_EDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
+            BoardConstants.FONT_UNEDITABLE = new Font(BoardConstants.FONT_UNEDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
+
+            // reload the model to update each cell
+            ctrlBoard.changeModel(ctrlBoard.getModel());
+        });
+    }
+
+    /*
      * Helping methods for creating a new Sudoku
      */
 
