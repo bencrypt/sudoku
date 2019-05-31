@@ -64,9 +64,13 @@ public class MenuBar extends JMenuBar {
         cbxFontSize.addItem(18);
         cbxFontSize.addItem(20);
         cbxFontSize.addItem(24);
+        cbxFontSize.addItem(28);
+        cbxFontSize.addItem(30);
+        cbxFontSize.addItem(32);
+        cbxFontSize.addItem(34);
 
         // choose initial size
-        cbxFontSize.setSelectedItem(14);
+        cbxFontSize.setSelectedItem(BoardConstants.FONT_SIZE);
 
         // create transparent separator to show the combo box and the label on the right side
         // of the menu bar
