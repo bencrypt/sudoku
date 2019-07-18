@@ -12,6 +12,7 @@ public class MenuBar extends JMenuBar {
 
     // the menus on the bar
     private MnuFile mnuFile;
+    private MnuPrint mnuPrint;
 
     // the combobox for the font size
     private JComboBox<Integer> cbxFontSize;
@@ -39,9 +40,11 @@ public class MenuBar extends JMenuBar {
 
         // create the menus
         mnuFile = new MnuFile();
+        mnuPrint = new MnuPrint();
 
         // add the menus to the menu bar
         add(mnuFile);
+        add(mnuPrint);
 
         // create and add input for font size
         createAndAddComboBoxForFontSize();
@@ -91,6 +94,13 @@ public class MenuBar extends JMenuBar {
      */
     public MnuFile getMnuFile() {
         return mnuFile;
+    }
+
+    /**
+     * @return the menu "Print" of the menu bar
+     */
+    public MnuPrint getMnuPrint() {
+        return mnuPrint;
     }
 
     /**

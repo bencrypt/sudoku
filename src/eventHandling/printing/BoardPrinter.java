@@ -5,13 +5,15 @@ import view.Board;
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardPrinter implements Printable {
 
     /* --> Fields <-- */
 
     // the Board to be printed
-    private Board toPrint;
+    private List<Board> toPrint;
 
     /* --> Constructor <-- */
 
@@ -23,6 +25,11 @@ public class BoardPrinter implements Printable {
      *      the Board to be printed
      */
     public BoardPrinter(Board toPrint) {
+        this.toPrint = new ArrayList<Board>(1);
+        toPrint.add(toPrint);
+    }
+
+    public BoardPrinter(List<Board> toPrint) {
         this.toPrint = toPrint;
     }
 
@@ -42,10 +49,13 @@ public class BoardPrinter implements Printable {
     @Override
     public int print(Graphics g, PageFormat pf, int pageIndex) {
 
-        // only 1 page should be printed
-        if (pageIndex > 0) {
+        // only needed pages should be printed
+        if (pageIndex > toPrint.size()-1) {
             return Printable.NO_SUCH_PAGE;
         }
+
+        // get Board to be printed
+        Board toPrint = this.toPrint.get(pageIndex);
 
         // get the original size
         double originalWidth = toPrint.getPreferredSize().getWidth();
@@ -62,9 +72,9 @@ public class BoardPrinter implements Printable {
         }
 
         // control output
-//        System.out.println("Original: " + originalWidth + "|" + originalHeight);
-//        System.out.println("Drucken: " + printWidth + "|" + printHeight);
-//        System.out.println("Skalierung: " + scale);
+//          System.out.println("Original: " + originalWidth + "|" + originalHeight);
+//          System.out.println("Drucken: " + printWidth + "|" + printHeight);
+//          System.out.println("Skalierung: " + scale);
 
         // place the component in the center of the page
         double printStartX = pf.getImageableX() + Math.abs(printWidth - originalWidth*scale)/2;
