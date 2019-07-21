@@ -66,7 +66,7 @@ public class WindowHandler {
         if (!equalsLastSavedSudoku) {
             option = JOptionPane.showConfirmDialog(null,
                     "Der aktuelle Stand des Sudokus wurde nicht gespeichert. " +
-                            "Soll das Programm wirklich beendet werden??",
+                            "Soll das Programm wirklich beendet werden?",
                     "Schließen", JOptionPane.YES_NO_OPTION);
         }
 

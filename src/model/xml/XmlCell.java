@@ -3,7 +3,7 @@ package model.xml;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "cell", propOrder = {"row", "column", "value", "editable", "valid", "automaticallySolved"})
+@XmlType(name = "cell", propOrder = {"row", "column", "value", "editable", "valid", "automaticallySolved", "sameAsSolution"})
 public class XmlCell {
 
     /* --> Fields <-- */
@@ -19,6 +19,7 @@ public class XmlCell {
     private boolean editable;
     private boolean valid;
     private boolean automaticallySolved;
+    private boolean sameAsSolution;
 
     /* --> Constructor <-- */
 
@@ -43,14 +44,17 @@ public class XmlCell {
      *      true when the Cell is valid, else false (e.g. when duplicate)
      * @param automaticallySolved
      *      true when the Cell was automatically solved, else false
+     * @param sameAsSolution
+     *      true when the Cell has the same value as the solution, else false
      */
-    public XmlCell(int row, int column, int value, boolean editable, boolean valid, boolean automaticallySolved) {
+    public XmlCell(int row, int column, int value, boolean editable, boolean valid, boolean automaticallySolved, boolean sameAsSolution) {
         this.row = row;
         this.column = column;
         this.value = value;
         this.editable = editable;
         this.valid = valid;
         this.automaticallySolved = automaticallySolved;
+        this.sameAsSolution = sameAsSolution;
     }
 
     /* --> Getters and Setters <-- */
@@ -143,5 +147,20 @@ public class XmlCell {
      */
     public void setAutomaticallySolved(boolean automaticallySolved) {
         this.automaticallySolved = automaticallySolved;
+    }
+
+    /**
+     * @return true when the Cell has the same value as the solution, else false
+     */
+    @XmlElement(required = false)
+    public boolean isSameAsSolution() {
+        return sameAsSolution;
+    }
+
+    /**
+     * @param sameAsSolution true for an Cell with the same value as the solution, else false
+     */
+    public void setSameAsSolution(boolean sameAsSolution) {
+        this.sameAsSolution = sameAsSolution;
     }
 }

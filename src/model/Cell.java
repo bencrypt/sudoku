@@ -17,6 +17,7 @@ public class Cell extends Observable {
 	private boolean editable;
 	private boolean valid;
 	private boolean automaticallySolved;
+	private boolean sameAsSolution;
 	
 	/* --> Constructors <-- */
 
@@ -43,6 +44,7 @@ public class Cell extends Observable {
 		// set fields with pre-defined values
 		this.valid = true;
 		this.automaticallySolved = false;
+		this.sameAsSolution = true;
 	}
 
     /**
@@ -60,14 +62,17 @@ public class Cell extends Observable {
      *      true when the Cell is valid, else false (e.g. when duplicate)
      * @param automaticallySolved
      *      true when the Cell was automatically solved, else false
+     * @param sameAsSolution
+     *      true when the Cell has the same value as the solution, else false
      */
-    public Cell(int row, int column, int value, boolean editable, boolean valid, boolean automaticallySolved) {
+    public Cell(int row, int column, int value, boolean editable, boolean valid, boolean automaticallySolved, boolean sameAsSolution) {
         this.row = row;
         this.column = column;
         this.value = value;
         this.editable = editable;
         this.valid = valid;
         this.automaticallySolved = automaticallySolved;
+        this.sameAsSolution = sameAsSolution;
     }
 
     /* --> Methods <-- */
@@ -79,7 +84,7 @@ public class Cell extends Observable {
      *      a copy of the Cell
      */
     public Cell copy() {
-        return new Cell(row, column, value, editable, valid, automaticallySolved);
+        return new Cell(row, column, value, editable, valid, automaticallySolved, sameAsSolution);
     }
 
     /**
@@ -120,9 +125,10 @@ public class Cell extends Observable {
         boolean sameEditable = editable == toCompare.isEditable();
         boolean sameValid = valid == toCompare.isValid();
         boolean sameAutomaticallySolved = automaticallySolved == toCompare.isAutomaticallySolved();
+        boolean sameSameAsSolution = sameAsSolution == toCompare.isSameAsSolution();
 
         // check if the Cells are equal
-        boolean equal = sameRow && sameCol && sameValue && sameEditable && sameValid && sameAutomaticallySolved;
+        boolean equal = sameRow && sameCol && sameValue && sameEditable && sameValid && sameAutomaticallySolved && sameSameAsSolution;
 
         // return the result
         return equal;
@@ -137,7 +143,8 @@ public class Cell extends Observable {
     @Override
     public String toString() {
         return "Cell[row: " + row + ", column: " + column + ", value: " + value + ", editable: " + editable
-                + ", valid: " + valid + ", automaticallySolved: " + automaticallySolved + "]";
+                + ", valid: " + valid + ", automaticallySolved: " + automaticallySolved + ", sameAsSolution: "
+                + sameAsSolution + "]";
     }
 
     /* --> Getters and Setters <-- */
@@ -213,6 +220,21 @@ public class Cell extends Observable {
      */
     public void setAutomaticallySolved(boolean automaticallySolved) {
         this.automaticallySolved = automaticallySolved;
+        notifyObservers();
+    }
+
+    /**
+     * @return true when the Cell has the same value as the solution, else false
+     */
+    public boolean isSameAsSolution() {
+        return sameAsSolution;
+    }
+
+    /**
+     * @param sameAsSolution true for an Cell with the same value as the solution, else false
+     */
+    public void setSameAsSolution(boolean sameAsSolution) {
+        this.sameAsSolution = sameAsSolution;
         notifyObservers();
     }
 }

@@ -12,11 +12,12 @@ public class BoardConstants {
 
     public static final Color CELL_COLOR_NORMAL = new Color(244, 248, 255);
     public static final Color CELL_COLOR_ERROR = new Color(255, 198, 198);
+    public static final Color CELL_COLOR_NOT_LIKE_SOLUTION = new Color(255, 250, 205);
 
     public static final Color FONT_COLOR_NORMAL = Color.BLACK;
     public static final Color FONT_COLOR_AUTOMATICALLY_SOLVED = new Color(5, 135, 31);
 
-    public static int FONT_SIZE = 14;
+    public static int FONT_SIZE = 24;
 
     public static Font FONT_EDITABLE = new Font("Arial", Font.PLAIN, FONT_SIZE);
     public static Font FONT_UNEDITABLE = new Font("Arial Black", Font.BOLD, FONT_SIZE);

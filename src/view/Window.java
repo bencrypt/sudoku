@@ -10,7 +10,8 @@ public class Window extends JFrame {
     /**
      * Creates the main window for the application. The elements on the Window should be added by
      * {@link #addToBorderLayout(JComponent, Object)} for correct useness.
-     * Does not add the subelements and does not create event handling. Latter has to be
+     * Does not add the subelements and does not create event handling. Latter has to be done by
+     * {@link eventHandling.WindowHandler}.
      */
     public Window() {
         init();

@@ -1,5 +1,7 @@
 package model;
 
+import computing.SudokuSolver;
+import console.SudokuPrinter;
 import utils.DuplicatesChecker;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class Sudoku {
 	/* --> Fields <-- */
 
 	private Cell[][] board;
+	private Sudoku solution;
 
 	/* --> Constructors <-- */
 
@@ -25,7 +28,41 @@ public class Sudoku {
 		this.board = board;
 	}
 
+	/**
+	 * Creates a empty editable Sudoku
+	 *
+	 */
+	public Sudoku() {
+
+		Cell[][] board = new Cell[9][9];
+
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+				board[row][col] = new Cell(row, col, 0, true);
+			}
+		}
+
+		this.board = board;
+	}
+
 	/* --> Methods <-- */
+
+	/**
+	 * Sets every Cell with a value (!= 0) as not editable.
+	 */
+	public void makeFilledCellsImmutable() {
+
+		// set filled Cells as non editable
+		Cell currentCell;
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+				currentCell = board[row][col];
+				if (currentCell.getValue() != 0) {
+					currentCell.setEditable(false);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Restarts the Sudoku which means the value of every editable Cell is resetted to 0.
@@ -46,6 +83,9 @@ public class Sudoku {
 		// check for duplicates
 		// --> only duplicates if user manipulated Sudoku
 		checkAndMarkDuplicates();
+
+		// compare to solution and mark incorrect cells
+		checkAndMarkCellsNotSameAsSolution();
 	}
 
 	/**
@@ -105,6 +145,43 @@ public class Sudoku {
 
 		// if arrived here, the Sudokus are equal
 		return true;
+	}
+
+	/*
+	 * methods for checking if the current filled Cells have the same values as the solution's cells
+	 */
+
+	public void checkAndMarkCellsNotSameAsSolution() {
+
+		// find solution if not already done or if the Sudoku has changed since then
+		if (solution == null || solution != null && !solution.equals(this.getUnchanged())) {
+			solution = SudokuSolver.findFirstSolution(this.getUnchanged());
+		}
+
+		// check each Cell
+		Cell currentCell = null;
+
+		for (int row = 0; row < 9; row++) {
+			for (int col = 0; col < 9; col++) {
+
+				// get the current Cell
+				currentCell = board[row][col];
+
+				// mark the Cell as correct
+				// --> all incorrect Cells are determined in following and marked as such
+				currentCell.setSameAsSolution(true);
+
+				// if the Cell is empty, skip the check
+				if (currentCell.getValue() == 0) {
+					continue;
+				}
+
+				// mark the Cell if it has not the same value as the solution
+				if (currentCell.getValue() != solution.getBoard()[row][col].getValue()) {
+					currentCell.setSameAsSolution(false);
+				}
+			}
+		}
 	}
 
 	/*
@@ -268,26 +345,53 @@ public class Sudoku {
 	    return filled;
     }
 
-    /**
-     * @return all empty Cells of the board
-     */
-    public List<Cell> getEmptyCells() {
-        List<Cell> filled = new ArrayList<>();
-
-        for (Cell[] row : board) {
-            for (Cell cell : row) {
-                if (cell.getValue() == 0) {
-                    filled.add(cell);
-                }
-            }
-        }
-
-        return filled;
-    }
-
 	/*
 	 * Getters and Setters for implicite values
 	 */
+
+	public Sudoku getUnchanged() {
+
+		// create a copy of the given Sudoku where all editable fields are cleared and
+		// the flags are made equal
+		Sudoku unchanged = this.copy();
+		for (Cell[] row : unchanged.getBoard()) {
+			for (Cell cell : row) {
+
+				// make flags equal
+				cell.setSameAsSolution(true);
+				cell.setValid(true);
+				cell.setAutomaticallySolved(false);
+
+				// clear the cell
+				if (cell.getValue() != 0 && cell.isEditable()) {
+					cell.setValue(0);
+				}
+			}
+		}
+
+		// control output
+		//SudokuPrinter.showOnConsole(unchanged, "Unchanged");
+
+		// return the copy
+		return unchanged;
+	}
+
+	/**
+	 * @return all empty Cells of the board
+	 */
+	public List<Cell> getEmptyCells() {
+		List<Cell> filled = new ArrayList<>();
+
+		for (Cell[] row : board) {
+			for (Cell cell : row) {
+				if (cell.getValue() == 0) {
+					filled.add(cell);
+				}
+			}
+		}
+
+		return filled;
+	}
 
 	/**
 	 * @return the count of Cells with a value != 0

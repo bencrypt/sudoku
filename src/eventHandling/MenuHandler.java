@@ -2,10 +2,14 @@ package eventHandling;
 
 import computing.GeneratorThread;
 import controller.CtrlBoard;
+import controller.CtrlEnterBoardDialog;
 import controller.CtrlWindow;
 import eventHandling.printing.PrintHandler;
 import model.BoardConstants;
 import model.Sudoku;
+import view.Board;
+import view.EnterBoardDialog;
+import view.HoverButton;
 import view.WaitingDialog;
 import view.menu.MenuBar;
 
@@ -13,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuHandler {
 
@@ -45,12 +51,14 @@ public class MenuHandler {
         this.gui = gui;
 
         // create the event handling for each single element in the menu
-        addMenuHandlerNew();
+        addMenuHandlerGenerate();
+        addMenuHandlerEnter();
         addMenuHandlerRestart();
         addMenuHandlerLoad();
         addMenuHandlerSave();
         addMenuHandlerSaveAs();
-        addMenuHandlerPrint();
+        addMenuHandlerPrintCurrent();
+        addMenuHandlerPrintMultiple();
         addMenuHandlerExit();
 
         // create the event handling for choosing a font size
@@ -68,11 +76,11 @@ public class MenuHandler {
      * Cells to be predefined and afterwards creates the Sudoku with showing a waiting dialog while doing this.
      *
      * @see #askForCountOfPredefinedCells()
-     * @see #createNewSudoku(int)
+     * @see #createNewSudoku(int, boolean)
      */
-    private void addMenuHandlerNew() {
+    private void addMenuHandlerGenerate() {
 
-        gui.getMnuFile().getMniNew().addActionListener(e -> {
+        gui.getMnuFile().getMniGenerate().addActionListener(e -> {
 
             // ask for the count of the predefined Cells
             int countOfPredefinedCells = askForCountOfPredefinedCells();
@@ -81,11 +89,20 @@ public class MenuHandler {
             if (countOfPredefinedCells != -1) {
 
                 // create the Sudoku and set it as new model
-                Sudoku newSudoku = createNewSudoku(countOfPredefinedCells);
+                Sudoku newSudoku = createNewSudoku(countOfPredefinedCells, true);
                 if (newSudoku != null) {
                     ctrlBoard.changeModel(newSudoku);
                 }
             }
+        });
+    }
+
+    /**
+     * Creates the event handling for the button "Enter a given Sudoku"
+     */
+    private void addMenuHandlerEnter() {
+        gui.getMnuFile().getMniEnter().addActionListener(e -> {
+            new CtrlEnterBoardDialog(ctrlWindow);
         });
     }
 
@@ -133,13 +150,39 @@ public class MenuHandler {
     }
 
     /**
-     * Creates the event handling for the button "Print Sudoku".
+     * Creates the event handling for the button "Print current Sudoku".
      *
      * @see PrintHandler
      */
-    private void addMenuHandlerPrint() {
-        gui.getMnuFile().getMniPrint().addActionListener(e -> {
+    private void addMenuHandlerPrintCurrent() {
+        gui.getMnuPrint().getMniPrintCurrent().addActionListener(e -> {
             PrintHandler.printBoard(ctrlBoard.getGui());
+        });
+    }
+
+    /**
+     * Creates the event handling for the button "Print multiple Sudokus".
+     *
+     * @see PrintHandler
+     */
+    private void addMenuHandlerPrintMultiple() {
+        gui.getMnuPrint().getMniPrintMultiple().addActionListener(e -> {
+
+            int predefinedCells = askForCountOfPredefinedCells();
+            if (predefinedCells != -1) {
+
+                int countToPrint = askForCountOfSudokusToBePrinted();
+                if (countToPrint != -1) {
+
+                    List<Sudoku> sudokus = new ArrayList<>(countToPrint);
+                    for (int i = 0; i < countToPrint; i++) {
+                        sudokus.add(createNewSudoku(predefinedCells, false));
+                    }
+                    List<Board> boards = createBoards(sudokus);
+                    PrintHandler.printMultiple(boards);
+                }
+            }
+
         });
     }
 
@@ -165,8 +208,8 @@ public class MenuHandler {
             BoardConstants.FONT_EDITABLE = new Font(BoardConstants.FONT_EDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
             BoardConstants.FONT_UNEDITABLE = new Font(BoardConstants.FONT_UNEDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
 
-            // reload the model to update each cell
-            ctrlBoard.changeModel(ctrlBoard.getModel());
+            // update the GUI
+            ctrlBoard.updateAll();
         });
     }
 
@@ -188,26 +231,15 @@ public class MenuHandler {
 
         // show a input dialog
         String input = JOptionPane.showInputDialog(
-                "Wie viele Sudoku-Zellen sollen vorbelegt werden?", 30);
+                "Wie viele Sudoku-Zellen sollen vorbelegt werden?", 33);
         int countOfPredefinedCells = -1;
 
         // define the border values for input
-        int MIN = 20;
-        int MAX = 50;
+        int min = 20;
+        int max = 50;
 
         // if there is a input, check if it is valid
-        if (input != null) {
-            try {
-                countOfPredefinedCells = Integer.valueOf(input);
-
-                if (countOfPredefinedCells < MIN || countOfPredefinedCells > MAX) {
-                	countOfPredefinedCells = -1;
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException ex) {
-                showErrorDialog(input, MIN, MAX);
-            }
-        }
+        TryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countOfPredefinedCells;
@@ -229,6 +261,71 @@ public class MenuHandler {
     }
 
     /**
+     * Opens a input dialog to ask for the count of Sudokus to be printed in one flow.
+     * If a valid count is entered, this count will be returned. Else an error dialog is shown and the value
+     * -1 is returned.
+     *
+     * @return
+     *      the count of Sudokus to print or -1
+     *
+     * @see #showErrorDialog(String, int, int)
+     */
+    private int askForCountOfSudokusToBePrinted() {
+
+        // show a input dialog
+        String input = JOptionPane.showInputDialog(
+                "Wie viele Sudokus sollen gedruckt werden?", 10);
+        int countToPrint = -1;
+
+        // define the border values for input
+        int min = 1;
+        int max = 50;
+
+        // if there is a input, check if it is valid
+        TryParseInput(input, min, max);
+
+        // return the input, maybe -1
+        return countToPrint;
+    }
+
+    /**
+     * Tries to parse the given input to an integer value and checks if this value lies between the given minimum
+     * and maximum. If so, the parsed integer value is returned, else an error dialog is opened and -1 will be
+     * returned.
+     *
+     * @param input
+     *      the input to parse
+     * @param min
+     *      the minimum border
+     * @param max
+     *      the maximum border
+     * @return
+     *      the parsed value or -1 if an error occured
+     */
+    private int TryParseInput(String input, int min, int max) {
+
+        // init return variable
+        int parsed = -1;
+
+        // if there is a input, check if it is valid
+        if (input != null) {
+            try {
+                parsed = Integer.valueOf(input);
+
+                if (parsed < min || parsed > max) {
+                    parsed = -1;
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException ex) {
+                showErrorDialog(input, min, max);
+            }
+        }
+
+        // return parsed value, maybe -1 if error
+        return parsed;
+    }
+
+    /**
      * Creates a new Sudoku with the given count of predefined Cells. For the generating process the
      * {@link GeneratorThread} is used while in front of the application is shown a modal waiting dialog. Afterwards
      * the new Sudoku is returned.
@@ -238,7 +335,7 @@ public class MenuHandler {
      * @return
      *      the new Sudoku
      */
-    private Sudoku createNewSudoku(int countOfPredefinedCells) {
+    private Sudoku createNewSudoku(int countOfPredefinedCells, boolean showWaitingDialog) {
 
         // create a waiting dialog and a Thread for generating a new Sudoku
         WaitingDialog waitingDialog = new WaitingDialog();
@@ -253,11 +350,52 @@ public class MenuHandler {
             }
         });
 
-        // generate a Sudoku and show the waiting dialog while this
+        // generate a Sudoku and show the waiting dialog if needed while this
         generatorThread.execute();
-        waitingDialog.makeVisible();
+
+        if (showWaitingDialog) {
+            waitingDialog.makeVisible();
+        }
 
         // return the created Sudoku or null when cancelled
         return generatorThread.getNewSudoku();
+    }
+
+    /**
+     * Creates the GUI-Boards for the given Sudokus and adds them to a hidden frame so that they can be printed
+     * correctly.
+     *
+     * @param sudokus
+     *      the Sudokus to print
+     * @return
+     *      the GUI-Boards
+     */
+    private List<Board> createBoards(List<Sudoku> sudokus) {
+
+        // list for all boards
+        List<Board> boards = new ArrayList<>(sudokus.size());
+
+        // helping frame (invisible) to let the board be correctly printed
+        JFrame frame = new JFrame();
+
+        // create a board for every sudoku and add it to the helping frame so that the
+        // board can be printed correctly afterwards
+        for (Sudoku sud: sudokus) {
+
+            // create the board and update it via the controller
+            Board board = new Board();
+            new CtrlBoard(board);
+
+            // add the board to the frame and the result list
+            frame.add(board);
+            boards.add(board);
+
+            // repaint and pack the frame for correct printing afterwards
+            frame.repaint();
+            frame.pack();
+        }
+
+        // return the board list
+        return boards;
     }
 }

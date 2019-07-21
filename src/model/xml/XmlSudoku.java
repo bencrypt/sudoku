@@ -40,7 +40,7 @@ public class XmlSudoku {
             for (int col = 0; col < sudoku.getBoard().length; col++) {
                 Cell c = sudoku.getBoard()[row][col];
                 board.add(new XmlCell(c.getRow(), c.getColumn(), c.getValue(), c.isEditable(), c.isValid(),
-                                      c.isAutomaticallySolved()));
+                                      c.isAutomaticallySolved(), c.isSameAsSolution()));
             }
         }
     }

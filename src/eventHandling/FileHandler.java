@@ -139,10 +139,14 @@ public class FileHandler {
         xmlSudoku.getBoard().forEach(xmlCell -> {
             internalBoard[xmlCell.getRow()][xmlCell.getColumn()] =
                     new Cell(xmlCell.getRow(), xmlCell.getColumn(), xmlCell.getValue(), xmlCell.isEditable(),
-                            xmlCell.isValid(), xmlCell.isAutomaticallySolved());
+                            xmlCell.isValid(), xmlCell.isAutomaticallySolved(), xmlCell.isSameAsSolution());
         });
 
         Sudoku sudoku = new Sudoku(internalBoard);
+
+        // update the Sudoku's Cell state
+        // --> sameAsSolution is no must-have attribute
+        sudoku.checkAndMarkCellsNotSameAsSolution();
 
         // set a copy of the imported Sudoku as the last saved Sudoku
         // --> can be compared with later states for checking if the current state is saved or not when closing
@@ -211,5 +215,11 @@ public class FileHandler {
      */
     public static boolean equalsLastSavedSudoku(Sudoku toCompare) {
         return toCompare.equals(lastSavedSudoku);
+    }
+
+    /* --> Getters and Setters <-- */
+
+    public static void setLastSavedSudoku(Sudoku lastSavedSudoku) {
+        FileHandler.lastSavedSudoku = lastSavedSudoku;
     }
 }

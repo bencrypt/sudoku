@@ -6,12 +6,12 @@ public class MnuFile extends JMenu {
 
     /* --> Fields <-- */
 
-    private JMenuItem mniNew;
+    private JMenuItem mniGenerate;
+    private JMenuItem mniEnter;
     private JMenuItem mniRestart;
     private JMenuItem mniLoad;
     private JMenuItem mniSave;
     private JMenuItem mniSaveAs;
-    private JMenuItem mniPrint;
     private JMenuItem mniExit;
 
     /* --> Constructor <-- */
@@ -32,23 +32,22 @@ public class MnuFile extends JMenu {
         setText("Datei");
 
         // create the menu-items
-        mniNew = new JMenuItem("Neues Sudoku erstellen");
+        mniGenerate = new JMenuItem("Neues Sudoku generieren");
+        mniEnter = new JMenuItem("Vorgegebenes Sudoku eingeben");
         mniRestart = new JMenuItem("Sudoku neustarten");
         mniLoad = new JMenuItem("Sudoku laden");
         mniSave = new JMenuItem("Sudoku speichern");
         mniSaveAs = new JMenuItem("Sudoku speichern unter ...");
-        mniPrint = new JMenuItem("Sudoku ausdrucken");
         mniExit = new JMenuItem("Programm beenden");
 
         // add the menu-items to the menu
-        add(mniNew);
+        add(mniGenerate);
+        add(mniEnter);
         add(mniRestart);
         addSeparator();
         add(mniLoad);
         add(mniSave);
         add(mniSaveAs);
-        addSeparator();
-        add(mniPrint);
         addSeparator();
         add(mniExit);
     }
@@ -56,10 +55,17 @@ public class MnuFile extends JMenu {
     /* --> Getters and Setters <-- */
 
     /**
-     * @return the menu item "New Sudoku"
+     * @return the menu item "Generate Sudoku"
      */
-    public JMenuItem getMniNew() {
-        return mniNew;
+    public JMenuItem getMniGenerate() {
+        return mniGenerate;
+    }
+
+    /**
+     * @return the menu item "Enter given Sudoku"
+     */
+    public JMenuItem getMniEnter() {
+        return mniEnter;
     }
 
     /**
@@ -88,13 +94,6 @@ public class MnuFile extends JMenu {
      */
     public JMenuItem getMniSaveAs() {
         return mniSaveAs;
-    }
-
-    /**
-     * @return the menu item "Print Sudoku"
-     */
-    public JMenuItem getMniPrint() {
-        return mniPrint;
     }
 
     /**
