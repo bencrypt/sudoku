@@ -30,6 +30,7 @@ public class CtrlEnterBoardDialog {
         // create board with empty Sudoku
         this.ctrlNewBoard = new CtrlBoard(new Board());
         this.ctrlNewBoard.changeModel(new Sudoku());
+        this.ctrlNewBoard.setShowComparisonToSolution(false);
 
         // disable the main window to get a modal effect
         // --> not directly modal dialogue because of popups on it (would also be disabled else)
@@ -51,9 +52,10 @@ public class CtrlEnterBoardDialog {
      */
     public void ApplySudoku() {
 
-        // make every entered field immutable
+        // make every entered field immutable and restart the Sudoku for the correct Cell state
         Sudoku model = ctrlNewBoard.getModel();
         model.makeFilledCellsImmutable();
+        model.restart();
 
         // set the new Sudoku as main window's sudoku
         ctrlWindow.getCtrlBoard().changeModel(model);
