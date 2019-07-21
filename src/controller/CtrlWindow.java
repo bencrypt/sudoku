@@ -109,4 +109,28 @@ public class CtrlWindow {
     public void closeWindow() {
         windowHandler.closeWindow();
     }
+
+    /**
+     * Disables the Window as if a modal dialog is opened.
+     */
+    public void DisableWindow() {
+        window.setEnabled(false);
+    }
+
+    /**
+     * Enables the Window as if a modal dialog is closed.
+     */
+    public void enableWindow() {
+        window.setEnabled(true);
+        window.requestFocus();
+    }
+
+    /* --> Getters and Setters <-- */
+
+    /**
+     * @return the board controller of the main window's board
+     */
+    public CtrlBoard getCtrlBoard() {
+        return ctrlBoard;
+    }
 }

@@ -93,6 +93,36 @@ public class SudokuSolver {
 		return false;
 	}
 
+    /**
+     * Solves the given Sudoku via human strategy so that the solution is finally saved in the given instance.
+     * Therefore a copy should be given to this method.
+     * Returns true when a solution is found, else false.
+     *
+     * @param toSolve
+     *      the Sudoku which should be solved
+     * @return
+     *      true when a solution is found, else false
+     */
+	private static boolean solveViaHumanStrategy(Sudoku toSolve) {
+
+        // search for the next (human strategy) step as long as possible
+        Cell nextStep;
+        do {
+            nextStep = determineNextStep(toSolve);
+            if (nextStep != null) {
+                toSolve.getBoard()[nextStep.getRow()][nextStep.getColumn()].setValue(nextStep.getValue());
+            }
+        } while (nextStep != null);
+
+        // if now there is no empty Cell, the Sudoku is solved
+        // --> return true or false for each case
+        if (toSolve.getNextFreeCell() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 	/*
 	 * all solutions via backtracking
 	 */

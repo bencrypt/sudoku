@@ -1,6 +1,7 @@
 package controller;
 
 import computing.SudokuGenerator;
+import computing.SudokuSolver;
 import eventHandling.BoardHandler;
 import eventHandling.FileHandler;
 import model.BoardConstants;
@@ -11,6 +12,7 @@ import utils.Pair;
 import view.Board;
 import view.HoverButton;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,6 +27,9 @@ public class CtrlBoard implements Observer {
     // needed for changing a Cell's value through GUI input
     private CtrlValueSelector ctrlValueSelector;
     private int indexClickedCell;
+
+    // flag for individual view
+    private boolean showComparisonToSolution = true;
 
     /* --> Constructor <-- */
 
@@ -48,7 +53,8 @@ public class CtrlBoard implements Observer {
 
         // TODO: Test-Methoden rausnehmen
         Sudoku test = SudokuGenerator.generateSudoku(30);
-//        Sudoku test = FileHandler.importSudokuFromXml(".\\res\\naechsterSchritt.suk");
+        FileHandler.setLastSavedSudoku(test.getUnchanged());
+ //       Sudoku test = FileHandler.importSudokuFromXml(new File(".\\res\\naechsterSchritt.suk"));
         changeModel(test);
 
         // initialize event handling and observing pattern
@@ -81,6 +87,20 @@ public class CtrlBoard implements Observer {
      */
     public void restartSudoku() {
         model.restart();
+    }
+
+    /*
+     * Update explicitely every Cell
+     */
+    public void updateAll() {
+        if (model != null) {
+            for (int row = 0; row < 9; row++) {
+                for (int col = 0; col < 9; col++) {
+                    Cell cell = model.getBoard()[row][col];
+                    update(cell, null);
+                }
+            }
+        }
     }
 
     /*
@@ -130,9 +150,10 @@ public class CtrlBoard implements Observer {
             toUpdate.setText("");
         }
 
-        // update the status of the GUI cell
+        /* --> update the status of the GUI cell <-- */
         toUpdate.setEnabled(updated.isEditable());
 
+        // editable --> font
         if (updated.isEditable()) {
             toUpdate.setFont(BoardConstants.FONT_EDITABLE);
             toUpdate.enableHover();
@@ -141,12 +162,28 @@ public class CtrlBoard implements Observer {
             toUpdate.disableHover();
         }
 
+        // check for valid input (no duplicate) --> background
         if (updated.isValid()) {
             toUpdate.setBackground(BoardConstants.CELL_COLOR_NORMAL);
         } else {
             toUpdate.setBackground(BoardConstants.CELL_COLOR_ERROR);
         }
 
+        // compare with solution --> background
+        // CAREFUL: only change when comparison view enabled and background not already changed because of an
+        //          invalid cell
+        if (updated.isValid()) {
+
+            // standard color for not changed (init value)
+            toUpdate.setBackground(BoardConstants.CELL_COLOR_NORMAL);
+
+            // only mark wrong filled Cells when comparison view enabled
+            if (showComparisonToSolution && !updated.isSameAsSolution() && updated.getValue() != 0) {
+                toUpdate.setBackground(BoardConstants.CELL_COLOR_NOT_LIKE_SOLUTION);
+            }
+        }
+
+        // automatically solved --> foreground
         if (updated.isAutomaticallySolved()) {
             toUpdate.setForeground(BoardConstants.FONT_COLOR_AUTOMATICALLY_SOLVED);
         } else {
@@ -191,6 +228,9 @@ public class CtrlBoard implements Observer {
 
         // check the whole Sudoku for duplicate Cells and mark them as invalid
         model.checkAndMarkDuplicates();
+
+        // compare the Sudoku with the solution
+        model.checkAndMarkCellsNotSameAsSolution();
     }
 
     /* --> Getters and Setters <-- */
@@ -229,5 +269,16 @@ public class CtrlBoard implements Observer {
      */
     public void setIndexClickedCell(int indexClickedCell) {
         this.indexClickedCell = indexClickedCell;
+    }
+
+    /**
+     * Sets the flag for comparison to solution so that the comparison can be activated with true or deactivated
+     * with false.
+     *
+     * @param showComparisonToSolution
+     *      true for showing, else false
+     */
+    public void setShowComparisonToSolution(boolean showComparisonToSolution) {
+        this.showComparisonToSolution = showComparisonToSolution;
     }
 }

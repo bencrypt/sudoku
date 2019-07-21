@@ -38,6 +38,7 @@ public class ControlPanelHandler {
         // add the event handlers for the single elements on the GUI
         addSolveCompletelyHandler();
         addSolveNextStepHandler();
+        addCompareWithSolutionHandler();
     }
 
     /* --> Methods <-- */
@@ -108,6 +109,17 @@ public class ControlPanelHandler {
                 toChange.setValue(nextStep.getValue());
                 toChange.setAutomaticallySolved(true);
             }
+        });
+    }
+
+    /**
+     * Adds event handling for the Checkbox "Compare with solution" to enable special marked Cells when this
+     * option is enabled.
+     */
+    private void addCompareWithSolutionHandler() {
+        gui.getChkCompareWithSolution().addChangeListener(e -> {
+            ctrlBoard.setShowComparisonToSolution(gui.getChkCompareWithSolution().isSelected());
+            ctrlBoard.updateAll();
         });
     }
 }

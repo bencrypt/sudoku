@@ -13,6 +13,8 @@ public class ControlPanel extends JPanel {
     private HoverButton btnSolveCompletely;
     private HoverButton btnSolveNextStep;
 
+    private JCheckBox chkCompareWithSolution;
+
     /* --> Constructor <-- */
 
     /**
@@ -31,11 +33,23 @@ public class ControlPanel extends JPanel {
     private void init() {
 
         // preferences
-        setLayout(new GridLayout(1, 2, 20, 0));
+        setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setBackground(BoardConstants.BACKGROUND);
 
-        // initialize the buttons
+        // initalize checkbox
+        chkCompareWithSolution = new JCheckBox("Vergleiche mit Lösung");
+        chkCompareWithSolution.setBackground(BoardConstants.BACKGROUND);
+        chkCompareWithSolution.setHorizontalAlignment(SwingConstants.RIGHT);
+        chkCompareWithSolution.setFocusable(false);
+        chkCompareWithSolution.setSelected(true);
+
+        // initialize button panel
+        JPanel panButtons = new JPanel();
+        panButtons.setLayout(new GridLayout(1, 2, 20, 0));
+        panButtons.setBackground(BoardConstants.BACKGROUND);
+        panButtons.setBorder(new EmptyBorder(10,  0, 0, 0));
+
         btnSolveCompletely = new HoverButton("Komplett lösen");
         btnSolveNextStep = new HoverButton("Nächster Schritt");
 
@@ -45,9 +59,12 @@ public class ControlPanel extends JPanel {
         btnSolveCompletely.setFocusable(false);
         btnSolveNextStep.setFocusable(false);
 
+        panButtons.add(btnSolveCompletely);
+        panButtons.add(btnSolveNextStep);
+
         // add the elements
-        add(btnSolveCompletely);
-        add(btnSolveNextStep);
+        add(chkCompareWithSolution, BorderLayout.NORTH);
+        add(panButtons, BorderLayout.CENTER);
     }
 
     /* --> Getters and Setters <-- */
@@ -64,5 +81,12 @@ public class ControlPanel extends JPanel {
      */
     public HoverButton getBtnSolveNextStep() {
         return btnSolveNextStep;
+    }
+
+    /**
+     * @return the checkbox "Compare with solution"
+     */
+    public JCheckBox getChkCompareWithSolution() {
+        return chkCompareWithSolution;
     }
 }

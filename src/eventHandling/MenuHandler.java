@@ -2,13 +2,15 @@ package eventHandling;
 
 import computing.GeneratorThread;
 import controller.CtrlBoard;
+import controller.CtrlEnterBoardDialog;
 import controller.CtrlWindow;
 import eventHandling.printing.PrintHandler;
 import model.BoardConstants;
 import model.Sudoku;
 import view.Board;
+import view.EnterBoardDialog;
+import view.HoverButton;
 import view.WaitingDialog;
-import view.Window;
 import view.menu.MenuBar;
 
 import javax.swing.*;
@@ -49,7 +51,8 @@ public class MenuHandler {
         this.gui = gui;
 
         // create the event handling for each single element in the menu
-        addMenuHandlerNew();
+        addMenuHandlerGenerate();
+        addMenuHandlerEnter();
         addMenuHandlerRestart();
         addMenuHandlerLoad();
         addMenuHandlerSave();
@@ -75,9 +78,9 @@ public class MenuHandler {
      * @see #askForCountOfPredefinedCells()
      * @see #createNewSudoku(int, boolean)
      */
-    private void addMenuHandlerNew() {
+    private void addMenuHandlerGenerate() {
 
-        gui.getMnuFile().getMniNew().addActionListener(e -> {
+        gui.getMnuFile().getMniGenerate().addActionListener(e -> {
 
             // ask for the count of the predefined Cells
             int countOfPredefinedCells = askForCountOfPredefinedCells();
@@ -91,6 +94,15 @@ public class MenuHandler {
                     ctrlBoard.changeModel(newSudoku);
                 }
             }
+        });
+    }
+
+    /**
+     * Creates the event handling for the button "Enter a given Sudoku"
+     */
+    private void addMenuHandlerEnter() {
+        gui.getMnuFile().getMniEnter().addActionListener(e -> {
+            new CtrlEnterBoardDialog(ctrlWindow);
         });
     }
 
@@ -196,8 +208,8 @@ public class MenuHandler {
             BoardConstants.FONT_EDITABLE = new Font(BoardConstants.FONT_EDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
             BoardConstants.FONT_UNEDITABLE = new Font(BoardConstants.FONT_UNEDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
 
-            // reload the model to update each cell
-            ctrlBoard.changeModel(ctrlBoard.getModel());
+            // update the GUI
+            ctrlBoard.updateAll();
         });
     }
 
@@ -223,22 +235,11 @@ public class MenuHandler {
         int countOfPredefinedCells = -1;
 
         // define the border values for input
-        int MIN = 20;
-        int MAX = 50;
+        int min = 20;
+        int max = 50;
 
         // if there is a input, check if it is valid
-        if (input != null) {
-            try {
-                countOfPredefinedCells = Integer.valueOf(input);
-
-                if (countOfPredefinedCells < MIN || countOfPredefinedCells > MAX) {
-                	countOfPredefinedCells = -1;
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException ex) {
-                showErrorDialog(input, MIN, MAX);
-            }
-        }
+        TryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countOfPredefinedCells;
@@ -259,6 +260,16 @@ public class MenuHandler {
         JOptionPane.showMessageDialog(null, errorMessage, "Fehler", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Opens a input dialog to ask for the count of Sudokus to be printed in one flow.
+     * If a valid count is entered, this count will be returned. Else an error dialog is shown and the value
+     * -1 is returned.
+     *
+     * @return
+     *      the count of Sudokus to print or -1
+     *
+     * @see #showErrorDialog(String, int, int)
+     */
     private int askForCountOfSudokusToBePrinted() {
 
         // show a input dialog
@@ -267,25 +278,51 @@ public class MenuHandler {
         int countToPrint = -1;
 
         // define the border values for input
-        int MIN = 1;
-        int MAX = 50;
+        int min = 1;
+        int max = 50;
+
+        // if there is a input, check if it is valid
+        TryParseInput(input, min, max);
+
+        // return the input, maybe -1
+        return countToPrint;
+    }
+
+    /**
+     * Tries to parse the given input to an integer value and checks if this value lies between the given minimum
+     * and maximum. If so, the parsed integer value is returned, else an error dialog is opened and -1 will be
+     * returned.
+     *
+     * @param input
+     *      the input to parse
+     * @param min
+     *      the minimum border
+     * @param max
+     *      the maximum border
+     * @return
+     *      the parsed value or -1 if an error occured
+     */
+    private int TryParseInput(String input, int min, int max) {
+
+        // init return variable
+        int parsed = -1;
 
         // if there is a input, check if it is valid
         if (input != null) {
             try {
-                countToPrint = Integer.valueOf(input);
+                parsed = Integer.valueOf(input);
 
-                if (countToPrint < MIN || countToPrint > MAX) {
-                    countToPrint = -1;
+                if (parsed < min || parsed > max) {
+                    parsed = -1;
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                showErrorDialog(input, MIN, MAX);
+                showErrorDialog(input, min, max);
             }
         }
 
-        // return the input, maybe -1
-        return countToPrint;
+        // return parsed value, maybe -1 if error
+        return parsed;
     }
 
     /**
@@ -324,6 +361,15 @@ public class MenuHandler {
         return generatorThread.getNewSudoku();
     }
 
+    /**
+     * Creates the GUI-Boards for the given Sudokus and adds them to a hidden frame so that they can be printed
+     * correctly.
+     *
+     * @param sudokus
+     *      the Sudokus to print
+     * @return
+     *      the GUI-Boards
+     */
     private List<Board> createBoards(List<Sudoku> sudokus) {
 
         // list for all boards
