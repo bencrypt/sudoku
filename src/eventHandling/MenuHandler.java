@@ -239,7 +239,7 @@ public class MenuHandler {
         int max = 50;
 
         // if there is a input, check if it is valid
-        TryParseInput(input, min, max);
+        countOfPredefinedCells = TryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countOfPredefinedCells;
@@ -282,7 +282,7 @@ public class MenuHandler {
         int max = 50;
 
         // if there is a input, check if it is valid
-        TryParseInput(input, min, max);
+        countToPrint = TryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countToPrint;
