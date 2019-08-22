@@ -8,8 +8,6 @@ import eventHandling.printing.PrintHandler;
 import model.BoardConstants;
 import model.Sudoku;
 import view.Board;
-import view.EnterBoardDialog;
-import view.HoverButton;
 import view.WaitingDialog;
 import view.menu.MenuBar;
 
@@ -19,6 +17,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MenuHandler {
 
@@ -169,6 +168,7 @@ public class MenuHandler {
         gui.getMnuPrint().getMniPrintMultiple().addActionListener(e -> {
 
             int predefinedCells = askForCountOfPredefinedCells();
+
             if (predefinedCells != -1) {
 
                 int countToPrint = askForCountOfSudokusToBePrinted();
@@ -239,7 +239,7 @@ public class MenuHandler {
         int max = 50;
 
         // if there is a input, check if it is valid
-        countOfPredefinedCells = TryParseInput(input, min, max);
+        countOfPredefinedCells = tryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countOfPredefinedCells;
@@ -282,7 +282,7 @@ public class MenuHandler {
         int max = 50;
 
         // if there is a input, check if it is valid
-        countToPrint = TryParseInput(input, min, max);
+        countToPrint = tryParseInput(input, min, max);
 
         // return the input, maybe -1
         return countToPrint;
@@ -302,7 +302,7 @@ public class MenuHandler {
      * @return
      *      the parsed value or -1 if an error occured
      */
-    private int TryParseInput(String input, int min, int max) {
+    private int tryParseInput(String input, int min, int max) {
 
         // init return variable
         int parsed = -1;
@@ -351,10 +351,19 @@ public class MenuHandler {
         });
 
         // generate a Sudoku and show the waiting dialog if needed while this
+        // --> if no waiting dialog, still wait via get() method
         generatorThread.execute();
 
         if (showWaitingDialog) {
             waitingDialog.makeVisible();
+        } else {
+            try {
+                generatorThread.get();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Die Sudokus konnten nicht erstellt werden.",
+                                                "Fehler", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
         }
 
         // return the created Sudoku or null when cancelled
@@ -384,7 +393,7 @@ public class MenuHandler {
 
             // create the board and update it via the controller
             Board board = new Board();
-            new CtrlBoard(board);
+            new CtrlBoard(board, sud);
 
             // add the board to the frame and the result list
             frame.add(board);

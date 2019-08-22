@@ -40,22 +40,26 @@ public class CtrlBoard implements Observer {
      *
      * @param gui
      *      the Board-GUI
+     * @param model
+     *      the Sudoku model, maybe null to create a random Sudoku
      *
      * @see #createEventHandling()
      * @see #initObserver()
      *
      */
-    public CtrlBoard(Board gui) {
+    public CtrlBoard(Board gui, Sudoku model) {
 
         // set the needed fields
         this.gui = gui;
         this.ctrlValueSelector = new CtrlValueSelector(this);
 
-        // TODO: Test-Methoden rausnehmen
-        Sudoku test = SudokuGenerator.generateSudoku(30);
-        FileHandler.setLastSavedSudoku(test.getUnchanged());
- //       Sudoku test = FileHandler.importSudokuFromXml(new File(".\\res\\naechsterSchritt.suk"));
-        changeModel(test);
+        this.model = model;
+        if (this.model == null) {
+            this.model = SudokuGenerator.generateSudoku(25);
+            // this.model = FileHandler.importSudokuFromXml(new File(".\\res\\naechsterSchritt.suk"));
+        }
+
+        FileHandler.setLastSavedSudoku(this.model.getUnchanged());
 
         // initialize event handling and observing pattern
         createEventHandling();
