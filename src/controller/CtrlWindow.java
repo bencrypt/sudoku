@@ -74,7 +74,7 @@ public class CtrlWindow {
      *      the related View for the Board-Controller
      */
     private void createBoardController(Board board) {
-        ctrlBoard = new CtrlBoard(board);
+        ctrlBoard = new CtrlBoard(board, null);
     }
 
     /**

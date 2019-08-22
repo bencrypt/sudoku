@@ -28,8 +28,7 @@ public class CtrlEnterBoardDialog {
         this.ctrlWindow = ctrlWindow;
 
         // create board with empty Sudoku
-        this.ctrlNewBoard = new CtrlBoard(new Board());
-        this.ctrlNewBoard.changeModel(new Sudoku());
+        this.ctrlNewBoard = new CtrlBoard(new Board(), new Sudoku());
         this.ctrlNewBoard.setShowComparisonToSolution(false);
 
         // disable the main window to get a modal effect

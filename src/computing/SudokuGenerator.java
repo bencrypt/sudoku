@@ -146,7 +146,7 @@ public class SudokuGenerator {
         long end = System.currentTimeMillis();
 
         // control output with needed time
-        System.out.println("Neues Sudoku generiert in " + (end - start) + " ms.");
+        System.out.println("Neues Sudoku generiert in " + (end - start) + " ms.\n");
 
         // return the created Sudoku
         return newSudoku;
