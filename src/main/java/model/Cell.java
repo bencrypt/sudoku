@@ -1,8 +1,9 @@
 package model;
 
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class Cell extends Observable {
+public class Cell {
 	
 	/* --> Fields <-- */
 
@@ -18,6 +19,9 @@ public class Cell extends Observable {
 	private boolean valid;
 	private boolean automaticallySolved;
 	private boolean sameAsSolution;
+
+	// support object for property change
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	/* --> Constructors <-- */
 
@@ -88,13 +92,10 @@ public class Cell extends Observable {
     }
 
     /**
-     * Notifies the Observers when a field of the Cell has been changed.
+     * Adds the given listener as observer for property changes.
      */
-    @Override
-    public void notifyObservers() {
-        setChanged();
-        super.notifyObservers();
-        clearChanged();
+    public void addObserver(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
     }
 
     /**
@@ -174,8 +175,9 @@ public class Cell extends Observable {
      * @param value the new value of the Cell
      */
     public void setValue(int value) {
+        int oldValue = this.value;
         this.value = value;
-        notifyObservers();
+        this.pcs.firePropertyChange("value", oldValue, value);
     }
 
     /**
@@ -189,8 +191,9 @@ public class Cell extends Observable {
      * @param editable true for an editable Cell, else false
      */
     public void setEditable(boolean editable) {
+        boolean oldEditable = this.editable;
         this.editable = editable;
-        notifyObservers();
+        this.pcs.firePropertyChange("editable", oldEditable, editable);
     }
 
     /**
@@ -204,8 +207,9 @@ public class Cell extends Observable {
      * @param valid true for a valid Cell, else false
      */
     public void setValid(boolean valid) {
+        boolean oldValid = this.valid;
         this.valid = valid;
-        notifyObservers();
+        this.pcs.firePropertyChange("valid", oldValid, valid);
     }
 
     /**
@@ -219,8 +223,9 @@ public class Cell extends Observable {
      * @param automaticallySolved true for an automatically solved Cell, else false
      */
     public void setAutomaticallySolved(boolean automaticallySolved) {
+        boolean oldAutomaticallySolved = this.automaticallySolved;
         this.automaticallySolved = automaticallySolved;
-        notifyObservers();
+        this.pcs.firePropertyChange("automaticallySolved", oldAutomaticallySolved, automaticallySolved);
     }
 
     /**
@@ -234,7 +239,8 @@ public class Cell extends Observable {
      * @param sameAsSolution true for an Cell with the same value as the solution, else false
      */
     public void setSameAsSolution(boolean sameAsSolution) {
+        boolean oldSameAsSolution = this.sameAsSolution;
         this.sameAsSolution = sameAsSolution;
-        notifyObservers();
+        this.pcs.firePropertyChange("sameAsSolution", oldSameAsSolution, sameAsSolution);
     }
 }
