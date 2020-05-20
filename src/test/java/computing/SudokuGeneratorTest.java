@@ -25,7 +25,7 @@ public class SudokuGeneratorTest {
             for (int col = 0; col < 9; col++) {
                 currentCell = sudoku.getBoard()[row][col];
                 assertFalse(currentCell.isEditable());
-                assertFalse(currentCell.getValue() == 0);
+                assertTrue(currentCell.getValue() == 0);
             }
         }
 
