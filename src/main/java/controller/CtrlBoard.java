@@ -1,7 +1,6 @@
 package controller;
 
 import computing.SudokuGenerator;
-import computing.SudokuSolver;
 import eventHandling.BoardHandler;
 import eventHandling.FileHandler;
 import model.BoardConstants;
@@ -12,7 +11,6 @@ import utils.Pair;
 import view.Board;
 import view.HoverButton;
 
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 

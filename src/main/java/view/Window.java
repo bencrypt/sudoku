@@ -59,24 +59,13 @@ public class Window extends JFrame {
         }
 
         // use different cases for BorderLayout
-        switch((String) constraints) {
-            case BorderLayout.CENTER:
-                add(component, BorderLayout.CENTER);
-                break;
-            case BorderLayout.NORTH:
-                add(component, BorderLayout.NORTH);
-                break;
-            case BorderLayout.EAST:
-                add(component, BorderLayout.EAST);
-                break;
-            case BorderLayout.SOUTH:
-                add(component, BorderLayout.SOUTH);
-                break;
-            case BorderLayout.WEST:
-                add(component, BorderLayout.WEST);
-                break;
-            default:
-                throw new IllegalArgumentException();
+        switch ((String) constraints) {
+            case BorderLayout.CENTER -> add(component, BorderLayout.CENTER);
+            case BorderLayout.NORTH -> add(component, BorderLayout.NORTH);
+            case BorderLayout.EAST -> add(component, BorderLayout.EAST);
+            case BorderLayout.SOUTH -> add(component, BorderLayout.SOUTH);
+            case BorderLayout.WEST -> add(component, BorderLayout.WEST);
+            default -> throw new IllegalArgumentException();
         }
     }
 }

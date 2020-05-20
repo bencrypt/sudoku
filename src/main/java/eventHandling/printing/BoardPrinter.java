@@ -25,7 +25,7 @@ public class BoardPrinter implements Printable {
      *      the Board to be printed
      */
     public BoardPrinter(Board toPrint) {
-        this.toPrint = new ArrayList<Board>(1);
+        this.toPrint = new ArrayList<>(1);
         this.toPrint.add(toPrint);
     }
 

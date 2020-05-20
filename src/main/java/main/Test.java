@@ -41,7 +41,7 @@ public class Test {
         Cell[][] board = new Cell[9][9];
         for (byte row = 0; row < 9; row++) {
             for (byte column = 0; column < 9; column++) {
-                boolean editable = values[row][column] == 0 ? true : false;
+                boolean editable = values[row][column] == 0;
                 board[row][column] = new Cell(row, column, values[row][column], editable);
             }
         }
@@ -78,16 +78,12 @@ public class Test {
     public static void findAndPrintAllSolutions(Sudoku toSolve) {
 
         // get all solutions in a list and determine the computing time
-        List<Sudoku> solutions = new ArrayList<>();
-
-        long start =System.currentTimeMillis();
-
-        solutions = SudokuSolver.findAllSolutions(toSolve);
-
-        long ende =System.currentTimeMillis();
+        long start = System.currentTimeMillis();
+        List<Sudoku> solutions = SudokuSolver.findAllSolutions(toSolve);
+        long end =System.currentTimeMillis();
 
         // print the solutions and the time needed for the whole computing
-        System.out.println("\n-------\n"+solutions.size()+" Lösung(en) ("+(ende -start)+"ms):\n-------");
+        System.out.println("\n-------\n"+solutions.size()+" Lösung(en) ("+(end -start)+"ms):\n-------");
         for (int i = 0; i < solutions.size(); i++) {
             SudokuPrinter.showOnConsole(solutions.get(i), "Lösung " + (i+1));
         }
@@ -112,12 +108,8 @@ public class Test {
         SudokuPrinter.showOnConsole(newSudoku, "Neues Sudoku (" + (end - start) + " ms)");
 
         // solve the new Sudoku
-        List<Sudoku> solutions = new ArrayList<>();
-
         start = System.currentTimeMillis();
-
-        solutions = SudokuSolver.findAllSolutions(newSudoku);
-
+        List<Sudoku> solutions = SudokuSolver.findAllSolutions(newSudoku);
         end = System.currentTimeMillis();
 
         System.out.println("\n-------\n" + solutions.size() + " Lösung(en) (" + (end - start) + "ms):\n-------");

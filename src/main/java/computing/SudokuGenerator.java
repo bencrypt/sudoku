@@ -1,10 +1,12 @@
 package computing;
 
-import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class SudokuGenerator {
 
@@ -70,7 +72,7 @@ public class SudokuGenerator {
         // define a new Sudoku
         Sudoku newSudoku = null;
 
-        // TODO: Test-Methoden rausnehmen
+        // TODO: remove test methods
         // generate a new Sudoku until there is created one with exactly one solution
         if (countOfPredefinedCells < 25) {
         	newSudoku = createSudokuViaHumanStrategy(countOfPredefinedCells);
@@ -119,9 +121,9 @@ public class SudokuGenerator {
         // generate a new Sudoku until there is created one with exactly one solution
         while (newSudoku == null)
         {
-            // TODO: schnelleres Erstellen von Sudokus ?
-            //    --> bis 23 okay, 22 wird schon sehr langsam
-            //    --> bis 25 ist Clearing der schnellste Ansatz, darunter HumanStrategy
+            // TODO: create sudokus faster? ?
+            //    --> until 23 okay, 22 very slow
+            //    --> until 25 is Clearing the fastest approach, below HumanStrategy
 
             // used method (fastest until now and correct)
         	if (countOfPredefinedCells < 25) {
@@ -481,18 +483,18 @@ public class SudokuGenerator {
         int indexStart = -1;
         int indexEnd = -1;
         switch (diagonalBox) {
-            case 0:
+            case 0 -> {
                 indexStart = 0;
                 indexEnd = 3;
-                break;
-            case 1:
+            }
+            case 1 -> {
                 indexStart = 3;
                 indexEnd = 6;
-                break;
-            case 2:
+            }
+            case 2 -> {
                 indexStart = 6;
                 indexEnd = 9;
-                break;
+            }
         }
 
         // to each Cell in the given box add the first value of the shuffled list and remove it

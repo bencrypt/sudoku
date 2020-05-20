@@ -1,7 +1,6 @@
 package model;
 
 import computing.SudokuSolver;
-import console.SudokuPrinter;
 import utils.DuplicatesChecker;
 
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class Sudoku {
 	}
 
 	/**
-	 * Restarts the Sudoku which means the value of every editable Cell is resetted to 0.
+	 * Restarts the Sudoku which means the value of every editable Cell is reset to 0.
 	 */
 	public void restart() {
 
@@ -154,7 +153,7 @@ public class Sudoku {
 	public void checkAndMarkCellsNotSameAsSolution() {
 
 		// find solution if not already done or if the Sudoku has changed since then
-		if (solution == null || solution != null && !solution.equals(this.getUnchanged())) {
+		if (solution == null || !solution.equals(this.getUnchanged())) {
 			solution = SudokuSolver.findFirstSolution(this.getUnchanged());
 		}
 

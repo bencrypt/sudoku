@@ -116,11 +116,7 @@ public class SudokuSolver {
 
         // if now there is no empty Cell, the Sudoku is solved
         // --> return true or false for each case
-        if (toSolve.getNextFreeCell() == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return toSolve.getNextFreeCell() == null;
     }
 
 	/*
@@ -219,10 +215,7 @@ public class SudokuSolver {
         determineMaxCountOfSolutions(toSolve, solutions, 1);
 
         // if there is exactly one solution, return true, else false
-        if (solutions.size() == 1)
-            return true;
-        else
-            return false;
+        return solutions.size() == 1;
     }
 
     /**
@@ -240,11 +233,7 @@ public class SudokuSolver {
 
         // solve via backtracking because it is the fastest way to check for a solution
         Sudoku copy = toSolve.copy();
-        if (SudokuSolver.solveViaBacktracking(copy)) {
-            return true;
-        } else {
-            return false;
-        }
+        return SudokuSolver.solveViaBacktracking(copy);
     }
 
     /**
@@ -334,11 +323,7 @@ public class SudokuSolver {
 
         // if now there is no empty Cell, the Sudoku is solved
         // --> return true or false for each case
-        if (copy.getNextFreeCell() == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return copy.getNextFreeCell() == null;
     }
 
     /**
@@ -353,7 +338,7 @@ public class SudokuSolver {
      */
     public static Cell determineNextStep(Sudoku sudoku)
     {
-        // TODO: weitere Berechnungen?
+        // TODO: farther steps?
 
         // determine the value for the next Cell to be solved
         // --> a copy of the changed Cell will be returned

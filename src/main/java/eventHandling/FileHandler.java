@@ -53,7 +53,7 @@ public class FileHandler {
         }
 
         // add the ending ".suk" if needed
-        if (destination != null && !destination.getName().endsWith(".suk")) {
+        if (!destination.getName().endsWith(".suk")) {
             destination = new File(destination + ".suk");
         }
 
@@ -81,7 +81,6 @@ public class FileHandler {
         } catch (JAXBException e) {
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht exportiert werden.",
                                             "Fehler", JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }
 
