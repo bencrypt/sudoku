@@ -6,6 +6,8 @@ import eventHandling.FileHandler;
 import model.BoardConstants;
 import model.Cell;
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.IndexConverter;
 import utils.Pair;
 import view.Board;
@@ -15,6 +17,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class CtrlBoard implements PropertyChangeListener {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(CtrlBoard.class);
 
     /* --> Fields <-- */
 
@@ -200,8 +206,7 @@ public class CtrlBoard implements PropertyChangeListener {
         gui.repaint();
 
         // control output
-//        System.out.println("Sudoku aktualisiert:");
-//        SudokuPrinter.showOnConsole(model);
+        //LOGGER.debug("Sudoku updated: {}", model.getAsPrettyString());
     }
 
     /*

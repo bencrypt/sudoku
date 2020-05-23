@@ -2,6 +2,8 @@ package computing;
 
 import model.Cell;
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,12 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class SudokuSolver {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(SudokuSolver.class);
+
+    /* --> Methods <-- */
 
     /*
      * find first solutions via backtracking
@@ -73,18 +81,17 @@ public class SudokuSolver {
 			freeCell.setValue(possibleValue);
 
 			// control output
-//			System.out.println("\n------\nVersuche " + possibleValue + ":");
-//			SudokuPrinter.showOnConsole(toSolve);
+            //LOGGER.debug("Try {}: {}", possibleValue, toSolve.getAsPrettyString());
 
 			// try to solve the next free Cell
-			// --> if the Sudoku can be solved, true will be returned in the end, otherwhise the current
-			//     setted value has to be switched with the next possible value
+			// --> if the Sudoku can be solved, true will be returned in the end, otherwise the current
+			//     set value has to be switched with the next possible value
 			boolean nextStepSuccessfull = solveViaBacktracking(toSolve);
 			if (nextStepSuccessfull) {
 				return true;
 			} else {
 				freeCell.setValue(0);
-//				System.out.println("Versuch fehlgeschlagen!");
+				//LOGGER.debug("Try failed!");
 			}
 		}
 
@@ -179,12 +186,11 @@ public class SudokuSolver {
 			freeCell.setValue(possibleValue);
 
 			// control output
-//			System.out.println("\n------\nVersuche " + possibleValue + ":");
-//			SudokuPrinter.showOnConsole(original);
+            //LOGGER.debug("Try {}: {}", possibleValue, toSolve.getAsPrettyString());
 
 			// try to solve the next free Cell
 			// --> if the Sudoku can be solved, it will be added to the solution list, afterwards the current
-			//     setted value has to be switched with the next possible value
+			//     set value has to be switched with the next possible value
 			// --> if not solved, the current value is just switched
 			findAllSolutionsViaBacktracking(toSolve, solutions);
 
@@ -338,7 +344,7 @@ public class SudokuSolver {
      */
     public static Cell determineNextStep(Sudoku sudoku)
     {
-        // TODO: farther steps?
+        // TODO: more strategies?
 
         // determine the value for the next Cell to be solved
         // --> a copy of the changed Cell will be returned
@@ -346,11 +352,11 @@ public class SudokuSolver {
 
         if (nextStep == null) {
             nextStep = onlyOnePossibleCellInRelatingUnits(sudoku);
-//            System.out.println("zweiter Test: " + nextStep);
+            //LOGGER.debug("Second test: {}", nextStep);
         }
 
         // control output
-//        System.out.println("Nächster Schritt: " + nextStep);
+        //LOGGER.debug("Next step: {}", nextStep);
 
         // return the copy of the changed Cell
         return nextStep;
@@ -463,11 +469,12 @@ public class SudokuSolver {
                 });
 
                 // control output
-//                System.out.println("\nonlyOnePossibleCellInRelatingUnits: " + cell.getRow() + "|" + cell.getColumn());
-//                System.out.println("Möglich in Feld: " + possibleValuesInCell);
-//                System.out.println("Möglich in anderen Feldern der Reihe:  " + possibleValuesInRow);
-//                System.out.println("Möglich in anderen Feldern der Spalte: " + possibleValuesInColumn);
-//                System.out.println("Möglich in anderen Feldern der Box:    " + possibleValuesInBox);
+                /*
+                LOGGER.debug("Current Cell: {}|{}\nPossible in this Cell: {}",
+                                cell.getRow(), cell.getColumn(), possibleValuesInCell);
+                LOGGER.debug("Possible in row: {}\nPossible in col: {}\nPossible in box:{}",
+                                possibleValuesInRow, possibleValuesInColumn, possibleValuesInBox);
+                 */
 
                 // if there is exactly one possible value left for the cell, set it into the Cell
                 for (Integer value : possibleValuesInCell) {

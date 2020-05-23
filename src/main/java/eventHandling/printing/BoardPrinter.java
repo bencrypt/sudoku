@@ -1,5 +1,7 @@
 package eventHandling.printing;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import view.Board;
 
 import java.awt.*;
@@ -9,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardPrinter implements Printable {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(BoardPrinter.class);
 
     /* --> Fields <-- */
 
@@ -72,9 +78,7 @@ public class BoardPrinter implements Printable {
         }
 
         // control output
-//          System.out.println("Original: " + originalWidth + "|" + originalHeight);
-//          System.out.println("Drucken: " + printWidth + "|" + printHeight);
-//          System.out.println("Skalierung: " + scale);
+        //LOGGER.debug("Original: {}|{}\nPrint: {}|{}\nScale: {}", originalWidth, originalHeight, printWidth, printHeight, scale);
 
         // place the component in the center of the page
         double printStartX = pf.getImageableX() + Math.abs(printWidth - originalWidth*scale)/2;

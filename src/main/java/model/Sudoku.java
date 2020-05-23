@@ -1,6 +1,8 @@
 package model;
 
 import computing.SudokuSolver;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.DuplicatesChecker;
 
 import java.util.ArrayList;
@@ -9,6 +11,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Sudoku {
+
+	/* --> Logger <-- */
+
+	private static final Logger LOGGER = LogManager.getLogger(Sudoku.class);
 
 	/* --> Fields <-- */
 
@@ -144,6 +150,60 @@ public class Sudoku {
 
 		// if arrived here, the Sudokus are equal
 		return true;
+	}
+
+	/**
+	 * Returns a pretty string representing the Sudoku.
+	 *
+	 * Therefore uses the following style:
+	 *
+	 * 		x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 *
+	 * 	    x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 *
+	 * 	    x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 * 	    x x x  x x x  x x x
+	 *
+	 */
+	public String getAsPrettyString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		// start with line break
+		sb.append("\n");
+
+		// go through each row
+		for (byte row = 0; row < 9; row++) {
+
+			// all 3 rows a free line
+			if (row % 3 == 0) {
+				sb.append("\n");
+			}
+
+			// print all columns of the current row
+			for (int column = 0; column < 9; column++) {
+
+				// all 3 columns additionally spaces
+				if (column % 3 == 0) {
+					sb.append("  ");
+				}
+
+				// print cell value
+				sb.append(" ")
+						.append(board[row][column].getValue());
+			}
+
+			// line break after the row
+			sb.append("\n");
+		}
+
+		// return created string
+		return sb.toString();
 	}
 
 	/*
@@ -345,9 +405,12 @@ public class Sudoku {
     }
 
 	/*
-	 * Getters and Setters for implicite values
+	 * Getters and Setters for implicitly set values
 	 */
 
+	/**
+	 * @return the Sudoku in a state where no changes are made
+	 */
 	public Sudoku getUnchanged() {
 
 		// create a copy of the given Sudoku where all editable fields are cleared and
@@ -369,7 +432,7 @@ public class Sudoku {
 		}
 
 		// control output
-		//SudokuPrinter.showOnConsole(unchanged, "Unchanged");
+		//LOGGER.debug("Unchanged: {}", unchanged.getAsPrettyString());
 
 		// return the copy
 		return unchanged;
@@ -432,7 +495,7 @@ public class Sudoku {
 
 	/**
 	 * Returns a list which contains every Cell that is related to the given Cell. That means that the list contains
-	 * each Cell in the realted row, column and box of the given Cell.
+	 * each Cell in the related row, column and box of the given Cell.
 	 * <p>
 	 * IMPORTANT: The given Cell itself is NOT included in the result list.
 	 *
@@ -745,9 +808,10 @@ public class Sudoku {
 		possibleValues.removeAll(existingValues);
 
 		// control output
-//		System.out.println("\ndeterminePossibleValues: " + cell.getRow() + "|" + cell.getColumn());
-//		System.out.println("Schon vorhandene Zahlen: " + existingValues);
-//		System.out.println("Mögliche Zahlen: " + possibleValues);
+		/*
+		LOGGER.debug("\nCurrent Cell: {}|{}\nExisting values: {}\nPossible values: {}",
+					cell.getRow(), cell.getColumn(), existingValues, possibleValues);
+		 */
 
 		/* --> return the list of possible values <-- */
 		return possibleValues;
