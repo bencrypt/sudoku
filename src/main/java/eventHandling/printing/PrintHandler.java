@@ -1,6 +1,5 @@
 package eventHandling.printing;
 
-import model.Sudoku;
 import view.Board;
 
 import javax.swing.*;

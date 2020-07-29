@@ -1,10 +1,16 @@
 package computing;
 
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 
 public class GeneratorThread extends SwingWorker<Void, Void> {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(GeneratorThread.class);
 
     /* --> Fields <-- */
 
@@ -55,9 +61,9 @@ public class GeneratorThread extends SwingWorker<Void, Void> {
 
         // control output with needed time
         if (isCancelled()) {
-            System.out.println("Generator-Thread unterbrochen nach " + (end - start) + " ms.");
+            LOGGER.debug("Cancelled generator thread after {} ms", (end-start));
         } else {
-            System.out.println("Neues Sudoku generiert in " + (end - start) + " ms.");
+            LOGGER.debug("Generated new Sudoku in {} ms", (end-start));
         }
 
         // return null (not needed)

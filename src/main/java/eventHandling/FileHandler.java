@@ -1,10 +1,11 @@
 package eventHandling;
 
-import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
 import model.xml.XmlCell;
 import model.xml.XmlSudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -15,6 +16,10 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class FileHandler {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(FileHandler.class);
 
     /* --> Fields <-- */
 
@@ -53,7 +58,7 @@ public class FileHandler {
         }
 
         // add the ending ".suk" if needed
-        if (destination != null && !destination.getName().endsWith(".suk")) {
+        if (!destination.getName().endsWith(".suk")) {
             destination = new File(destination + ".suk");
         }
 
@@ -76,12 +81,12 @@ public class FileHandler {
             // set a copy of the saved Sudoku as the last saved Sudoku
             // --> can be compared with later states for checking if the current state is saved or not when closing
             lastSavedSudoku = toExport.copy();
-            SudokuPrinter.showOnConsole(lastSavedSudoku, "lastSavedSudoku");
+            LOGGER.debug("last saved: {}", lastSavedSudoku.getAsPrettyString());
 
         } catch (JAXBException e) {
+            LOGGER.error(e.getMessage());
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht exportiert werden.",
                                             "Fehler", JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }
 
@@ -115,7 +120,7 @@ public class FileHandler {
      */
     public static Sudoku importSudokuFromXml(File source) {
 
-        // import from the choosen file
+        // import from the chosen file
         XmlSudoku xmlSudoku = null;
         try {
             // helping classes
@@ -129,6 +134,7 @@ public class FileHandler {
             currentFile = source;
 
         } catch (JAXBException e) {
+
             JOptionPane.showMessageDialog(null, "Die Datei konnte nicht importiert werden.",
                     "Fehler", JOptionPane.ERROR_MESSAGE);
             return null;
@@ -151,7 +157,7 @@ public class FileHandler {
         // set a copy of the imported Sudoku as the last saved Sudoku
         // --> can be compared with later states for checking if the current state is saved or not when closing
         lastSavedSudoku = sudoku.copy();
-        SudokuPrinter.showOnConsole(lastSavedSudoku, "lastSavedSudoku");
+        LOGGER.debug("last saved: {}", lastSavedSudoku.getAsPrettyString());
 
         // return the converted Sudoku
         return sudoku;

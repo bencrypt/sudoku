@@ -1,7 +1,6 @@
 package controller;
 
 import eventHandling.ControlPanelHandler;
-import eventHandling.FileHandler;
 import eventHandling.MenuHandler;
 import eventHandling.WindowHandler;
 import view.Board;
@@ -9,10 +8,7 @@ import view.ControlPanel;
 import view.Window;
 import view.menu.MenuBar;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class CtrlWindow {
 

@@ -1,6 +1,5 @@
 package view.menu;
 
-import javafx.scene.control.ComboBox;
 import model.BoardConstants;
 
 import javax.swing.*;

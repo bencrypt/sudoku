@@ -2,14 +2,18 @@ package main;
 
 import computing.SudokuGenerator;
 import computing.SudokuSolver;
-import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(Test.class);
 
     /* --> Methods <-- */
 
@@ -41,7 +45,7 @@ public class Test {
         Cell[][] board = new Cell[9][9];
         for (byte row = 0; row < 9; row++) {
             for (byte column = 0; column < 9; column++) {
-                boolean editable = values[row][column] == 0 ? true : false;
+                boolean editable = values[row][column] == 0;
                 board[row][column] = new Cell(row, column, values[row][column], editable);
             }
         }
@@ -63,10 +67,10 @@ public class Test {
 
         Sudoku solvedSudoku = SudokuSolver.findFirstSolution(toSolve);
 
-        long ende = System.currentTimeMillis();
+        long end = System.currentTimeMillis();
 
         // print the solution and the time needed to solve
-        SudokuPrinter.showOnConsole(solvedSudoku, "Ergebnis (" + (ende-start) + " ms)");
+        LOGGER.debug("Solution ({} ms): {}", (end-start), solvedSudoku.getAsPrettyString());
     }
 
     /**
@@ -78,18 +82,14 @@ public class Test {
     public static void findAndPrintAllSolutions(Sudoku toSolve) {
 
         // get all solutions in a list and determine the computing time
-        List<Sudoku> solutions = new ArrayList<>();
-
-        long start =System.currentTimeMillis();
-
-        solutions = SudokuSolver.findAllSolutions(toSolve);
-
-        long ende =System.currentTimeMillis();
+        long start = System.currentTimeMillis();
+        List<Sudoku> solutions = SudokuSolver.findAllSolutions(toSolve);
+        long end =System.currentTimeMillis();
 
         // print the solutions and the time needed for the whole computing
-        System.out.println("\n-------\n"+solutions.size()+" Lösung(en) ("+(ende -start)+"ms):\n-------");
+        LOGGER.debug("{} solutions ({} ms):", solutions.size(), (end-start));
         for (int i = 0; i < solutions.size(); i++) {
-            SudokuPrinter.showOnConsole(solutions.get(i), "Lösung " + (i+1));
+            LOGGER.debug("Solution {}: {}", (i+1), solutions.get(i).getAsPrettyString());
         }
     }
 
@@ -109,21 +109,16 @@ public class Test {
 
         long end = System.currentTimeMillis();
 
-        SudokuPrinter.showOnConsole(newSudoku, "Neues Sudoku (" + (end - start) + " ms)");
+        LOGGER.debug("New Sudoku ({} ms): {}", (end-start), newSudoku.getAsPrettyString());
 
         // solve the new Sudoku
-        List<Sudoku> solutions = new ArrayList<>();
-
         start = System.currentTimeMillis();
-
-        solutions = SudokuSolver.findAllSolutions(newSudoku);
-
+        List<Sudoku> solutions = SudokuSolver.findAllSolutions(newSudoku);
         end = System.currentTimeMillis();
 
-        System.out.println("\n-------\n" + solutions.size() + " Lösung(en) (" + (end - start) + "ms):\n-------");
-
+        LOGGER.debug("{} Solution(s) ({}) ms", solutions.size(), (end-start));
         for (int i = 0; i < solutions.size(); i++) {
-            SudokuPrinter.showOnConsole(solutions.get(i), "Lösung " + (i+1));
+            LOGGER.debug("Solution {}: {}", (i+1), solutions.get(i).getAsPrettyString());
         }
     }
 }

@@ -1,8 +1,8 @@
 package utils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class DuplicatesChecker<T> {
 
@@ -17,7 +17,7 @@ public class DuplicatesChecker<T> {
     public Set<T> getAllDuplicatesInList(List<T> toCheck) {
 
         // create the result set
-        Set<T> duplicates = new TreeSet<>();
+        Set<T> duplicates = new HashSet<>();
 
         // if the list is null or has only one element, there cannot be a duplicate
         if (toCheck == null || toCheck.size() < 2) {

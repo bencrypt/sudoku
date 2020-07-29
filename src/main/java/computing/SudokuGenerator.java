@@ -1,12 +1,22 @@
 package computing;
 
-import console.SudokuPrinter;
 import model.Cell;
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class SudokuGenerator {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(SudokuGenerator.class);
+
+    /* --> Methods <-- */
 
     /*
      * methods that can be accessed from outside
@@ -70,7 +80,6 @@ public class SudokuGenerator {
         // define a new Sudoku
         Sudoku newSudoku = null;
 
-        // TODO: Test-Methoden rausnehmen
         // generate a new Sudoku until there is created one with exactly one solution
         if (countOfPredefinedCells < 25) {
         	newSudoku = createSudokuViaHumanStrategy(countOfPredefinedCells);
@@ -119,9 +128,9 @@ public class SudokuGenerator {
         // generate a new Sudoku until there is created one with exactly one solution
         while (newSudoku == null)
         {
-            // TODO: schnelleres Erstellen von Sudokus ?
-            //    --> bis 23 okay, 22 wird schon sehr langsam
-            //    --> bis 25 ist Clearing der schnellste Ansatz, darunter HumanStrategy
+            // TODO: create sudokus faster? ?
+            //    --> until 23 okay, 22 very slow
+            //    --> until 25 is Clearing the fastest approach, below HumanStrategy
 
             // used method (fastest until now and correct)
         	if (countOfPredefinedCells < 25) {
@@ -146,7 +155,7 @@ public class SudokuGenerator {
         long end = System.currentTimeMillis();
 
         // control output with needed time
-        System.out.println("Neues Sudoku generiert in " + (end - start) + " ms.\n");
+        LOGGER.debug("New Sudoku generated in {} ms", (end-start));
 
         // return the created Sudoku
         return newSudoku;
@@ -313,7 +322,7 @@ public class SudokuGenerator {
         }
 
         // control output
-//        SudokuPrinter.showOnConsole(sudoku, "Vollständiges Sudoku");
+        //LOGGER.debug("Complete Sudoku: {}", sudoku.getAsPrettyString());
 
         // create a random generator
         Random rand = new Random();
@@ -324,7 +333,7 @@ public class SudokuGenerator {
             cleared = clearCells(sudoku, countOfPredefinedCells, rand);
         }
 
-        System.out.println("Cleared all needed Cells: " + cleared);
+        //LOGGER.debug("Cleared all needed Cells: {}" + cleared);
 
         // return the generated Sudoku
         return sudoku;
@@ -358,8 +367,7 @@ public class SudokuGenerator {
         while (triedCells.size() < sudoku.getCountOfFilledCells()) {
 
             // control output
-//            System.out.println("tried:  " + triedCells.size());
-//            System.out.println("filled: " + sudoku.getCountOfFilledCells());
+            //LOGGER.debug("tried: {}\nfilled: {}", triedCells.size(), sudoku.getCountOfFilledCells());
 
             // get an untried Cell
             Cell toClear = getCellToBeCleared(sudoku, triedCells);
@@ -374,7 +382,7 @@ public class SudokuGenerator {
             // --> if all Cells to be cleared are cleared, true is returned
             boolean solveAbleByHuman = SudokuSolver.isSolveableByHumanStrategy(sudoku);
             if (solveAbleByHuman) {
-//                System.out.println("cleared");
+                //LOGGER.debug("cleared");
                 clearCells(sudoku, countOfPredefinedCells, rand);
             }
 
@@ -389,7 +397,7 @@ public class SudokuGenerator {
             triedCells.add(toClear);
         }
 
-        // here no try was successfull
+        // here no try was successful
         // --> return false to return to the upper level of backtracking
         return false;
     }
@@ -442,7 +450,7 @@ public class SudokuGenerator {
             fillBoxOfDiagonal(2, sudoku);
 
             // control output
-//            SudokuPrinter.showOnConsole(sudoku, "Diagonale");
+            //LOGGER.debug("Filled diagonal: {}", sudoku.getAsPrettyString());
 
         } while (SudokuSolver.findFirstSolution(sudoku) == null);
 

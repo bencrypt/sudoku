@@ -1,22 +1,26 @@
 package controller;
 
 import computing.SudokuGenerator;
-import computing.SudokuSolver;
 import eventHandling.BoardHandler;
 import eventHandling.FileHandler;
 import model.BoardConstants;
 import model.Cell;
 import model.Sudoku;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.IndexConverter;
 import utils.Pair;
 import view.Board;
 import view.HoverButton;
 
-import java.io.File;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class CtrlBoard implements Observer {
+public class CtrlBoard implements PropertyChangeListener {
+
+    /* --> Logger <-- */
+
+    private static final Logger LOGGER = LogManager.getLogger(CtrlBoard.class);
 
     /* --> Fields <-- */
 
@@ -101,7 +105,7 @@ public class CtrlBoard implements Observer {
             for (int row = 0; row < 9; row++) {
                 for (int col = 0; col < 9; col++) {
                     Cell cell = model.getBoard()[row][col];
-                    update(cell, null);
+                    propertyChange(new PropertyChangeEvent(cell, "all", null, null));
                 }
             }
         }
@@ -115,7 +119,7 @@ public class CtrlBoard implements Observer {
      * Initializes the observer pattern for the Board-Controller. Therefore the Controller observes each Cell of the
      * Model and updates the GUI with every change of a Cell.
      *
-     * @see #update(Observable, Object)
+     * @see #propertyChange(PropertyChangeEvent)
      */
     private void initObserver() {
         if (model != null) {
@@ -123,7 +127,7 @@ public class CtrlBoard implements Observer {
                 for (int col = 0; col < 9; col++) {
                     Cell cell = model.getBoard()[row][col];
                     cell.addObserver(this);
-                    update(cell, null);
+                    propertyChange(new PropertyChangeEvent(cell, "all", null, null));
                 }
             }
         }
@@ -132,25 +136,29 @@ public class CtrlBoard implements Observer {
     /**
      * Updates the GUI so that it is synchronized with the Model. Concretely this method is called when a Model's Cell
      * is changed by one of its fields.
+     * <p>
+     * Does not use the possibilities of event fields like the new or old value or the changed property's name,
+     * only uses the event cell and checks for all fields that might be updated. This is because the method was
+     * designed originally with Observer and Observable interfaces which are now deprecated.
      *
-     * @param o
-     *      the observed Cell which has been changed
-     * @param arg
-     *      additional arguments, not used here
+     * @param event
+     *      the property change event causing the update
      */
     @Override
-    public void update(Observable o, Object arg) {
+    public void propertyChange(PropertyChangeEvent event) {
 
         // determine the updated Model-Cell and the corresponding GUI-Cell
-        Cell updated = (Cell) o;
+        Cell updated = (Cell) event.getSource();
         HoverButton toUpdate =
                 IndexConverter.determineGuiCellFromModelCell(updated.getRow(), updated.getColumn(), gui.getCells());
 
         // put the new value into the GUI
         if (updated.getValue() != 0) {
+            // filled cell, actual value
             String newValue = String.valueOf(updated.getValue());
             toUpdate.setText(newValue);
         } else {
+            // empty cell with value 0, should be shown as empty string
             toUpdate.setText("");
         }
 
@@ -173,7 +181,7 @@ public class CtrlBoard implements Observer {
             toUpdate.setBackground(BoardConstants.CELL_COLOR_ERROR);
         }
 
-        // compare with solution --> background
+        // compare with solution --> background color for wrong cells
         // CAREFUL: only change when comparison view enabled and background not already changed because of an
         //          invalid cell
         if (updated.isValid()) {
@@ -198,8 +206,7 @@ public class CtrlBoard implements Observer {
         gui.repaint();
 
         // control output
-//        System.out.println("Sudoku aktualisiert:");
-//        SudokuPrinter.showOnConsole(model);
+        //LOGGER.debug("Sudoku updated: {}", model.getAsPrettyString());
     }
 
     /*

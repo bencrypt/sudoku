@@ -59,7 +59,7 @@ public class Window extends JFrame {
         }
 
         // use different cases for BorderLayout
-        switch((String) constraints) {
+        switch ((String) constraints) {
             case BorderLayout.CENTER:
                 add(component, BorderLayout.CENTER);
                 break;
