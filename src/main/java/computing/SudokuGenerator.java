@@ -489,18 +489,18 @@ public class SudokuGenerator {
         int indexStart = -1;
         int indexEnd = -1;
         switch (diagonalBox) {
-            case 0 -> {
+            case 0:
                 indexStart = 0;
                 indexEnd = 3;
-            }
-            case 1 -> {
+                break;
+            case 1:
                 indexStart = 3;
                 indexEnd = 6;
-            }
-            case 2 -> {
+                break;
+            case 2:
                 indexStart = 6;
                 indexEnd = 9;
-            }
+                break;
         }
 
         // to each Cell in the given box add the first value of the shuffled list and remove it
