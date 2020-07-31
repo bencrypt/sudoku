@@ -7,6 +7,7 @@ import controller.CtrlWindow;
 import eventHandling.printing.PrintHandler;
 import model.BoardConstants;
 import model.Sudoku;
+import utils.LanguageBundle;
 import view.Board;
 import view.WaitingDialog;
 import view.menu.MenuBar;
@@ -17,8 +18,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class MenuHandler {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -229,12 +235,11 @@ public class MenuHandler {
     private int askForCountOfPredefinedCells() {
 
         // show a input dialog
-        String input = JOptionPane.showInputDialog(
-                "Wie viele Sudoku-Zellen sollen vorbelegt werden?", 33);
+        String input = JOptionPane.showInputDialog(bundle.getString("HowManyPredefinedCells"), 33);
         int countOfPredefinedCells = -1;
 
         // define the border values for input
-        int min = 20;
+        int min = 25;
         int max = 50;
 
         // if there is a input, check if it is valid
@@ -255,8 +260,8 @@ public class MenuHandler {
      *      the maximal valid value
      */
     private void showErrorDialog(String input, int min, int max) {
-        String errorMessage = "'" + input + "' ist kein gültiger Wert.\nGültige Werte: " + min + " bis " + max;
-        JOptionPane.showMessageDialog(null, errorMessage, "Fehler", JOptionPane.ERROR_MESSAGE);
+        String errorMessage = String.format(bundle.getString("NoValidValue"), input, min, max);
+        JOptionPane.showMessageDialog(null, errorMessage, bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -272,8 +277,7 @@ public class MenuHandler {
     private int askForCountOfSudokusToBePrinted() {
 
         // show a input dialog
-        String input = JOptionPane.showInputDialog(
-                "Wie viele Sudokus sollen gedruckt werden?", 10);
+        String input = JOptionPane.showInputDialog(bundle.getString("HowManyPrinted"), 10);
         int countToPrint = -1;
 
         // define the border values for input
@@ -359,8 +363,8 @@ public class MenuHandler {
             try {
                 generatorThread.get();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Die Sudokus konnten nicht erstellt werden.",
-                                                "Fehler", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, bundle.getString("SudokusCouldNotBeCreated"),
+                                                bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         }

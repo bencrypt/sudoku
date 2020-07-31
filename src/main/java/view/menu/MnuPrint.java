@@ -1,8 +1,15 @@
 package view.menu;
 
+import utils.LanguageBundle;
+
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class MnuPrint extends JMenu {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -24,11 +31,11 @@ public class MnuPrint extends JMenu {
     private void init() {
 
         // preferences
-        setText("Drucken");
+        setText(bundle.getString("Print"));
 
         // create the menu-items
-        mniPrintCurrent = new JMenuItem("Drucke aktuelles Sudoku");
-        mniPrintMultiple = new JMenuItem("Drucke mehrere Sudokus");
+        mniPrintCurrent = new JMenuItem(bundle.getString("PrintCurrentSudoku"));
+        mniPrintMultiple = new JMenuItem(bundle.getString("PrintMultipleSudokus"));
 
         // add the menu-items to the menu
         add(mniPrintCurrent);

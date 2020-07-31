@@ -4,11 +4,17 @@ import computing.SudokuSolver;
 import controller.CtrlBoard;
 import model.Cell;
 import model.Sudoku;
+import utils.LanguageBundle;
 import view.ControlPanel;
 
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class ControlPanelHandler {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -58,8 +64,7 @@ public class ControlPanelHandler {
 
             // if there is no solution, show a info message
             if (solution == null) {
-                JOptionPane.showMessageDialog(null,
-                                              "Es gibt keine Lösung für den aktuellen Stand des Sudokus.");
+                JOptionPane.showMessageDialog(null, bundle.getString("NoSolutionForCurrentState"));
             }
 
             // work with the solution if existing
@@ -95,8 +100,7 @@ public class ControlPanelHandler {
 
             // if no further step is possible, show a info message
             if (nextStep == null) {
-                JOptionPane.showMessageDialog(null,
-                                              "Es konnte kein weiterer Schritt berechnet werden.");
+                JOptionPane.showMessageDialog(null, bundle.getString("NoFurtherStepComputable"));
             }
 
             // work with the determined Cell if existing

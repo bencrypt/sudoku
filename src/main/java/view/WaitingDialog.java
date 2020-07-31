@@ -1,10 +1,17 @@
 package view;
 
+import utils.LanguageBundle;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class WaitingDialog extends JDialog {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Constructor <-- */
 
@@ -29,7 +36,7 @@ public class WaitingDialog extends JDialog {
         setResizable(false);
 
         // create and add label with waiting message
-        JLabel lblWaiting = new JLabel("Bitte warten ...");
+        JLabel lblWaiting = new JLabel(bundle.getString("PleaseWait"));
         lblWaiting.setHorizontalTextPosition(JLabel.CENTER);
         lblWaiting.setVerticalTextPosition(JLabel.CENTER);
         lblWaiting.setBorder(new EmptyBorder(30, 30, 30, 30));

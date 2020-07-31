@@ -1,12 +1,18 @@
 package view;
 
 import model.BoardConstants;
+import utils.LanguageBundle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class ControlPanel extends JPanel {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -38,7 +44,7 @@ public class ControlPanel extends JPanel {
         setBackground(BoardConstants.BACKGROUND);
 
         // initalize checkbox
-        chkCompareWithSolution = new JCheckBox("Vergleiche mit Lösung");
+        chkCompareWithSolution = new JCheckBox(bundle.getString("CompareWithSolution"));
         chkCompareWithSolution.setBackground(BoardConstants.BACKGROUND);
         chkCompareWithSolution.setHorizontalAlignment(SwingConstants.RIGHT);
         chkCompareWithSolution.setFocusable(false);
@@ -50,8 +56,8 @@ public class ControlPanel extends JPanel {
         panButtons.setBackground(BoardConstants.BACKGROUND);
         panButtons.setBorder(new EmptyBorder(10,  0, 0, 0));
 
-        btnSolveCompletely = new HoverButton("Komplett lösen");
-        btnSolveNextStep = new HoverButton("Nächster Schritt");
+        btnSolveCompletely = new HoverButton(bundle.getString("SolveCompletely"));
+        btnSolveNextStep = new HoverButton(bundle.getString("NextStep"));
 
         btnSolveCompletely.setBackground(BoardConstants.CELL_COLOR_NORMAL);
         btnSolveNextStep.setBackground(BoardConstants.CELL_COLOR_NORMAL);

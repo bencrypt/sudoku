@@ -6,6 +6,7 @@ import model.xml.XmlCell;
 import model.xml.XmlSudoku;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.LanguageBundle;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -14,8 +15,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.ResourceBundle;
 
 public class FileHandler {
+
+    /* --> Internationalization <-- */
+
+    private static ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Logger <-- */
 
@@ -49,7 +55,7 @@ public class FileHandler {
         // --> may be the current file if wished so and valid
         File destination = currentFile;
         if (!saveIntoCurrentFile || currentFile == null) {
-            destination = chooseFile("Exportieren");
+            destination = chooseFile(bundle.getString("Export"));
         }
 
         // if no file is selected, stop the method
@@ -85,8 +91,8 @@ public class FileHandler {
 
         } catch (JAXBException e) {
             LOGGER.error(e.getMessage());
-            JOptionPane.showMessageDialog(null, "Die Datei konnte nicht exportiert werden.",
-                                            "Fehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, bundle.getString("NoExportPossible"),
+                                            bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -104,9 +110,9 @@ public class FileHandler {
     public static Sudoku importSudokuFromXml() {
 
         // choose the file from which the Sudoku should be imported
-        File source = chooseFile("Importieren");
+        File source = chooseFile(bundle.getString("Import"));
 
-        // import from the choosen file and return the result (Sudoku or null)
+        // import from the chosen file and return the result (Sudoku or null)
         return importSudokuFromXml(source);
     }
 
@@ -135,8 +141,8 @@ public class FileHandler {
 
         } catch (JAXBException e) {
 
-            JOptionPane.showMessageDialog(null, "Die Datei konnte nicht importiert werden.",
-                    "Fehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, bundle.getString("NoImportPossible"),
+                                            bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
@@ -189,7 +195,7 @@ public class FileHandler {
 
             @Override
             public String getDescription() {
-                return "Sudoku-Dateien";
+                return bundle.getString("SudokuFiles");
             }
         });
 
