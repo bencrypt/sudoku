@@ -126,6 +126,11 @@ public class FileHandler {
      */
     public static Sudoku importSudokuFromXml(File source) {
 
+        // if no valid file, return null
+        if (source == null) {
+            return null;
+        }
+
         // import from the chosen file
         XmlSudoku xmlSudoku = null;
         try {
