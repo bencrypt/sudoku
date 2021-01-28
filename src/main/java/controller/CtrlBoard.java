@@ -60,7 +60,6 @@ public class CtrlBoard implements PropertyChangeListener {
         this.model = model;
         if (this.model == null) {
             this.model = SudokuGenerator.generateSudoku(25);
-            // this.model = FileHandler.importSudokuFromXml(new File(".\\res\\naechsterSchritt.suk"));
         }
 
         FileHandler.setLastSavedSudoku(this.model.getUnchanged());
@@ -98,7 +97,7 @@ public class CtrlBoard implements PropertyChangeListener {
     }
 
     /*
-     * Update explicitely every Cell
+     * Update explicitly every Cell
      */
     public void updateAll() {
         if (model != null) {

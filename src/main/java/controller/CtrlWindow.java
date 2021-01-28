@@ -109,7 +109,7 @@ public class CtrlWindow {
     /**
      * Disables the Window as if a modal dialog is opened.
      */
-    public void DisableWindow() {
+    public void disableWindow() {
         window.setEnabled(false);
     }
 

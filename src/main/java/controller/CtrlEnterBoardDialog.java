@@ -33,7 +33,7 @@ public class CtrlEnterBoardDialog {
 
         // disable the main window to get a modal effect
         // --> not directly modal dialogue because of popups on it (would also be disabled else)
-        ctrlWindow.DisableWindow();
+        ctrlWindow.disableWindow();
 
         // create dialog and event handling
         dialog = new EnterBoardDialog(ctrlNewBoard.getGui());
