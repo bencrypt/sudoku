@@ -1,6 +1,7 @@
 package view;
 
 import model.BoardConstants;
+import utils.LanguageBundle;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -8,8 +9,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class ValueSelector extends JPanel {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -53,7 +59,7 @@ public class ValueSelector extends JPanel {
         valueButtons.add(new HoverButton("8"));
         valueButtons.add(new HoverButton("9"));
 
-        btnDelete = new HoverButton("Entfernen");
+        btnDelete = new HoverButton(bundle.getString("Remove"));
 
         // add borders to the buttons
         valueButtons.forEach(btn -> {

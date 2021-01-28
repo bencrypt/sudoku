@@ -1,11 +1,17 @@
 package view.menu;
 
 import model.BoardConstants;
+import utils.LanguageBundle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class MenuBar extends JMenuBar {
+
+    /* --> Internationalization <-- */
+
+    ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -55,7 +61,7 @@ public class MenuBar extends JMenuBar {
     private void createAndAddComboBoxForFontSize() {
 
         // create label
-        JLabel lblFontSize = new JLabel("Schriftgröße:  ");
+        JLabel lblFontSize = new JLabel(bundle.getString("FontSize"));
 
         // create combo box with default values
         cbxFontSize = new JComboBox<>();

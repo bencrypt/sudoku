@@ -1,8 +1,15 @@
 package view.menu;
 
+import utils.LanguageBundle;
+
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class MnuFile extends JMenu {
+
+    /* --> Internationalization <-- */
+
+    ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -29,16 +36,16 @@ public class MnuFile extends JMenu {
     private void init() {
 
         // preferences
-        setText("Datei");
+        setText(bundle.getString("File"));
 
         // create the menu-items
-        mniGenerate = new JMenuItem("Neues Sudoku generieren");
-        mniEnter = new JMenuItem("Vorgegebenes Sudoku eingeben");
-        mniRestart = new JMenuItem("Sudoku neustarten");
-        mniLoad = new JMenuItem("Sudoku laden");
-        mniSave = new JMenuItem("Sudoku speichern");
-        mniSaveAs = new JMenuItem("Sudoku speichern unter ...");
-        mniExit = new JMenuItem("Programm beenden");
+        mniGenerate = new JMenuItem(bundle.getString("CreateNewSudoku"));
+        mniEnter = new JMenuItem(bundle.getString("EnterExistingSudoku"));
+        mniRestart = new JMenuItem(bundle.getString("Restart"));
+        mniLoad = new JMenuItem(bundle.getString("Load"));
+        mniSave = new JMenuItem(bundle.getString("Save"));
+        mniSaveAs = new JMenuItem(bundle.getString("SaveAs"));
+        mniExit = new JMenuItem(bundle.getString("Exit"));
 
         // add the menu-items to the menu
         add(mniGenerate);

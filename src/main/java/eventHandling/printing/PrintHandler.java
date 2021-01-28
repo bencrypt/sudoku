@@ -1,5 +1,6 @@
 package eventHandling.printing;
 
+import utils.LanguageBundle;
 import view.Board;
 
 import javax.swing.*;
@@ -7,8 +8,13 @@ import java.awt.print.PrinterAbortException;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class PrintHandler {
+
+    /* --> Internationalization <-- */
+
+    private static ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Methods <-- */
 
@@ -46,8 +52,8 @@ public class PrintHandler {
                 }
 
                 // show message when error
-                JOptionPane.showMessageDialog(null, "Das Sudoku konnte nicht gedruckt werden.",
-                                              "Fehler", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, bundle.getString("ErrorCouldNotPrint"),
+                                              bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -79,8 +85,8 @@ public class PrintHandler {
                 }
 
                 // show message when error
-                JOptionPane.showMessageDialog(null, "Die Sudokus konnte nicht gedruckt werden.",
-                        "Fehler", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, bundle.getString("ErrorCouldNotPrint"),
+                        bundle.getString("Error"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }

@@ -1,21 +1,27 @@
 package eventHandling;
 
 import controller.CtrlBoard;
+import utils.LanguageBundle;
 import view.Window;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
 
 public class WindowHandler {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
     // related View
-    Window gui;
+    private Window gui;
 
     // needed for event handling
-    CtrlBoard ctrlBoard;
+    private CtrlBoard ctrlBoard;
 
     /* --> Constructor <-- */
 
@@ -64,9 +70,7 @@ public class WindowHandler {
 
         // confirm dialog when not equal Sudokus
         if (!equalsLastSavedSudoku) {
-            option = JOptionPane.showConfirmDialog(null,
-                    "Der aktuelle Stand des Sudokus wurde nicht gespeichert. " +
-                            "Soll das Programm wirklich beendet werden?",
+            option = JOptionPane.showConfirmDialog(null, bundle.getString("NotSavedExit"),
                     "Schließen", JOptionPane.YES_NO_OPTION);
         }
 

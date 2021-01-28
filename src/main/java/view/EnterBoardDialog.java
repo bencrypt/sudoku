@@ -1,12 +1,18 @@
 package view;
 
 import model.BoardConstants;
+import utils.LanguageBundle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ResourceBundle;
 
 public class EnterBoardDialog extends JDialog {
+
+    /* --> Internationalization <-- */
+
+    private ResourceBundle bundle = LanguageBundle.getBundle();
 
     /* --> Fields <-- */
 
@@ -22,18 +28,18 @@ public class EnterBoardDialog extends JDialog {
     public EnterBoardDialog(Board board) {
 
         // preferences
-        setTitle("Vorgegebenes Sudoku eingeben");
+        setTitle(bundle.getString("EnterExistingSudoku"));
         setLayout(new BorderLayout());
         setBackground(BoardConstants.BACKGROUND);
 
         // init components
         JPanel panButtons = new JPanel();
 
-        btnOk = new HoverButton("OK");
+        btnOk = new HoverButton(bundle.getString("OK"));
         btnOk.setBackground(BoardConstants.CELL_COLOR_NORMAL);
         btnOk.setFocusable(false);
 
-        btnCancel = new HoverButton("Abbrechen");
+        btnCancel = new HoverButton(bundle.getString("Cancel"));
         btnCancel.setBackground(BoardConstants.CELL_COLOR_NORMAL);
         btnCancel.setFocusable(false);
 
