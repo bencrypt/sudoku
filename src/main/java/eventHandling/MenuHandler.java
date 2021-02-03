@@ -211,7 +211,7 @@ public class MenuHandler {
             // update constants
             BoardConstants.FONT_SIZE = (int) gui.getCbxFontSize().getSelectedItem();
             BoardConstants.FONT_EDITABLE = new Font(BoardConstants.FONT_EDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
-            BoardConstants.FONT_UNEDITABLE = new Font(BoardConstants.FONT_UNEDITABLE.getName(), Font.PLAIN, BoardConstants.FONT_SIZE);
+            BoardConstants.FONT_UNEDITABLE = new Font(BoardConstants.FONT_UNEDITABLE.getName(), Font.BOLD, BoardConstants.FONT_SIZE);
 
             // update the GUI
             ctrlBoard.updateAll();

@@ -1,4 +1,6 @@
-# Introduction
+# Sudoku
+
+## Introduction
 
 This application lets the user create and solve 9x9 Sudoku puzzles interactively. 
 Currently, there are given the following possibilities:
@@ -14,7 +16,21 @@ Currently, there are given the following possibilities:
 * Compare the current state of the Sudoku puzzle with the solution
 * Import and export Sudoku puzzles (e.g. to continue playing later)
 
-# Structure:
+## Screenshot
+
+![Screenshot](Screenshot.png)
+
+__Notes to the GUI:__
+
+* Predefined cells are printed bold.
+* The value selector popup opens when clicking on an editable cell to choose or remove the value inside this cell.
+* Red fields show that a value is used two times in a row, column or box and marks the affected cells as duplicates.
+* Yellow fields show that the chosen value is not the correct one compared to the solution. 
+  This behavior can be unchecked via the checkbox 
+  _"Compare With Solution"_ below the board.
+* Green printed values are inserted by the application after clicking on _"Solve Completely"_ or _"Next Step"_.
+
+## Structure:
 
 The package `main` includes the `Start` class which is the entry point of the application.
 
@@ -36,7 +52,7 @@ Some helpful classes which may not be strictly limited to the logic of a Sudoku 
 package. This package also includes the class `LanguageBundle` which is needed for supporting different languages for 
 the user interface (right now the GUI is available in German and English).
 
-# Build and start JAR:
+## Build and start JAR:
 
 1. Execute the Maven goal `package`
 2. The JAR file _./target/Sudoku-1.0-SNAPSHOT-jar-with-dependencies.jar_ includes all dependencies and can directly be 
